@@ -1,0 +1,47 @@
+Feature: View prescriptions
+  As a signed-in patient
+  I want to access my prescriptions
+  So that I can follow my treatment correctly
+
+  Scenario: Patient sees their prescriptions, ordered by issue date, with most recent first
+    Given I am a signed-in-patient
+    And I am on the page showing my prescriptions
+    When I visit my prescriptions
+    Then I should see a list
+    Given that these are my prescriptions:
+      Ibuprofen, 200 mg as needed, Take with food as necessary, Dr Rivera, 2025-10-15, active
+      Zyrtec, 2 tablets daily, Take with meal, Dr Smith, 2025-09-20, expired
+      Panadol, 1 tablet daily, take with evening meal, Dr Rivera, 2025-10-10, active
+    Then I should see "Ibuprofen" before "Panadol"
+    And I should see "Panadol" before "Zyrtec"
+
+  Scenario: Empty table when the patient has no prescriptions
+    Given that I have no prescriptions
+    When I visit the prescriptions page
+    Then I should see "No prescriptions provided yet"
+
+  Scenario: Patient cannot view and is denied access to another patient's prescriptions
+    Given another patient has another prescription, where it is confidential
+    When I attempt to visit that patient's prescriptions page
+    Then I should be redirected to the patient dashboard
+    And I should see an authorization error message
+
+  Scenario: Patient filters prescriptions by status
+    Given that the same prescriptions exist:
+      Ibuprofen, 200 mg as needed, Take with food as necessary, Dr Rivera, 2025-10-15, active
+      Zyrtec, 2 tablets daily, Take with meal, Dr Smith, 2025-09-20, expired
+      Panadol, 1 tablet daily, take with evening meal, Dr Rivera, 2025-10-10, active
+    When I visit the prescriptions page
+    And I choose to view "active" prescriptions
+    Then I should see "Ibuprofen"
+    And I should see "Panadol"
+    And I should not see "Zyrtec"
+
+  Scenario: Patient filters and there are no matching records
+  Given that the same prescriptions exist:
+    Ibuprofen, 200 mg as needed, Take with food as necessary, Dr Rivera, 2025-10-15, active
+    Zyrtec, 2 tablets daily, Take with meal, Dr Smith, 2025-09-20, expired
+    Panadol, 1 tablet daily, take with evening meal, Dr Rivera, 2025-10-10, active
+  When I visit the prescriptions page
+  And I choose to view "cancelled" prescriptions
+  Then I should see a message saying "No matching records"
