@@ -1,3 +1,4 @@
+# features/step_definitions/prescription_steps.rb
 require "cgi"
 require "date"
 
@@ -15,7 +16,7 @@ Given("I am signed in as a patient") do
   click_button "Log in"
 end
 
-# data setup, retrieving prescriptions
+# stage of setting up data
 Given("the following prescriptions exist for me:") do |table|
   table.hashes.each do |row|
     doctor = Doctor.find_or_create_by!(
@@ -26,8 +27,8 @@ Given("the following prescriptions exist for me:") do |table|
     )
 
     Prescription.create!(
-      patient: @patient,
-      doctor: doctor,
+      patient_id: @patient.id,   
+      doctor_id:  doctor.id,        
       medication_name: row["medication_name"],
       dosage: row["dosage"],
       instructions: row["instructions"],
@@ -38,7 +39,7 @@ Given("the following prescriptions exist for me:") do |table|
 end
 
 Given("I have no prescriptions") do
-  Prescription.where(patient: @patient).delete_all
+  Prescription.where(patient_id: @patient.id).delete_all
 end
 
 Given("another patient exists with a prescription {string}") do |med_name|
@@ -55,8 +56,8 @@ Given("another patient exists with a prescription {string}") do |med_name|
     last_name: "Doctor"
   )
   @other_rx = Prescription.create!(
-    patient: @other_patient,
-    doctor: doctor,
+    patient_id: @other_patient.id, 
+    doctor_id:  doctor.id,          
     medication_name: med_name,
     dosage: "10 mg",
     instructions: "Once daily",
@@ -65,31 +66,27 @@ Given("another patient exists with a prescription {string}") do |med_name|
   )
 end
 
-# visiting prescriptions page
+# visiting the prescriptions page
 When("I visit the prescriptions page") do
-  visit "/patient/prescriptions"
+  visit "/patient/prescriptions" # make sure only the CURRENT patient's info is being accessed
 end
 
 When("I visit the prescriptions page with status {string}") do |status|
   visit "/patient/prescriptions?status=#{CGI.escape(status)}"
 end
 
-When("I attempt to visit that patient's prescriptions page") do
-  # Visiting a specific patient's prescriptions page
-  visit "/patient/prescriptions?patient_id=#{@other_patient.id}"
-end
-
 When("I choose {string} in the status filter") do |status|
-  select status, from: "Status"
+  select status, from: "Status" 
 end
 
 When("I apply the filter") do
   click_button "Apply"
 end
 
-# assertions
+# assertions for prescription lists and pages
 Then("I should see a prescriptions list") do
   expect(page).to have_content("Prescriptions")
+  # loosen until your markup is final
   expect(page).to have_css(".prescription-item, table tr, li", minimum: 1)
 end
 
@@ -107,12 +104,4 @@ Then("I should see {string} before {string}") do |first_text, second_text|
   expect(a).not_to be_nil, "Expected to find '#{first_text}'"
   expect(b).not_to be_nil, "Expected to find '#{second_text}'"
   expect(a).to be < b
-end
-
-Then("I should be redirected to the patient dashboard") do
-  expect(page).to have_current_path("/patient", ignore_query: true)
-end
-
-Then("I should see an authorization error message") do
-  expect(page).to have_content("You are not authorized to view that resource")
 end

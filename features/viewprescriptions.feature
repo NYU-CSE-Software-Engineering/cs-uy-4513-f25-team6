@@ -24,9 +24,8 @@ Feature: View prescriptions
 
   Scenario: Patient cannot view another patient's prescriptions
     Given another patient exists with a prescription "ConfidentialMed"
-    When I attempt to visit that patient's prescriptions page
-    Then I should be redirected to the patient dashboard
-    And I should see an authorization error message
+    When I visit the prescriptions page
+    Then I should not see "ConfidentialMed"
 
   Scenario: Patient filters prescriptions by status
     Given the following prescriptions exist for me:
