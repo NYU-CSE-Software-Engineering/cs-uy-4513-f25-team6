@@ -1,3 +1,15 @@
+Given("I have the following appointments") do |table|
+  table.hashes.each do |row|
+    Appointment.create!(
+      doctor_id: @test_user.id,
+      patient_id: row["patient_id"],
+      appointment_time: row["appointment_time"],
+      status: row["status"],
+      clinic_name: row["clinic_name"]
+    )
+  end
+end
+
 When("I visit the appointments page") do
   visit doctor_appointments_path(@test_user)
 end
