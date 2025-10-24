@@ -1,13 +1,5 @@
-Given("I am signed in as a doctor") do
-  @doctor = Doctor.create!(email: "doc@example.com", password: "password")
-  visit new_doctor_session_path
-  fill_in "Email", with: @doctor.email
-  fill_in "Password", with: @doctor.password
-  click_button "Log in"
-end
-
 When("I visit the appointments page") do
-  visit doctor_appointments_path(@doctor)
+  visit doctor_appointments_path(@test_user)
 end
 
 Then("I should see a list of my upcoming appointments") do
@@ -40,14 +32,6 @@ end
 Given("I am on the appointments page") do
   step "I am signed in as a doctor"
   step "I visit the appointments page"
-end
-
-Given("I am signed in as a doctor with no scheduled appointments") do
-  @doctor = Doctor.create!(email: "emptydoc@example.com", password: "password")
-  visit new_doctor_session_path
-  fill_in "Email", with: @doctor.email
-  fill_in "Password", with: @doctor.password
-  click_button "Log in"
 end
 
 When("I attempt to access another doctor's appointments page") do

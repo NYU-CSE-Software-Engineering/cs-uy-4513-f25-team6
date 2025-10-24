@@ -2,20 +2,6 @@
 require "cgi"
 require "date"
 
-# authentication scenario
-Given("I am signed in as a patient") do
-  @patient = Patient.create!(
-    email: "pat@example.com",
-    password: "password",
-    first_name: "Pat",
-    last_name: "Example"
-  )
-  visit "/login"
-  fill_in "Email", with: @patient.email
-  fill_in "Password", with: "password"
-  click_button "Log in"
-end
-
 # stage of setting up data
 Given("the following prescriptions exist for me:") do |table|
   table.hashes.each do |row|
@@ -27,7 +13,7 @@ Given("the following prescriptions exist for me:") do |table|
     )
 
     Prescription.create!(
-      patient_id: @patient.id,   
+      patient_id: @test_user.id,   
       doctor_id:  doctor.id,        
       medication_name: row["medication_name"],
       dosage: row["dosage"],
@@ -39,7 +25,7 @@ Given("the following prescriptions exist for me:") do |table|
 end
 
 Given("I have no prescriptions") do
-  Prescription.where(patient_id: @patient.id).delete_all
+  Prescription.where(patient_id: @test_user.id).delete_all
 end
 
 Given("another patient exists with a prescription {string}") do |med_name|

@@ -9,18 +9,11 @@ def patient_billing_show_path_for(bill)
   "/#{patient}/billing/bills"
 end
 
-Given('I am a signed-in patient') do
-  @patient ||= Patient.create!(email: "pat@example.com", password: "password")
-  sign_in_user(@patient)
-  # Sanity check:
-  expect(page).to have_content("Signed in").or have_current_path(root_path, ignore_query: true)
-end
-
 Given('I have an unpaid bill for one of my appointments') do
   # Minimal associated records so the Bill is valid
   doctor = Doctor.create!(email: "doc@example.com", password: "password", name: "Dr. Ada")
-  appt   = Appointment.create!(patient: @patient, doctor: doctor, starts_at: Time.current + 2.days)
-  @bill  = Bill.create!(patient: @patient, appointment: appt, amount_cents: 15000, status: "unpaid")
+  appt   = Appointment.create!(patient: @test_user, doctor: doctor, starts_at: Time.current + 2.days)
+  @bill  = Bill.create!(patient: @test_user, appointment: appt, amount_cents: 15000, status: "unpaid")
 end
 
 Given('I am on my bill page') do
@@ -54,8 +47,8 @@ end
 
 Given('I have a paid bill') do
   doctor = Doctor.create!(email: "doc2@example.com", password: "password", name: "Dr. Turing")
-  appt   = Appointment.create!(patient: @patient, doctor: doctor, starts_at: Time.current - 1.day)
-  @paid_bill = Bill.create!(patient: @patient, appointment: appt, amount_cents: 9000, status: "paid", paid_at: Time.current)
+  appt   = Appointment.create!(patient: @test_user, doctor: doctor, starts_at: Time.current - 1.day)
+  @paid_bill = Bill.create!(patient: @test_user, appointment: appt, amount_cents: 9000, status: "paid", paid_at: Time.current)
 end
 
 Given('I am on my paid bill page') do

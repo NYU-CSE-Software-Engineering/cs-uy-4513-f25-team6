@@ -4,7 +4,7 @@ Feature: Pay for appointment bill
   So that my balance is settled and my billing status is updated
 
   Background:
-    Given I am a signed-in patient
+    Given I am signed in as a patient
     And I have an unpaid bill for one of my appointments
 
   @happy
