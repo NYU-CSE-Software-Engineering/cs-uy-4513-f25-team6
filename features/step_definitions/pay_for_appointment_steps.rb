@@ -6,7 +6,7 @@ def sign_in_user(user)
 end
 
 def patient_billing_show_path_for(bill)
-  "/patient/billing/#{bill}"
+  "/#{patient}/billing/bills"
 end
 
 Given('I am a signed-in patient') do
