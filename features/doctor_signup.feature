@@ -18,7 +18,7 @@ Feature: Doctor signs up for the clinic
     And I select "Cardiology" from "Specialty"
     And I press "Create Account"
     Then I should see "Welcome, Dr. Ada Lovelace" or "A message with a confirmation link has been sent to your email address"
-    And I should be on the doctor dashboard
+    And I should be on the doctor dashboard page
 
   @missing_fields
   Scenario: Missing required fields

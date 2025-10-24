@@ -4,9 +4,15 @@ def path_to(page_name)
     case page_name
 
     # add whatever pages you need to this mapping
-    when 'doctor profile' then '/doctor/profile'
-    when 'time slot' then '/doctor/time_slots'
     when 'login' then '/login'
+    when 'doctor sign up' then '/login/signup_doctor'
+
+    when 'prescriptions' then '/patient/prescriptions'
+
+    when 'doctor dashboard' then '/doctor/dashboard'
+    when 'doctor appointments' then '/doctor/appointments'
+    when 'time slot' then '/doctor/time_slots'
+    
 
     else raise "Can't find mapping from \"#{page_name}\" to a path."
     end
@@ -33,6 +39,14 @@ Given(/I am on the (.*) page/) do |page_name|
     visit path_to(page_name)
 end
 
+When(/I click "(.*)"/) do |label|
+    click_on label
+end
+
+When(/I fill in "(.*)" with "(.*)"/) do |label, value|
+    fill_in label, with: value
+end
+
 Then(/I should be on the (.*) page/) do |page_name|
     current_path = URI.parse(current_url).path
     assert_equal path_to(page_name), current_path
@@ -44,4 +58,12 @@ Then(/I should( not)? see "(.*)"/) do |inverse, text|
     else
         expect(page).to have_content(text)
     end
+end
+
+Then("I should see {string} before {string}") do |first_text, second_text|
+    a = page.text.index(first_text)
+    b = page.text.index(second_text)
+    expect(a).not_to be_nil, "Expected to find '#{first_text}'"
+    expect(b).not_to be_nil, "Expected to find '#{second_text}'"
+    expect(a).to be < b
 end
