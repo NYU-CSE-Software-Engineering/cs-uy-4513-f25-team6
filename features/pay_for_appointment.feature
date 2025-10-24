@@ -14,7 +14,7 @@ Feature: Pay for appointment bill
     And I fill in "Expiration Month" with "12"
     And I fill in "Expiration Year" with "2030"
     And I fill in "CVC" with "123"
-    And I press "Pay Now"
+    And I click "Pay Now"
     Then I should see "Payment successful"
     And I should see "Status: paid"
     And the bill should be marked paid
@@ -23,7 +23,7 @@ Feature: Pay for appointment bill
   Scenario: Patient submits invalid payment information
     Given I am on the page for my unpaid bill
     When I fill in "Card Number" with ""
-    And I press "Pay Now"
+    And I click "Pay Now"
     Then I should see "Please enter a valid card number"
     And I should see "Status: unpaid"
 
@@ -31,7 +31,7 @@ Feature: Pay for appointment bill
   Scenario: Patient attempts to pay an already-paid bill
     Given I have a paid bill
     And I am on the page for my paid bill
-    When I press "Pay Now"
+    When I click "Pay Now"
     Then I should see "This bill is already paid"
     And I should see "Status: paid"
 

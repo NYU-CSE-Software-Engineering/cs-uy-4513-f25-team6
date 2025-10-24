@@ -22,18 +22,6 @@ Given('I am on the page for my unpaid bill') do
   expect(page.status_code).to be_between(200, 399).inclusive rescue nil
 end
 
-When('I fill in {string} with {string}') do |label, value|
-  fill_in label, with: value
-end
-
-When('I press {string}') do |button|
-  click_button button
-end
-
-Then('I should see {string}') do |text|
-  expect(page).to have_content(text)
-end
-
 Then('the bill should be marked paid') do
   # Prefer reading UI first; otherwise reload the record.
   if @bill

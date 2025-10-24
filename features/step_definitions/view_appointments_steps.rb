@@ -15,10 +15,6 @@ Then("I should see a list of my upcoming appointments") do
   expect(page).to have_selector(".appointment-row")
 end
 
-Then("I should see the message {string}") do |message|
-  expect(page).to have_content(message)
-end
-
 When("I select {string} from the status dropdown") do |status|
   select status, from: "Status"
   click_button "Filter"

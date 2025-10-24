@@ -39,12 +39,12 @@ Given(/I am on the (.*) page/) do |page_name|
     visit path_to(page_name)
 end
 
-When(/I click "(.*)"/) do |target|
-    click_on target
+When(/I click "(.*)"/) do |label|
+    click_on label
 end
 
-When(/I fill in "(.*)" with "(.*)"/) do |target, value|
-    fill_in target, with: value
+When(/I fill in "(.*)" with "(.*)"/) do |label, value|
+    fill_in label, with: value
 end
 
 Then(/I should be on the (.*) page/) do |page_name|
@@ -58,4 +58,12 @@ Then(/I should( not)? see "(.*)"/) do |inverse, text|
     else
         expect(page).to have_content(text)
     end
+end
+
+Then("I should see {string} before {string}") do |first_text, second_text|
+    a = page.text.index(first_text)
+    b = page.text.index(second_text)
+    expect(a).not_to be_nil, "Expected to find '#{first_text}'"
+    expect(b).not_to be_nil, "Expected to find '#{second_text}'"
+    expect(a).to be < b
 end

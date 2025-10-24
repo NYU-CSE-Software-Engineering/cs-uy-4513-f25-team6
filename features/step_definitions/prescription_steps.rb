@@ -71,18 +71,3 @@ Then("I should see a prescriptions list") do
   expect(page).to have_css(".prescription-item, table tr, li", minimum: 1)
 end
 
-Then("I should see {string}") do |text|
-  expect(page).to have_content(text)
-end
-
-Then("I should not see {string}") do |text|
-  expect(page).not_to have_content(text)
-end
-
-Then("I should see {string} before {string}") do |first_text, second_text|
-  a = page.text.index(first_text)
-  b = page.text.index(second_text)
-  expect(a).not_to be_nil, "Expected to find '#{first_text}'"
-  expect(b).not_to be_nil, "Expected to find '#{second_text}'"
-  expect(a).to be < b
-end
