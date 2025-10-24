@@ -6,16 +6,13 @@ def sign_in_user(user)
 end
 
 def patient_billing_show_path_for(bill)
-  # Prefer a route helper if you’ve defined one:
-  # patient_billing_path(bill) or bill_path(bill)
-  # Fallback to a hardcoded path if your project spec uses this URI:
-  "/patient/billing/#{bill.id}"
+  "/patient/billing/#{bill}"
 end
 
 Given('I am a signed-in patient') do
   @patient ||= Patient.create!(email: "pat@example.com", password: "password")
   sign_in_user(@patient)
-  # Optional sanity check:
+  # Sanity check:
   expect(page).to have_content("Signed in").or have_current_path(root_path, ignore_query: true)
 end
 
@@ -29,8 +26,6 @@ end
 Given('I am on my bill page') do
   raise "No @bill set. Did you call the unpaid bill step?" unless @bill
   visit patient_billing_show_path_for(@bill)
-  # Keep this generic; the page may not exist yet (that's OK for RED)
-  # If it exists, these hints help catch regressions:
   expect(page.status_code).to be_between(200, 399).inclusive rescue nil
 end
 
