@@ -10,10 +10,6 @@ Given("I have the following appointments") do |table|
   end
 end
 
-When("I visit the appointments page") do
-  visit doctor_appointments_path(@test_user)
-end
-
 Then("I should see a list of my upcoming appointments") do
   expect(page).to have_content("Upcoming Appointments")
   expect(page).to have_selector(".appointment-row")
@@ -39,14 +35,4 @@ Then("each appointment should display the patient's name, date, and clinic") do
     expect(page).to have_content("Date")
     expect(page).to have_content("Clinic")
   end
-end
-
-Given("I am on the appointments page") do
-  step "I am signed in as a doctor"
-  step "I visit the appointments page"
-end
-
-When("I attempt to access another doctor's appointments page") do
-  other_doctor = Doctor.create!(email: "otherdoc@example.com", password: "password")
-  visit doctor_appointments_path(other_doctor)
 end

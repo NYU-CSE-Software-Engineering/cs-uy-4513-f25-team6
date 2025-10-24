@@ -52,11 +52,6 @@ Given("another patient exists with a prescription {string}") do |med_name|
   )
 end
 
-# visiting the prescriptions page
-When("I visit the prescriptions page") do
-  visit "/patient/prescriptions" # make sure only the CURRENT patient's info is being accessed
-end
-
 When("I visit the prescriptions page with status {string}") do |status|
   visit "/patient/prescriptions?status=#{CGI.escape(status)}"
 end

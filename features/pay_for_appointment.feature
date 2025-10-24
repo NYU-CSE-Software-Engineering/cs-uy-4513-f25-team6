@@ -9,7 +9,7 @@ Feature: Pay for appointment bill
 
   @happy
   Scenario: Patient pays an unpaid bill successfully
-    Given I am on my bill page
+    Given I am on the page for my unpaid bill
     When I fill in "Card Number" with "4242424242424242"
     And I fill in "Expiration Month" with "12"
     And I fill in "Expiration Year" with "2030"
@@ -21,7 +21,7 @@ Feature: Pay for appointment bill
 
   @sad
   Scenario: Patient submits invalid payment information
-    Given I am on my bill page
+    Given I am on the page for my unpaid bill
     When I fill in "Card Number" with ""
     And I press "Pay Now"
     Then I should see "Please enter a valid card number"
@@ -30,7 +30,7 @@ Feature: Pay for appointment bill
   @edge
   Scenario: Patient attempts to pay an already-paid bill
     Given I have a paid bill
-    And I am on my paid bill page
+    And I am on the page for my paid bill
     When I press "Pay Now"
     Then I should see "This bill is already paid"
     And I should see "Status: paid"

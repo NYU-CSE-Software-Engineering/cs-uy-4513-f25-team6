@@ -4,9 +4,15 @@ def path_to(page_name)
     case page_name
 
     # add whatever pages you need to this mapping
-    when 'doctor profile' then '/doctor/profile'
-    when 'time slot' then '/doctor/time_slots'
     when 'login' then '/login'
+    when 'doctor sign up' then '/login/signup_doctor'
+
+    when 'prescriptions' then '/patient/prescriptions'
+
+    when 'doctor dashboard' then '/doctor/dashboard'
+    when 'doctor appointments' then '/doctor/appointments'
+    when 'time slot' then '/doctor/time_slots'
+    
 
     else raise "Can't find mapping from \"#{page_name}\" to a path."
     end
@@ -31,6 +37,14 @@ end
 
 Given(/I am on the (.*) page/) do |page_name|
     visit path_to(page_name)
+end
+
+When(/I click "(.*)"/) do |target|
+    click_on target
+end
+
+When(/I fill in "(.*)" with "(.*)"/) do |target, value|
+    fill_in target, with: value
 end
 
 Then(/I should be on the (.*) page/) do |page_name|

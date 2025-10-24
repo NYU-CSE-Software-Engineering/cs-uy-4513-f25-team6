@@ -6,7 +6,7 @@ def sign_in_user(user)
 end
 
 def patient_billing_show_path_for(bill)
-  "/#{patient}/billing/bills"
+  "/patient/billing/#{bill.id}"
 end
 
 Given('I have an unpaid bill for one of my appointments') do
@@ -16,7 +16,7 @@ Given('I have an unpaid bill for one of my appointments') do
   @bill  = Bill.create!(patient: @test_user, appointment: appt, amount_cents: 15000, status: "unpaid")
 end
 
-Given('I am on my bill page') do
+Given('I am on the page for my unpaid bill') do
   raise "No @bill set. Did you call the unpaid bill step?" unless @bill
   visit patient_billing_show_path_for(@bill)
   expect(page.status_code).to be_between(200, 399).inclusive rescue nil
@@ -51,7 +51,7 @@ Given('I have a paid bill') do
   @paid_bill = Bill.create!(patient: @test_user, appointment: appt, amount_cents: 9000, status: "paid", paid_at: Time.current)
 end
 
-Given('I am on my paid bill page') do
+Given('I am on the page for my paid bill') do
   raise "No @paid_bill set. Did you call the paid bill step?" unless @paid_bill
   visit patient_billing_show_path_for(@paid_bill)
   expect(page).to have_content("paid").or have_current_path(patient_billing_show_path_for(@paid_bill), ignore_query: true) rescue nil

@@ -1,4 +1,4 @@
-Given(/^Ive chosen a clinic already$/) do
+Given(/^I've chosen a clinic already$/) do
     @clinic = FactoryBot.create(:clinic, name: 'Downtown Clinic')
     # sample doctors for deterministic checks; adjust fields to your schema
     @doc1 = FactoryBot.create(:doctor, clinic: @clinic, name: 'John Simth',
@@ -8,11 +8,11 @@ Given(/^Ive chosen a clinic already$/) do
 end
 
 # If you don’t already have a generic “I am on ... page” step
-Given(/^I am on the `Find a Doctor` page$/) do
+Given(/^I am on the "Find a Doctor" page for that clinic$/) do
     visit clinic_doctors_path(@clinic)  # change to your route
 end
   
-Then(/^I should see a doctor named `(.*)` specializing in `(.*)`$/) do |name, specialty|
+Then(/^I should see a doctor named "(.*)" specializing in "(.*)"$/) do |name, specialty|
     container = '#results'   # change selectors to your DOM
     item_sel  = '.doctor'
     expect(page).to have_css(container)
@@ -35,7 +35,7 @@ Then(/^I should see a list of doctors within this clinic sorted by their ratings
   expect(ratings.each_cons(2).all? { |a,b| a >= b }).to be true
 end
 
-When(/^I fill in `(.*)` with a nonexsitent name$/) do |field_label|
+When(/^I fill in "(.*)" with a nonexistent name$/) do |field_label|
     @nonexistent_name = "NO_SUCH_DOCTOR_#{SecureRandom.hex(4)}"
     fill_in field_label, with: @nonexistent_name
 end
