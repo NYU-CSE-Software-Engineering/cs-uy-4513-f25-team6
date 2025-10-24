@@ -20,8 +20,6 @@ As a signed-in patient, I want to pay the bill for my appointment so that I can 
 - **Patient** (existing): authentication + ownership
 - **Payment** audit: `bill_id`, `txn_id`, `amount_cents`, `state`, `gateway_response`, timestamps
 
-> Matches spec’s **bills** table and “Payment system” module, which lets patients make a payment for an appointment. :contentReference[oaicite:3]{index=3}
-
 ### Views
 - `patients/billing/show.html.erb` (or `bills/show.html.erb`): shows bill details + a “Pay Now” form (`card_number`, `exp_month`, `exp_year`, `cvc`) and messages for success/failure.  
   Browser path conforms to `/patient/billing/{bill}`. :contentReference[oaicite:4]{index=4}
