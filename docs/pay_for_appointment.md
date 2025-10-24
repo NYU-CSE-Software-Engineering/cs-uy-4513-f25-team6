@@ -18,7 +18,7 @@ As a signed-in patient, I want to pay the bill for my appointment so that I can 
   Validations: `amount_cents > 0`, `status` inclusion
 - **Appointment** (existing): links a patient & doctor, date/time
 - **Patient** (existing): authentication + ownership
-- (Optional) **Payment** audit: `bill_id`, `txn_id`, `amount_cents`, `state`, `gateway_response`, timestamps
+- **Payment** audit: `bill_id`, `txn_id`, `amount_cents`, `state`, `gateway_response`, timestamps
 
 > Matches spec’s **bills** table and “Payment system” module, which lets patients make a payment for an appointment. :contentReference[oaicite:3]{index=3}
 
@@ -30,4 +30,4 @@ As a signed-in patient, I want to pay the bill for my appointment so that I can 
 - `BillsController`
   - `show` — renders the bill page for the current patient
   - `pay` — POST handler to process payment, update `Bill` to `paid`, set `paid_at`, flash success, redirect back to `show`
-  - (Optionally) `index` — list of bills for the current patient
+  - `index` — list of bills for the current patient
