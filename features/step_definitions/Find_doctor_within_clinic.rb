@@ -35,9 +35,9 @@ Then(/^I should see a list of doctors within this clinic sorted by their ratings
   expect(ratings.each_cons(2).all? { |a,b| a >= b }).to be true
 end
 
-When(/^I fill in `(.*)' with a nonexsitent name$/) do
+When(/^I fill in `(.*)` with a nonexsitent name$/) do |field_label|
     @nonexistent_name = "NO_SUCH_DOCTOR_#{SecureRandom.hex(4)}"
-    fill_in field, with: @nonexistent_name
+    fill_in field_label, with: @nonexistent_name
 end
 
 Then(/^I should see an error message indicating doctor not found$/) do
