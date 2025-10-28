@@ -57,6 +57,9 @@ group :development do
 end
 
 group :test do
+  # RSpec testing framework
+  gem "rspec-rails"
+
   # Cucumber testing framework
   gem "cucumber-rails", require: false
   gem "database_cleaner"
