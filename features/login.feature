@@ -16,7 +16,7 @@ Feature: User logs in
     Given I am on the login page
     When I fill in "Email or Username" with "pat@example.com"
     And I fill in "Password" with "Secret12"
-    And I press "Log in"
+    And I click "Log in"
     Then I should see "Welcome, pat_user"
     And I should be on the patient dashboard page
 
@@ -25,7 +25,7 @@ Feature: User logs in
     Given I am on the login page
     When I fill in "Email or Username" with "dr_smith"
     And I fill in "Password" with "Secret12"
-    And I press "Log in"
+    And I click "Log in"
     Then I should see "Welcome, dr_smith"
     And I should be on the doctor dashboard page
 
@@ -34,6 +34,6 @@ Feature: User logs in
     Given I am on the login page
     When I fill in "Email or Username" with "admin@example.com"
     And I fill in "Password" with "wrongpass"
-    And I press "Log in"
+    And I click "Log in"
     Then I should see "Invalid credentials"
     And I should be on the login page
