@@ -17,10 +17,9 @@ end
 Given('the following time slots exist for doctor {string}:') do |doctor_username, table|
   table.hashes.each do |row|
     TimeSlot.create!(
-      doctor: Doctor.find_by!(user: User.find_by!(username: doctor_username)),
+      doctor: Doctor.find_by!(username: doctor_username),
       starts_at: Time.zone.parse(row["starts_at"]),
-      ends_at:   Time.zone.parse(row["ends_at"]),
-      id:        row["slot_id"]
+      ends_at:   Time.zone.parse(row["ends_at"])
     )
   end
   pending "Seed doctor's available TimeSlot records"
@@ -76,8 +75,8 @@ Then('I should be on my appointments page') do
 end
 
 Then('an appointment should exist for patient {string} with doctor {string} at {string}') do |patient_u, doctor_u, starts_at_s|
-  patient = User.find_by!(username: patient_u)
-  doctor  = User.find_by!(username: doctor_u)
+  patient = Patient.find_by!(username: patient_u)
+  doctor  = Doctor.find_by!(username: doctor_u)
   t = Time.zone.parse(starts_at_s)
   expect(Appointment.exists?(patient: patient.patient, doctor: doctor.doctor, starts_at: t)).to be(true)
   pending "Assert Appointment persisted for #{patient_u} with #{doctor_u} at #{starts_at_s}"

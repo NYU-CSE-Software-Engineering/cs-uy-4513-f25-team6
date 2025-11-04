@@ -14,15 +14,15 @@ Feature: Patient picks an appointment time with a doctor
       | Midtown Health    | 1  |
     And doctor "dr_user" works at clinic "Midtown Health"
     And the following time slots exist for doctor "dr_user":
-      | starts_at           | ends_at             | slot_id |
-      | 2026-01-05 09:00 AM | 2026-01-05 09:30 AM | 101     |
-      | 2026-01-05 09:30 AM | 2026-01-05 10:00 AM | 102     |
+      | starts_at           | ends_at             |
+      | 2026-01-05 09:00 AM | 2026-01-05 09:30 AM |
+      | 2026-01-05 09:30 AM | 2026-01-05 10:00 AM |
 
   @happy_path
   Scenario: Patient books an available time slot
     Given I am logged in as patient "pat_user"
     And I am on the find doctor page for clinic "Midtown Health"
-    When I follow "dr_user"
+    When I click "dr_user"
     Then I should be on the schedule page for doctor "dr_user"
     And I should see "Available time slots"
     And I should see "2026-01-05 09:00 AM – 09:30 AM"
