@@ -1,5 +1,5 @@
 class TimeSlot < ApplicationRecord
-    # belongs_to :doctor # UNCOMMENT ONCE DOCTOR MODEL EXISTS
+    belongs_to :doctor
     
     # all attributes must be present
     validates :doctor_id, :starts_at, :ends_at, presence: true

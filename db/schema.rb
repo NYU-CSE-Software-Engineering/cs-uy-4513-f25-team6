@@ -10,7 +10,41 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_04_204531) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_05_175200) do
+  create_table "admins", force: :cascade do |t|
+    t.string "email"
+    t.string "username"
+    t.string "password"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "doctors", force: :cascade do |t|
+    t.string "email"
+    t.string "username"
+    t.string "password"
+    t.integer "clinic_id"
+    t.float "salary"
+    t.string "specialty"
+    t.string "phone"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["clinic_id"], name: "index_doctors_on_clinic_id"
+  end
+
+  create_table "patients", force: :cascade do |t|
+    t.string "email"
+    t.string "username"
+    t.string "password"
+    t.integer "age"
+    t.float "height"
+    t.float "weight"
+    t.string "gender"
+    t.text "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "time_slots", force: :cascade do |t|
     t.integer "doctor_id"
     t.time "starts_at"
