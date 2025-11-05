@@ -1,4 +1,5 @@
 require 'uri'
+require 'digest'
 
 def path_to(page_name)
     case page_name
@@ -19,19 +20,20 @@ def path_to(page_name)
 end
 
 Given(/I am signed in as a (.*)/) do |type|
+    pass_hash = Digest::MD5.hexdigest('testPassword')
     case type
     when 'patient'
-        @test_user = Patient.create!(email: "patient@example.com", password: "password")
+        @test_user = Patient.create!(email: 'patient@example.com', username: 'testPatient', password: pass_hash)
     when 'doctor'
-        @test_user = Doctor.create!(email: "doctor@example.com", password: "password")
+        @test_user = Doctor.create!(email: 'doctor@example.com', username: 'testDoctor', password: pass_hash)
     when 'admin'
-        @test_user = Admin.create!(email: "admin@example.com", password: "password")
+        @test_user = Admin.create!(email: 'admin@example.com', username: 'testAdmin', password: pass_hash)
     else
         raise "#{type} is not a valid role."
     end
     visit '/login'
     fill_in 'Email', with: @test_user.email
-    fill_in 'Password', with: @test_user.password
+    fill_in 'Password', with: 'testPassword'
     click_button 'Log In'
 end
 

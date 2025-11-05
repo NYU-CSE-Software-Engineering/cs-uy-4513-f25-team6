@@ -5,7 +5,7 @@ Given("a doctor exists with email {string}") do |email|
   if defined?(Doctor)
     Doctor.create!(
       email: email,
-      password: "VeryStrongPass9",
+      password: Digest::MD5.hexdigest('testPassword'),
       name: "Existing Doctor",
       specialty: "Cardiology",
       license_number: "NY-000001"
