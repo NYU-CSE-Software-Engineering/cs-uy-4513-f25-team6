@@ -7,7 +7,7 @@ Given("the following prescriptions exist for me:") do |table|
   table.hashes.each do |row|
     doctor = Doctor.find_or_create_by!(
       email: "#{(row["doctor_name"] || "doctor").parameterize}@example.com",
-      password: "password",
+      password: Digest::MD5.hexdigest('testPassword'),
       first_name: row["doctor_name"]&.split&.first || "Doc",
       last_name:  row["doctor_name"]&.split&.last  || "Tor"
     )
@@ -31,13 +31,13 @@ end
 Given("another patient exists with a prescription {string}") do |med_name|
   @other_patient = Patient.create!(
     email: "other@example.com",
-    password: "password",
+    password: Digest::MD5.hexdigest('testPassword'),
     first_name: "Other",
     last_name: "Patient"
   )
   doctor = Doctor.find_or_create_by!(
     email: "doc2@example.com",
-    password: "password",
+    password: Digest::MD5.hexdigest('testPassword'),
     first_name: "Other",
     last_name: "Doctor"
   )
