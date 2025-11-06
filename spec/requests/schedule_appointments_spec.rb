@@ -1,8 +1,6 @@
-# frozen_string_literal: true
 require 'rails_helper'
 
 RSpec.describe "Schedule Appointments (request)", type: :request do
-
   describe "GET /doctor/:id/schedule_appt" do
     it "renders the schedule page and lists available slots" do
       doctor_class   = class_double("Doctor").as_stubbed_const
@@ -73,6 +71,15 @@ RSpec.describe "Schedule Appointments (request)", type: :request do
       post appointments_path, params: { appointment: { time_slot_id: 101, doctor_id: 7 } }
 
       expect(response).to redirect_to(doctor_schedule_path(id: "dr_user"))
+
+      # After redirect, the GET schedule page runs and will call Doctor.joins / TimeSlot.where
+      rel = double(:rel)
+      expect(doctor_c).to receive(:joins).with(:user).and_return(rel)
+      expect(rel).to receive(:find_by!).with(users: { username: "dr_user" }).and_return(doctor)
+      where_rel = double(:where_rel)
+      expect(timeslot_c).to receive(:where).with(doctor_id: 7).and_return(where_rel)
+      expect(where_rel).to receive(:order).with(:starts_at).and_return([])
+
       follow_redirect!
       expect(response.body).to include("Time slot no longer available")
     end
