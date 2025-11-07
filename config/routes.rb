@@ -22,5 +22,20 @@ Rails.application.routes.draw do
   get '/doctor/dashboard', to: 'doctor#dashboard', as: :doctor_dashboard
   get '/admin/dashboard', to: 'admin#dashboard', as: :admin_dashboard
 
-  root 'login#new'
+  root 'login#form'
+
+
+
+
+  # TODO: make this a standardized resource route
+  get '/clinic/:cl_id/doctors', to: 'clinic#doctors'
+
+  # TODO: make this a standardized resource route
+  get  '/doctor/:id/schedule_appt', to: 'doctor#schedule', as: :doctor_schedule
+
+  # create appointment
+  resources :appointments, only: [:create]
+
+  # TODO: make this a standardized resource route
+  get '/patient/appointments', to: 'appointments#index', as: :patient_appointments
 end
