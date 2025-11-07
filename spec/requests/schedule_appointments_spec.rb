@@ -6,8 +6,7 @@ RSpec.describe "Schedule Appointments (request)", type: :request do
       doctor_class   = class_double("Doctor").as_stubbed_const
       timeslot_class = class_double("TimeSlot").as_stubbed_const
 
-      user_d   = instance_double("User", username: "dr_user")
-      doctor_d = instance_double("Doctor", id: 42, user: user_d)
+      doctor_d = instance_double("Doctor", id: 42, username: "dr_user")
       slot1    = instance_double("TimeSlot", id: 101,
                                  starts_at: Time.zone.parse("2026-01-05 09:00"),
                                  ends_at:   Time.zone.parse("2026-01-05 09:30"))
@@ -38,8 +37,7 @@ RSpec.describe "Schedule Appointments (request)", type: :request do
       doctor_c      = class_double("Doctor").as_stubbed_const
       timeslot_c    = class_double("TimeSlot").as_stubbed_const
 
-      d_user = instance_double("User", username: "dr_user")
-      doctor = instance_double("Doctor", id: 7, user: d_user)
+      doctor = instance_double("Doctor", id: 7, username: "dr_user")
       slot   = instance_double("TimeSlot", id: 101)
 
       expect(timeslot_c).to receive(:find).with("101").and_return(slot)
@@ -59,8 +57,7 @@ RSpec.describe "Schedule Appointments (request)", type: :request do
       doctor_c      = class_double("Doctor").as_stubbed_const
       timeslot_c    = class_double("TimeSlot").as_stubbed_const
 
-      d_user = instance_double("User", username: "dr_user")
-      doctor = instance_double("Doctor", id: 7, user: d_user)
+      doctor = instance_double("Doctor", id: 7, username: "dr_user")
       slot   = instance_double("TimeSlot", id: 101)
 
       expect(timeslot_c).to receive(:find).with("101").and_return(slot)

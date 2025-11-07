@@ -5,7 +5,7 @@ class AppointmentsController < ApplicationController
     doctor = Doctor.find(params.dig(:appointment, :doctor_id))
 
     if Appointment.exists?(time_slot_id: slot.id)
-      redirect_to doctor_schedule_path(id: doctor.user.username), alert: "Time slot no longer available"
+      redirect_to doctor_schedule_path(id: doctor.username), alert: "Time slot no longer available"
       return
     end
 
