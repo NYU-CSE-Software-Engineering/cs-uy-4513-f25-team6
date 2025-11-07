@@ -1,5 +1,6 @@
 class TimeSlot < ApplicationRecord
     belongs_to :doctor
+    has_many :appointments
     
     # all attributes must be present
     validates :doctor_id, :starts_at, :ends_at, presence: true

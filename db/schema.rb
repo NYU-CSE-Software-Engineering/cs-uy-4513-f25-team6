@@ -10,13 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_05_180000) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_07_145100) do
   create_table "admins", force: :cascade do |t|
     t.string "email"
     t.string "username"
     t.string "password"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "appointments", force: :cascade do |t|
+    t.integer "patient_id"
+    t.integer "time_slot_id"
+    t.date "date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["patient_id"], name: "index_appointments_on_patient_id"
+    t.index ["time_slot_id"], name: "index_appointments_on_time_slot_id"
   end
 
   create_table "clinics", force: :cascade do |t|

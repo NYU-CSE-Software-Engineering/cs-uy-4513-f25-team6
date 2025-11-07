@@ -33,7 +33,6 @@ RSpec.describe Appointment, type: :model do
   it 'can be created when all required attributes are present' do
     expect {
       Appointment.create!(
-        doctor: @doctor,
         patient: @patient,
         time_slot: @time_slot,
         date: @appointment_date
@@ -45,7 +44,6 @@ RSpec.describe Appointment, type: :model do
   
   it 'can access its associated patient, doctor, and time_slot' do
     appointment = Appointment.create!(
-      doctor: @doctor,
       patient: @patient,
       time_slot: @time_slot,
       date: @appointment_date
@@ -57,42 +55,35 @@ RSpec.describe Appointment, type: :model do
   end
 
   it 'can be accessed from its patient' do
-    appointment = Appointment.create!(doctor: @doctor, patient: @patient, time_slot: @time_slot, date: @appointment_date)
+    appointment = Appointment.create!(patient: @patient, time_slot: @time_slot, date: @appointment_date)
     expect(@patient.appointments).to include(appointment)
   end
 
   it 'can be accessed from its doctor' do
-    appointment = Appointment.create!(doctor: @doctor, patient: @patient, time_slot: @time_slot, date: @appointment_date)
+    appointment = Appointment.create!(patient: @patient, time_slot: @time_slot, date: @appointment_date)
     expect(@doctor.appointments).to include(appointment)
   end
 
   # --- Validations (Sad Paths) ---
-  
-  it 'cannot be created when doctor is missing' do
-    # no doctor
-    expect {
-      Appointment.create!(patient: @patient, time_slot: @time_slot, date: @appointment_date)
-    }.to raise_error(ActiveRecord::RecordInvalid)
-  end
 
   it 'cannot be created when patient is missing' do
     # no patient
     expect {
-      Appointment.create!(doctor: @doctor, time_slot: @time_slot, date: @appointment_date)
+      Appointment.create!(time_slot: @time_slot, date: @appointment_date)
     }.to raise_error(ActiveRecord::RecordInvalid)
   end
 
   it 'cannot be created when time_slot is missing' do
     # no time_slot
     expect {
-      Appointment.create!(doctor: @doctor, patient: @patient, date: @appointment_date)
+      Appointment.create!(patient: @patient, date: @appointment_date)
     }.to raise_error(ActiveRecord::RecordInvalid)
   end
 
   it 'cannot be created when date is missing' do
     # no date
     expect {
-      Appointment.create!(doctor: @doctor, patient: @patient, time_slot: @time_slot)
+      Appointment.create!(patient: @patient, time_slot: @time_slot)
     }.to raise_error(ActiveRecord::RecordInvalid)
   end
 
@@ -144,7 +135,7 @@ RSpec.describe Appointment, type: :model do
   it 'CAN be created for the same doctor at a DIFFERENT time slot' do
     time_slot_b = TimeSlot.create!(doctor: @doctor, starts_at: "11:00", ends_at: "11:30")
     patient_a = Patient.create!(email: "patient_a3@test.com", username: "patient_a3_spec", password: Digest::MD5.hexdigest("pass"))
-    patient_b = Patient.create!(email: "patient_a3@test.com", username: "patient_b3_spec", password: Digest::MD5.hexdigest("pass"))
+    patient_b = Patient.create!(email: "patient_b3@test.com", username: "patient_b3_spec", password: Digest::MD5.hexdigest("pass"))
 
     # 1. Create appointment for Time Slot A
     Appointment.create!(doctor: @doctor, patient: patient_a, time_slot: @time_slot, date: @appointment_date)
