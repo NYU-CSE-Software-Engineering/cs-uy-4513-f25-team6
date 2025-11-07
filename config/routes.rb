@@ -12,6 +12,18 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
 
+  # Login routes
+  get '/login', to: 'login#form', as: :login
+  post '/login', to: 'login#login'
+  delete '/logout', to: 'login#logout', as: :logout
+
+  # Dashboard routes
+  get '/patient/dashboard', to: 'patient#dashboard', as: :patient_dashboard
+  get '/doctor/dashboard', to: 'doctor#dashboard', as: :doctor_dashboard
+  get '/admin/dashboard', to: 'admin#dashboard', as: :admin_dashboard
+
+  root 'login#new'
+
   # schedule page for a doctor (username or id in :id)
   get  '/doctor/:id/schedule_appt', to: 'doctors#schedule', as: :doctor_schedule
 
