@@ -14,26 +14,29 @@ Feature: User logs in
   @happy_path
   Scenario: Patient logs in successfully with email
     Given I am on the login page
-    When I fill in "Email or Username" with "pat@example.com"
-    And I fill in "Password" with "Secret12"
-    And I click "Log in"
+    When I fill in "Email:" with "pat@example.com"
+    And I fill in "Password:" with "Secret12"
+    And I choose "Patient"
+    And I click "Log In"
     Then I should see "Welcome, pat_user"
     And I should be on the patient dashboard page
 
   @username_login
   Scenario: Doctor logs in successfully with username
     Given I am on the login page
-    When I fill in "Email or Username" with "dr_smith"
-    And I fill in "Password" with "Secret12"
-    And I click "Log in"
+    When I fill in "Email:" with "drsmith@example.com"
+    And I fill in "Password:" with "Secret12"
+    And I choose "Doctor"
+    And I click "Log In"
     Then I should see "Welcome, dr_smith"
     And I should be on the doctor dashboard page
 
   @sad_path
   Scenario: Login fails with invalid password
     Given I am on the login page
-    When I fill in "Email or Username" with "admin@example.com"
-    And I fill in "Password" with "wrongpass"
-    And I click "Log in"
-    Then I should see "Invalid credentials"
+    When I fill in "Email:" with "admin@example.com"
+    And I fill in "Password:" with "wrongpass"
+    And I choose "Admin"
+    And I click "Log In"
+    Then I should see "Invalid email or password"
     And I should be on the login page
