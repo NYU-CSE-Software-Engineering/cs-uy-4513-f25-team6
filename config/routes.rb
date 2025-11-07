@@ -11,4 +11,13 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+
+  # schedule page for a doctor (username or id in :id)
+  get  '/doctor/:id/schedule_appt', to: 'doctors#schedule', as: :doctor_schedule
+
+  # create appointment
+  resources :appointments, only: [:create]
+
+  # patient’s appointments page
+  get '/patient/appointments', to: 'appointments#index', as: :patient_appointments
 end
