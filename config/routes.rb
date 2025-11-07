@@ -13,9 +13,9 @@ Rails.application.routes.draw do
   # root "posts#index"
 
   # Login routes
-  get '/login', to: 'login#new', as: :login
-  post '/login', to: 'login#create'
-  delete '/logout', to: 'login#destroy', as: :logout
+  get '/login', to: 'login#form', as: :login
+  post '/login', to: 'login#login'
+  delete '/logout', to: 'login#logout', as: :logout
 
   # Dashboard routes
   get '/patient/dashboard', to: 'patient#dashboard', as: :patient_dashboard

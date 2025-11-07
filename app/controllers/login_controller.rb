@@ -1,26 +1,26 @@
 require 'digest'
 
 class LoginController < ApplicationController
-    def new
+    def form
         if current_user
             redirect_to dashboard_path_for_user(current_user)
         else
-            render :new
+            render :form
         end
     end
 
-    def create
+    def login
         email = params[:email]
         password = params[:password]
         role = params[:role]
 
         if email.blank? || password.blank?
             flash[:danger] = 'Invalid email or password'
-            render :new
+            render :form
             return
         elsif role.blank?
             flash[:danger] = 'You must select a role'
-            render :new
+            render :form
             return
         end
 
@@ -32,11 +32,11 @@ class LoginController < ApplicationController
             redirect_to dashboard_path_for_user(user)
         else
             flash[:danger] = 'Invalid email or password'
-            render :new
+            render :form
         end
     end
 
-    def destroy
+    def logout
         session[:user_id] = nil
         flash[:info] = 'Logged out successfully'
         redirect_to root_path
