@@ -1,7 +1,9 @@
+require 'digest'
+
 def sign_in_user(user)
   visit new_user_session_path 
   fill_in "Email", with: user.email
-  fill_in "Password", with: "password"
+  fill_in "Password", with: "testPassword"
   click_button "Log in"
 end
 
@@ -11,7 +13,7 @@ end
 
 Given('I have an unpaid bill for one of my appointments') do
   # Minimal associated records so the Bill is valid
-  doctor = Doctor.create!(email: "doc@example.com", password: "password", name: "Dr. Ada")
+  doctor = Doctor.create!(email: "doc@example.com", password: Digest::MD5.hexdigest('testPassword'), name: "Dr. Ada")
   appt   = Appointment.create!(patient: @test_user, doctor: doctor, starts_at: Time.current + 2.days)
   @bill  = Bill.create!(patient: @test_user, appointment: appt, amount_cents: 15000, status: "unpaid")
 end
@@ -34,7 +36,7 @@ Then('the bill should be marked paid') do
 end
 
 Given('I have a paid bill') do
-  doctor = Doctor.create!(email: "doc2@example.com", password: "password", name: "Dr. Turing")
+  doctor = Doctor.create!(email: "doc2@example.com", password: Digest::MD5.hexdigest('testPassword'), name: "Dr. Turing")
   appt   = Appointment.create!(patient: @test_user, doctor: doctor, starts_at: Time.current - 1.day)
   @paid_bill = Bill.create!(patient: @test_user, appointment: appt, amount_cents: 9000, status: "paid", paid_at: Time.current)
 end
@@ -46,8 +48,8 @@ Given('I am on the page for my paid bill') do
 end
 
 Given("another patient exists with a different unpaid bill") do
-  @other_patient = Patient.create!(email: "other@example.com", password: "password")
-  d = Doctor.create!(email: "doc3@example.com", password: "password", name: "Dr. Hopper")
+  @other_patient = Patient.create!(email: "other@example.com", password: Digest::MD5.hexdigest('testPassword'))
+  d = Doctor.create!(email: "doc3@example.com", password: Digest::MD5.hexdigest('testPassword'), name: "Dr. Hopper")
   a = Appointment.create!(patient: @other_patient, doctor: d, starts_at: Time.current + 1.day)
   @others_bill = Bill.create!(patient: @other_patient, appointment: a, amount_cents: 5000, status: "unpaid")
 end
