@@ -35,14 +35,14 @@ RSpec.describe LoginController, type: :controller do
         context 'with valid credentials' do # context start
 
             it 'patient logs in successfully' do
-                post :create, params: {login: 'pat@example.com', password: 'secret12' } # simulates a POST request to the `create` action with patient's credentials
+                post :create, params: {email: 'pat@example.com', password: 'secret12', role: 'patient'} # simulates a POST request to the `create` action with patient's credentials
 
                 expect(session[:user_id]).to eq(patient.id) # verifies that that the patient's user ID is stored in the session (proves they're logged in)
                 expect(response).to redirect_to(patient_dashboard_path) # verifies that patient is redirected to patient's dashboard after successful login
             end 
 
             it 'doctor logs in successfully' do
-                post :create, params: {login: 'drsmith@example.com', password: 'secret12' }  # simulates a POST request to the `create` action with doctors's credentials
+                post :create, params: {email: 'drsmith@example.com', password: 'secret12', role: 'doctor'}  # simulates a POST request to the `create` action with doctors's credentials
 
 
                 expect(session[:user_id]).to eq(doctor.id) # verifies that that the doctor's user ID is stored in the session (proves they're logged in)
@@ -50,7 +50,7 @@ RSpec.describe LoginController, type: :controller do
             end 
 
             it 'admin logs in successfully' do
-                post :create, params: {login: 'admin@example.com', password: 'secret12' } # simulates a POST request to the `create` action with admins's credentials
+                post :create, params: {email: 'admin@example.com', password: 'secret12', role: 'admin'} # simulates a POST request to the `create` action with admins's credentials
 
 
                 expect(session[:user_id]).to eq(admin.id) # verifies that that the admin's user ID is stored in the session (proves they're logged in)
@@ -63,45 +63,53 @@ RSpec.describe LoginController, type: :controller do
         context 'with invalid credentials' do # context start
 
             it 'fails with incorrect password' do
-                post :create, params: { login: 'pat@example.com', password: 'wrong_password' }
+                post :create, params: {email: 'pat@example.com', password: 'wrong_password', role: 'patient'}
 
                 expect(session[:user_id]).to be_nil
                 expect(response).to render_template(:new) # login failed so we give the user the login form again
-                expect(flash[:alert]).to eq('Invalid email or password')
+                expect(flash[:danger]).to eq('Invalid email or password')
             end
 
             it 'fails with non-existent email' do
-                post :create, params: { login: 'nonexistent@example.com', password: 'secret12' }
+                post :create, params: {email: 'nonexistent@example.com', password: 'secret12', role: 'doctor'}
 
                 expect(session[:user_id]).to be_nil
                 expect(response).to render_template(:new) 
-                expect(flash[:alert]).to eq('Invalid email or password')
+                expect(flash[:danger]).to eq('Invalid email or password')
             end
 
             it 'fails when email is missing' do
-                post :create, params: { password: 'secret12'}
+                post :create, params: {password: 'secret12', role: 'patient'}
 
                 expect(session[:user_id]).to be_nil
                 expect(response).to render_template(:new)
-                expect(flash[:alert]).to eq('Invalid email or password')
+                expect(flash[:danger]).to eq('Invalid email or password')
             end
 
             it 'fails when password is missing' do
-                post :create, params: { email: 'pat@example.com'}
+                post :create, params: {email: 'pat@example.com', role: 'admin'}
 
                 expect(session[:user_id]).to be_nil
                 expect(response).to render_template(:new)
-                expect(flash[:alert]).to eq('Invalid email or password')
+                expect(flash[:danger]).to eq('Invalid email or password')
             end
 
-            it 'fails when both email and password are missing' do
+            it 'fails when role is missing' do
+                post :create, params: {email: 'pat@example.com', password: 'secret12'}
+
+                expect(session[:user_id]).to be_nil
+                expect(response).to render_template(:new)
+                expect(flash[:danger]).to eq('You must select a role')
+            end
+
+            it 'fails when all params are missing' do
 
                 post :create, params: {}
 
 
                 expect(session[:user_id]).to be_nil
                 expect(response).to render_template(:new)
-                expect(flash[:alert]).to eq('Invalid email or password')
+                expect(flash[:danger]).to eq('Invalid email or password')
             end
         end # context end
 
@@ -122,7 +130,7 @@ RSpec.describe LoginController, type: :controller do
 
         expect(session[:user_id]).to be_nil 
         expect(response).to redirect_to(root_path) # verify user is redirected to the root path (home page) after logging out
-        expect(flash[:notice]).to eq('Logged out successfully')
+        expect(flash[:info]).to eq('Logged out successfully')
      end 
 
    end # describe end

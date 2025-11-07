@@ -1,2 +1,15 @@
 <!-- Login form view -->
 
+<%= form_with do |form| %>
+    <%= form.label :email, "Email:" %>
+    <%= form.text_field :email %><br>
+    <%= form.label :password, "Password:" %>
+    <%= form.password_field :password %><br>
+    <%= form.radio_button :role, "patient" %>
+    <%= form.label :role_patient, "Patient" %>
+    <%= form.radio_button :role, "doctor" %>
+    <%= form.label :role_doctor, "Doctor" %>
+    <%= form.radio_button :role, "admin" %>
+    <%= form.label :role_admin, "Admin" %><br>
+    <%= form.submit "Log In" %>
+<% end %>
