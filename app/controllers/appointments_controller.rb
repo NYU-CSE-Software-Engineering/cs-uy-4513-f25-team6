@@ -9,7 +9,7 @@ class AppointmentsController < ApplicationController
       return
     end
 
-    Appointment.create!(patient: nil, doctor: doctor, time_slot: slot)
+    Appointment.create!(patient_id: session[:user_id], time_slot: slot, date: Date.today)
     redirect_to patient_appointments_path, notice: "Appointment confirmed"
   end
 

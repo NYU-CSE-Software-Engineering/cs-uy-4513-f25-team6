@@ -56,7 +56,7 @@ Given(/I am signed in as a (.*)/) do |type|
     click_button 'Log In'
 end
 
-Given(/I am on the (.*) page/) do |page_name|
+Given(/I am on the (.*) page$/) do |page_name|
     visit path_to(page_name)
 end
 
@@ -72,7 +72,7 @@ When(/I fill in "(.*)" with "(.*)"/) do |label, value|
     fill_in label, with: value
 end
 
-Then(/I should be on the (.*) page/) do |page_name|
+Then(/I should be on the (.*) page$/) do |page_name|
     current_path = URI.parse(current_url).path
     assert_equal path_to(page_name), current_path
 end
