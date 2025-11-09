@@ -31,7 +31,6 @@ Given('I am logged in as patient {string}') do |username|
   fill_in "Password", with: "Secret12"
   choose "Patient"
   click_button "Log In"
-  #expect(page).to have_current_path("/patient", ignore_query: true), "Expected to land on /patient after login"
 end
 
 # ----- Navigation within clinic/doctor browse flow -----
@@ -62,7 +61,7 @@ Then('I should see {string} – {string}') do |start_s, end_s|
 end
 
 Given('the slot starting at {string} for doctor {string} is already booked') do |slot_time, doc_name|
-  otherPat = Patient.create!(username:"otherPatient",email:"other@test.com",password:Digest::MD5.hexdigest("hello"))
+  otherPat = FactoryBot.create(:patient)
   doc = Doctor.find_by!(username: doc_name)
   slot = TimeSlot.find_by!(starts_at: slot_time, doctor: doc)
   Appointment.create(patient: otherPat, time_slot: slot, date: Date.today)
@@ -82,7 +81,6 @@ Then('an appointment should exist for patient {string} with doctor {string} at {
   patient = Patient.find_by!(username: patient_u)
   doctor  = Doctor.find_by!(username: doctor_u)
   slot    = TimeSlot.find_by!(doctor: doctor, starts_at: starts_at_s)
-  #t = Time.zone.parse()
   expect(Appointment.exists?(patient: patient, time_slot: slot)).to be(true)
 end
 

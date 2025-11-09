@@ -20,9 +20,7 @@ Feature: Patient picks an appointment time with a doctor
   Scenario: Patient books an available time slot
     Given I am logged in as patient "pat_user"
     And I am on the find doctor page for clinic "Midtown Health"
-    
     Then I should see "dr_user"
-    
     When I click "dr_user"
     Then I should be on the time slots page for doctor "dr_user"
     And I should see "9:00 AM - 9:30 AM"

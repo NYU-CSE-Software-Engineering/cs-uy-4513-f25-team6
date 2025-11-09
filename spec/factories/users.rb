@@ -1,13 +1,15 @@
 require 'digest'
 
 FactoryBot.define do
+  sequence :tag, "0000"
+
   factory :user do
     transient do
       role { 'patient' }
     end
 
-    email { "user#{SecureRandom.hex(4)}@example.com" }
-    username { "user#{SecureRandom.hex(4)}" }
+    username { "user#{generate :tag}" }
+    email { |u| "#{u.username}@example.com" }
     
     after(:build) do |user, evaluator|
       # If password is provided as plain text, hash it
@@ -38,20 +40,20 @@ FactoryBot.define do
   end
 
   factory :patient, class: Patient do
-    email { "patient#{SecureRandom.hex(4)}@example.com" }
-    username { "patient#{SecureRandom.hex(4)}" }
+    username { "patient#{generate :tag}" }
+    email { |p| "#{p.username}@example.com" }
     password { Digest::MD5.hexdigest('secret12') }
   end
 
   factory :doctor, class: Doctor do
-    email { "doctor#{SecureRandom.hex(4)}@example.com" }
-    username { "doctor#{SecureRandom.hex(4)}" }
+    username { "doctor#{generate :tag}" }
+    email { |d| "#{d.username}@example.com" }
     password { Digest::MD5.hexdigest('secret12') }
   end
 
   factory :admin, class: Admin do
-    email { "admin#{SecureRandom.hex(4)}@example.com" }
-    username { "admin#{SecureRandom.hex(4)}" }
+    username { "admin#{generate :tag}" }
+    email { |a| "#{a.username}@example.com" }
     password { Digest::MD5.hexdigest('secret12') }
   end
 end

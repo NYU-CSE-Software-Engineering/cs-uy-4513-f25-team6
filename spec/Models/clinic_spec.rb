@@ -48,12 +48,7 @@ describe Clinic do
 
     it 'can access associated doctors' do
         clinic = Clinic.create!(name: "Midtown Health")
-        doctor = Doctor.create!(
-            email: "test@test.com",
-            username: "testDoctor",
-            password: Digest::MD5.hexdigest("testPassword"),
-            clinic: clinic
-        )
+        doctor = FactoryBot.create(:doctor, clinic: clinic)
         expect(clinic.doctors).to include(doctor)
     end
 
