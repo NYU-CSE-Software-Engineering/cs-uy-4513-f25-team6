@@ -67,7 +67,7 @@ RSpec.describe LoginController, type: :controller do
 
                 expect(session[:user_id]).to be_nil
                 expect(response).to render_template(:form) # login failed so we give the user the login form again
-                expect(flash[:danger]).to eq('Invalid email or password')
+                expect(flash[:alert]).to eq('Invalid email or password')
             end
 
             it 'fails with non-existent email' do
@@ -75,7 +75,7 @@ RSpec.describe LoginController, type: :controller do
 
                 expect(session[:user_id]).to be_nil
                 expect(response).to render_template(:form) 
-                expect(flash[:danger]).to eq('Invalid email or password')
+                expect(flash[:alert]).to eq('Invalid email or password')
             end
 
             it 'fails when email is missing' do
@@ -83,7 +83,7 @@ RSpec.describe LoginController, type: :controller do
 
                 expect(session[:user_id]).to be_nil
                 expect(response).to render_template(:form)
-                expect(flash[:danger]).to eq('Invalid email or password')
+                expect(flash[:alert]).to eq('Invalid email or password')
             end
 
             it 'fails when password is missing' do
@@ -91,7 +91,7 @@ RSpec.describe LoginController, type: :controller do
 
                 expect(session[:user_id]).to be_nil
                 expect(response).to render_template(:form)
-                expect(flash[:danger]).to eq('Invalid email or password')
+                expect(flash[:alert]).to eq('Invalid email or password')
             end
 
             it 'fails when role is missing' do
@@ -99,7 +99,7 @@ RSpec.describe LoginController, type: :controller do
 
                 expect(session[:user_id]).to be_nil
                 expect(response).to render_template(:form)
-                expect(flash[:danger]).to eq('You must select a role')
+                expect(flash[:alert]).to eq('You must select a role')
             end
 
             it 'fails when all params are missing' do
@@ -109,7 +109,7 @@ RSpec.describe LoginController, type: :controller do
 
                 expect(session[:user_id]).to be_nil
                 expect(response).to render_template(:form)
-                expect(flash[:danger]).to eq('Invalid email or password')
+                expect(flash[:alert]).to eq('Invalid email or password')
             end
         end # context end
 
@@ -130,7 +130,7 @@ RSpec.describe LoginController, type: :controller do
 
         expect(session[:user_id]).to be_nil 
         expect(response).to redirect_to(root_path) # verify user is redirected to the root path (home page) after logging out
-        expect(flash[:info]).to eq('Logged out successfully')
+        expect(flash[:notice]).to eq('Logged out successfully')
      end 
 
    end # describe end

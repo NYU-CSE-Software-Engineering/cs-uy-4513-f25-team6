@@ -15,11 +15,11 @@ class LoginController < ApplicationController
         role = params[:role]
 
         if email.blank? || password.blank?
-            flash[:danger] = 'Invalid email or password'
+            flash[:alert] = 'Invalid email or password'
             render :form
             return
         elsif role.blank?
-            flash[:danger] = 'You must select a role'
+            flash[:alert] = 'You must select a role'
             render :form
             return
         end
@@ -31,15 +31,14 @@ class LoginController < ApplicationController
             session[:role] = role
             redirect_to dashboard_path_for_user(user)
         else
-            flash[:danger] = 'Invalid email or password'
+            flash[:alert] = 'Invalid email or password'
             render :form
         end
     end
 
     def logout
         session[:user_id] = nil
-        flash[:info] = 'Logged out successfully'
-        redirect_to root_path
+        redirect_to root_path, notice: 'Logged out successfully'
     end
 
     private

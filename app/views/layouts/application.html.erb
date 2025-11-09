@@ -22,13 +22,13 @@
   </head>
 
   <body>
-    <% if flash[:info] %>
-      <div class="alert alert-info" role="alert" id="info">
-        <%= flash[:info] %>
+    <% if flash[:notice] %>
+      <div class="alert alert-info" role="alert" id="notice">
+        <%= flash[:notice] %>
       </div>
-    <% elsif flash[:danger] %>
-      <div class="alert alert-danger" role="alert" id="danger">
-        <%= flash[:danger] %>
+    <% elsif flash[:alert] %>
+      <div class="alert alert-danger" role="alert" id="alert">
+        <%= flash[:alert] %>
       </div>
     <% end %>
     <%= yield %>
