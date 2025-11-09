@@ -24,7 +24,7 @@ Feature: Patient picks an appointment time with a doctor
     Then I should see "dr_user"
     
     When I click "dr_user"
-    Then I should be on the schedule page for doctor "dr_user"
+    Then I should be on the time slots page for doctor "dr_user"
     And I should see "9:00 AM - 9:30 AM"
     When I book the slot starting at "9:00 AM"
     Then I should see "Appointment confirmed"
@@ -35,15 +35,15 @@ Feature: Patient picks an appointment time with a doctor
   Scenario: Patient cannot see a slot that is already booked
     Given I am logged in as patient "pat_user"
     And the slot starting at "9:00 AM" for doctor "dr_user" is already booked
-    And I am on the schedule page for doctor "dr_user"
+    And I am on the time slots page for doctor "dr_user"
     Then I should not see "9:00 AM - 9:30 AM"
 
   @sad_path
   Scenario: Patient cannot book a slot that was booked while they were viewing the page
     Given I am logged in as patient "pat_user"
-    And I am on the schedule page for doctor "dr_user"
+    And I am on the time slots page for doctor "dr_user"
     And the slot starting at "9:00 AM" for doctor "dr_user" is already booked
     Then I should see "9:00 AM - 9:30 AM"
     When I book the slot starting at "9:00"
     Then I should see "Time slot no longer available"
-    And I should stay on the schedule page for doctor "dr_user"
+    And I should stay on the time slots page for doctor "dr_user"

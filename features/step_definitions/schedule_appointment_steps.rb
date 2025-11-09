@@ -38,21 +38,21 @@ end
 
 Given('I am on the find doctor page for clinic {string}') do |clinic_name|
   cln = Clinic.find_by!(name: clinic_name)
-  visit "/clinic/#{cln.id}/doctors"
+  visit "/clinics/#{cln.id}/doctors"
 end
 
-Given('I am on the schedule page for doctor {string}') do |doc_name|
+Given('I am on the time slots page for doctor {string}') do |doc_name|
   doc = Doctor.find_by!(username: doc_name)
   visit doctor_time_slots_path(doc.id)
 end
 
-Then('I should be on the schedule page for doctor {string}') do |doctor_username|
-  expect(page).to have_current_path(%r{\A/doctor/.+/time_slots\z}, ignore_query: true),
+Then('I should be on the time slots page for doctor {string}') do |doctor_username|
+  expect(page).to have_current_path(%r{\A/doctors/.+/time_slots\z}, ignore_query: true),
     "Expected schedule URI for doctor '#{doctor_username}'"
 end
 
-Then('I should stay on the schedule page for doctor {string}') do |doctor_username|
-  step %(I should be on the schedule page for doctor "#{doctor_username}")
+Then('I should stay on the time slots page for doctor {string}') do |doctor_username|
+  step %(I should be on the time slots page for doctor "#{doctor_username}")
 end
 
 # ----- Slot visibility & actions -----
