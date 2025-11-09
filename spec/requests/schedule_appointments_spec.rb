@@ -14,9 +14,7 @@ RSpec.describe "Schedule Appointments (request)", type: :request do
                                  starts_at: Time.zone.parse("2026-01-05 09:30"),
                                  ends_at:   Time.zone.parse("2026-01-05 10:00"))
 
-      rel = double(:rel)
-      expect(doctor_class).to receive(:joins).with(:user).and_return(rel)
-      expect(rel).to receive(:find_by!).with(users: { username: "dr_user" }).and_return(doctor_d)
+      expect(doctor_class).to receive(:find_by!).with(username: "dr_user").and_return(doctor_d)
 
       where_rel = double(:where_rel)
       expect(timeslot_class).to receive(:where).with(doctor_id: 42).and_return(where_rel)
@@ -38,14 +36,13 @@ RSpec.describe "Schedule Appointments (request)", type: :request do
       timeslot_c    = class_double("TimeSlot").as_stubbed_const
 
       doctor = instance_double("Doctor", id: 7, username: "dr_user")
-      slot   = instance_double("TimeSlot", id: 101)
+      slot   = instance_double("TimeSlot", id: 101, doctor: doctor)
 
       expect(timeslot_c).to receive(:find).with("101").and_return(slot)
-      expect(doctor_c).to receive(:find).with("7").and_return(doctor)
       expect(appointment_c).to receive(:exists?).with(time_slot_id: 101).and_return(false)
-      expect(appointment_c).to receive(:create!).with(patient: anything, doctor: doctor, time_slot: slot)
+      expect(appointment_c).to receive(:create!).with(patient_id: anything, time_slot: slot, date: anything)
 
-      post appointments_path, params: { appointment: { time_slot_id: 101, doctor_id: 7 } }
+      post appointments_path, params: { appointment: { time_slot_id: 101 } }
 
       expect(response).to redirect_to(patient_appointments_path)
       follow_redirect!
@@ -58,10 +55,9 @@ RSpec.describe "Schedule Appointments (request)", type: :request do
       timeslot_c    = class_double("TimeSlot").as_stubbed_const
 
       doctor = instance_double("Doctor", id: 7, username: "dr_user")
-      slot   = instance_double("TimeSlot", id: 101)
+      slot   = instance_double("TimeSlot", id: 101, doctor: doctor)
 
       expect(timeslot_c).to receive(:find).with("101").and_return(slot)
-      expect(doctor_c).to receive(:find).with("7").and_return(doctor)
       expect(appointment_c).to receive(:exists?).with(time_slot_id: 101).and_return(true)
       expect(appointment_c).not_to receive(:create!)
 
@@ -69,10 +65,8 @@ RSpec.describe "Schedule Appointments (request)", type: :request do
 
       expect(response).to redirect_to(doctor_schedule_path(id: "dr_user"))
 
-      # After redirect, the GET schedule page runs and will call Doctor.joins / TimeSlot.where
-      rel = double(:rel)
-      expect(doctor_c).to receive(:joins).with(:user).and_return(rel)
-      expect(rel).to receive(:find_by!).with(users: { username: "dr_user" }).and_return(doctor)
+      # After redirect, the GET schedule page runs and will call Doctor.find_by / TimeSlot.where
+      expect(doctor_c).to receive(:find_by!).with(username: "dr_user").and_return(doctor)
       where_rel = double(:where_rel)
       expect(timeslot_c).to receive(:where).with(doctor_id: 7).and_return(where_rel)
       expect(where_rel).to receive(:order).with(:starts_at).and_return([])
