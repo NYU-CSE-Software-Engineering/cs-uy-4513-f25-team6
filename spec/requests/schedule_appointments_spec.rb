@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe "Schedule Appointments (request)", type: :request do
-  describe "GET /doctor/:id/schedule_appt" do
+  describe "GET /doctor/:id/time_slots" do
     it "renders the schedule page and lists available slots" do
       doctor_class   = class_double("Doctor").as_stubbed_const
       timeslot_class = class_double("TimeSlot").as_stubbed_const
@@ -18,7 +18,7 @@ RSpec.describe "Schedule Appointments (request)", type: :request do
       expect(timeslot_class).to receive_message_chain(:joins, :where).and_return([])
       expect(timeslot_class).to receive_message_chain(:where, :excluding, :order).and_return([slot1, slot2])
 
-      get doctor_schedule_path(id: "dr_user")
+      get doctor_time_slots_path(id: "dr_user")
 
       expect(response).to have_http_status(:ok)
       expect(response.body).to include("Available time slots")
@@ -61,7 +61,7 @@ RSpec.describe "Schedule Appointments (request)", type: :request do
 
       post appointments_path, params: { appointment: { time_slot_id: 101, doctor_id: 7 } }
 
-      expect(response).to redirect_to(doctor_schedule_path(id: "dr_user"))
+      expect(response).to redirect_to(doctor_time_slots_path(id: "dr_user"))
 
       # After redirect, the GET schedule page runs and will call Doctor.find_by / TimeSlot.where
       expect(doctor_c).to receive(:find_by!).with(username: "dr_user").and_return(doctor)

@@ -43,11 +43,11 @@ end
 
 Given('I am on the schedule page for doctor {string}') do |doc_name|
   doc = Doctor.find_by!(username: doc_name)
-  visit "/doctor/#{doc.id}/schedule_appt"
+  visit doctor_time_slots_path(doc.id)
 end
 
 Then('I should be on the schedule page for doctor {string}') do |doctor_username|
-  expect(page).to have_current_path(%r{\A/doctor/.+/schedule_appt\z}, ignore_query: true),
+  expect(page).to have_current_path(%r{\A/doctor/.+/time_slots\z}, ignore_query: true),
     "Expected schedule URI for doctor '#{doctor_username}'"
 end
 

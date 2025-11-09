@@ -5,7 +5,7 @@ class AppointmentsController < ApplicationController
     doctor = slot.doctor
 
     if Appointment.exists?(time_slot_id: slot.id)
-      redirect_to doctor_schedule_path(id: doctor.username), alert: "Time slot no longer available"
+      redirect_to doctor_time_slots_path(id: doctor.username), alert: "Time slot no longer available"
       return
     end
 

@@ -17,25 +17,20 @@ Rails.application.routes.draw do
   post '/login', to: 'login#login'
   delete '/logout', to: 'login#logout', as: :logout
 
-  # Dashboard routes
+  # Non-RESTful routes that use the session id
   get '/patient/dashboard', to: 'patient#dashboard', as: :patient_dashboard
+  get '/patient/appointments', to: 'appointments#index', as: :patient_appointments
+
   get '/doctor/dashboard', to: 'doctor#dashboard', as: :doctor_dashboard
+
   get '/admin/dashboard', to: 'admin#dashboard', as: :admin_dashboard
 
   root 'login#form'
 
-
-
-
-  # TODO: make this a standardized resource route
+  # TODO: use nested resource generators for these
   get '/clinic/:cl_id/doctors', to: 'clinic#doctors'
-
-  # TODO: make this a standardized resource route
-  get  '/doctor/:id/schedule_appt', to: 'doctor#schedule', as: :doctor_schedule
-
+  get '/doctor/:id/time_slots', to: 'doctor#schedule', as: :doctor_time_slots
+  
   # create appointment
   resources :appointments, only: [:create]
-
-  # TODO: make this a standardized resource route
-  get '/patient/appointments', to: 'appointments#index', as: :patient_appointments
 end
