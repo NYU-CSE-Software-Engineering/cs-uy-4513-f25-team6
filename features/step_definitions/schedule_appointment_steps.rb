@@ -61,16 +61,16 @@ Then('I should see {string} – {string}') do |start_s, end_s|
   expect(page).to have_content("#{start_s} – #{end_s}")
 end
 
-Given('time slot {string} for doctor {string} is already booked') do |_slot_time, doc_name|
+Given('the slot starting at {string} for doctor {string} is already booked') do |slot_time, doc_name|
   otherPat = Patient.create!(username:"otherPatient",email:"other@test.com",password:Digest::MD5.hexdigest("hello"))
   doc = Doctor.find_by!(username: doc_name)
-  slot = TimeSlot.find_by!(starts_at: _slot_time, doctor: doc)
+  slot = TimeSlot.find_by!(starts_at: slot_time, doctor: doc)
   Appointment.create(patient: otherPat, time_slot: slot, date: Date.today)
 end
 
-# Click the specific "Book ..." button for a slot 
-When('I press "Book {string}"') do |slot_label|
-  click_button "Book #{slot_label}"
+# Click the "Book this slot" button for a specific slot
+When('I book the slot starting at {string}') do |start_time|
+  page.find('td', text: start_time).find('+td button').click
 end
 
 Then('I should be on my appointments page') do

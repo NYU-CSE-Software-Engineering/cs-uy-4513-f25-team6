@@ -7,25 +7,12 @@ class DoctorController < ApplicationController
 
     def schedule
         @doctor = find_doctor!(params[:id])
-        @time_slots = TimeSlot.where(doctor_id: @doctor.id).order(:starts_at)
-    
-        render inline: <<-'ERB'
-          <h1>Available time slots</h1>
-          <% if flash[:alert].present? %>
-            <p><%= flash[:alert] %></p>
-          <% end %>
-          <ul>
-            <% @time_slots.each do |slot| %>
-              <li>
-                <%= slot.starts_at.strftime("%I:%M") %> – <%= slot.ends_at.strftime("%I:%M") %>
-                <%= button_to "Book #{slot.starts_at.strftime("%I:%M")}",
-                      appointments_path,
-                      method: :post,
-                      params: { appointment: { time_slot_id: slot.id, doctor_id: @doctor.id } } %>
-              </li>
-            <% end %>
-          </ul>
-        ERB
+        @date = params[:schedule_date] || Date.today
+
+        taken_slots = TimeSlot.joins(:appointments).where(appointments: {date: @date})
+        @time_slots = TimeSlot.where(doctor_id: @doctor.id)
+                              .excluding(taken_slots)
+                              .order(:starts_at)
     end
     
     private

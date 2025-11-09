@@ -8,24 +8,22 @@ RSpec.describe "Schedule Appointments (request)", type: :request do
 
       doctor_d = instance_double("Doctor", id: 42, username: "dr_user")
       slot1    = instance_double("TimeSlot", id: 101,
-                                 starts_at: Time.zone.parse("2026-01-05 09:00"),
-                                 ends_at:   Time.zone.parse("2026-01-05 09:30"))
+                                 starts_at: Time.zone.parse("2000-01-01 09:00"),
+                                 ends_at:   Time.zone.parse("2000-01-01 09:30"))
       slot2    = instance_double("TimeSlot", id: 102,
-                                 starts_at: Time.zone.parse("2026-01-05 09:30"),
-                                 ends_at:   Time.zone.parse("2026-01-05 10:00"))
+                                 starts_at: Time.zone.parse("2000-01-01 09:30"),
+                                 ends_at:   Time.zone.parse("2000-01-01 10:00"))
 
       expect(doctor_class).to receive(:find_by!).with(username: "dr_user").and_return(doctor_d)
-
-      where_rel = double(:where_rel)
-      expect(timeslot_class).to receive(:where).with(doctor_id: 42).and_return(where_rel)
-      expect(where_rel).to receive(:order).with(:starts_at).and_return([slot1, slot2])
+      expect(timeslot_class).to receive_message_chain(:joins, :where).and_return([])
+      expect(timeslot_class).to receive_message_chain(:where, :excluding, :order).and_return([slot1, slot2])
 
       get doctor_schedule_path(id: "dr_user")
 
       expect(response).to have_http_status(:ok)
       expect(response.body).to include("Available time slots")
-      expect(response.body).to include("09:00")
-      expect(response.body).to include("09:30")
+      expect(response.body).to include("9:00")
+      expect(response.body).to include("9:30")
     end
   end
 
@@ -67,9 +65,8 @@ RSpec.describe "Schedule Appointments (request)", type: :request do
 
       # After redirect, the GET schedule page runs and will call Doctor.find_by / TimeSlot.where
       expect(doctor_c).to receive(:find_by!).with(username: "dr_user").and_return(doctor)
-      where_rel = double(:where_rel)
-      expect(timeslot_c).to receive(:where).with(doctor_id: 7).and_return(where_rel)
-      expect(where_rel).to receive(:order).with(:starts_at).and_return([])
+      expect(timeslot_c).to receive_message_chain(:joins, :where).and_return([])
+      expect(timeslot_c).to receive_message_chain(:where, :excluding, :order).and_return([])
 
       follow_redirect!
       expect(response.body).to include("Time slot no longer available")
