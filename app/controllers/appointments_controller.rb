@@ -1,15 +1,15 @@
 class AppointmentsController < ApplicationController
 
   def create
-    slot   = TimeSlot.find(params.dig(:appointment, :time_slot_id))
-    doctor = slot.doctor
+    slot = TimeSlot.find(params.dig(:appointment, :time_slot_id))
+    date = params.dig(:appointment, :date)
 
-    if Appointment.exists?(time_slot_id: slot.id)
-      redirect_to doctor_time_slots_path(doctor.id), alert: "Time slot no longer available"
+    if Appointment.exists?(time_slot: slot)
+      redirect_to doctor_time_slots_path(slot.doctor.id), alert: "Time slot no longer available"
       return
     end
 
-    Appointment.create!(patient_id: session[:user_id], time_slot: slot, date: params.dig(:appointment, :date))
+    Appointment.create!(patient_id: session[:user_id], time_slot: slot, date: date)
     redirect_to patient_appointments_path, notice: "Appointment confirmed"
   end
 

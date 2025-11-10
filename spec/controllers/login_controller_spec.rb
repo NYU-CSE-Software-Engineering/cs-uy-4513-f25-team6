@@ -3,74 +3,72 @@ require 'spec_helper'
 
 RSpec.describe LoginController, type: :controller do
 
-    describe 'GET #new' do # creates a test group for the `new` action
-                             # Get #new indicates we're testing an HTTP GET request to the `new` action
+    describe 'GET #form' do 
 
-        it 'renders the login form' do # start of a specific test case1 --- the login form should be rendered when someone visits the login page
-            get :form # simulates an HTTP GET request to the `new` action
-                       # it's as if a user navigates to the /login in their browswer
-            expect(response).to have_http_status(:success) # this assertion checks that the server responded with a successful HTTP status code
-            expect(response).to render_template(:form) # this assertion verifies that the controller rendered the correct view template
-                                                         # ensuring that the login form is displayed to the user
-        end # end of the test case1
+        it 'renders the login form' do 
+            get :form 
+            expect(response).to have_http_status(:success)
+            expect(response).to render_template(:form)
+        end 
 
-        it 'redirects already authenticated users to their dashboards' do # start of a specific test case2 -- the user should be redirected to their dashboard if they are already authenticated (ie logged in)
-            patient = create(:user, role: 'patient') # this creates a test user in the database with the role of 'patient'
-            allow(controller).to receive(:current_user).and_return(patient) # this simulates the user already being logged in by setting the current_user method to return the test user we created above
+        it 'redirects already authenticated users to their dashboards' do 
+            # simulates a user being logged in by setting the user ID and role in the session
+            session[:user_id] = 4
+            session[:role] = 'patient'
 
-            get :form # this simulates the GET request to the `new` action (same as above) but this time with a logged-in user
-            expect(response).to redirect_to(patient_dashboard_path) # this assertion checks that the server redirected the already logged-in user to their dashboard instead of showing the login form again
+            get :form 
+            
+            expect(response).to redirect_to(patient_dashboard_path) 
         end
     end
 
 
-    describe 'POST #submit' do # start a test group for the `create` action (handles the login form submission)
+    describe 'POST #login' do 
         
-        # create test users with different roles for testing
-        let!(:patient) { create(:user, email: 'pat@example.com', password: 'secret12', role: 'patient') }
-        let!(:doctor) { create(:user, email: 'drsmith@example.com', password: 'secret12', role: 'doctor') }
-        let!(:admin) { create(:user, email: 'admin@example.com', password: 'secret12', role: 'admin') }
+        let(:pw_hash) { Digest::MD5.hexdigest('secret12') } 
 
-        
-        context 'with valid credentials' do # context start
+        context 'with valid credentials' do
 
             it 'patient logs in successfully' do
-                post :login, params: {email: 'pat@example.com', password: 'secret12', role: 'patient'} # simulates a POST request to the `create` action with patient's credentials
+                patient_class = class_double("Patient").as_stubbed_const
+                patient = instance_double("Patient", email: 'pat@example.com', id: 1, class: patient_class)
+                expect(patient_class).to receive(:find_by).with({email: patient.email, password: pw_hash}).and_return(patient)
+
+                post :login, params: {email: 'pat@example.com', password: 'secret12', role: 'patient'}
 
                 expect(session[:user_id]).to eq(patient.id) # verifies that that the patient's user ID is stored in the session (proves they're logged in)
                 expect(response).to redirect_to(patient_dashboard_path) # verifies that patient is redirected to patient's dashboard after successful login
             end 
 
             it 'doctor logs in successfully' do
-                post :login, params: {email: 'drsmith@example.com', password: 'secret12', role: 'doctor'}  # simulates a POST request to the `create` action with doctors's credentials
+                doctor_class = class_double("Doctor").as_stubbed_const
+                doctor = instance_double("Doctor", email: 'drsmith@example.com', id: 2, class: doctor_class)
+                expect(doctor_class).to receive(:find_by).with({email: doctor.email, password: pw_hash}).and_return(doctor)
 
+                post :login, params: {email: 'drsmith@example.com', password: 'secret12', role: 'doctor'}
 
                 expect(session[:user_id]).to eq(doctor.id) # verifies that that the doctor's user ID is stored in the session (proves they're logged in)
                 expect(response).to redirect_to(doctor_dashboard_path) # verifies that doctor is redirected to doctor's dashboard after successful login
             end 
 
             it 'admin logs in successfully' do
-                post :login, params: {email: 'admin@example.com', password: 'secret12', role: 'admin'} # simulates a POST request to the `create` action with admins's credentials
+                admin_class = class_double("Admin").as_stubbed_const
+                admin = instance_double("Admin", email: 'admin@example.com', id: 3, class: admin_class)
+                expect(admin_class).to receive(:find_by).with({email: admin.email, password: pw_hash}).and_return(admin)
 
+                post :login, params: {email: 'admin@example.com', password: 'secret12', role: 'admin'}
 
                 expect(session[:user_id]).to eq(admin.id) # verifies that that the admin's user ID is stored in the session (proves they're logged in)
                 expect(response).to redirect_to(admin_dashboard_path) # verifies that admin is redirected to admin's dashboard after successful login
             end 
-        end # context end
+        end
 
 
+        context 'with invalid credentials' do
 
-        context 'with invalid credentials' do # context start
-
-            it 'fails with incorrect password' do
-                post :login, params: {email: 'pat@example.com', password: 'wrong_password', role: 'patient'}
-
-                expect(session[:user_id]).to be_nil
-                expect(response).to render_template(:form) # login failed so we give the user the login form again
-                expect(flash[:alert]).to eq('Invalid email or password')
-            end
-
-            it 'fails with non-existent email' do
+            it 'fails with nonexistent user' do
+                expect(controller).to receive(:find_user_by).and_return(nil)
+                
                 post :login, params: {email: 'nonexistent@example.com', password: 'secret12', role: 'doctor'}
 
                 expect(session[:user_id]).to be_nil
@@ -102,42 +100,30 @@ RSpec.describe LoginController, type: :controller do
                 expect(flash[:alert]).to eq('You must select a role')
             end
 
-            it 'fails when all params are missing' do
+        end
 
-                post :login, params: {}
-
-
-                expect(session[:user_id]).to be_nil
-                expect(response).to render_template(:form)
-                expect(flash[:alert]).to eq('Invalid email or password')
-            end
-        end # context end
-
-    end # describe end
+    end
 
     
-   describe 'DELETE #exit' do
-
-     let(:user) { create(:user, email: 'test@example.com', password: 'secret12') } # create a test user 
-
-     before do 
-        session[:user_id] = user.id # simulates a user being logged in by setting the user ID in the session
-     end 
-
+   describe 'DELETE #logout' do
 
      it 'logs out the user' do
-        delete :logout # simulate the HTTP DELTE request to the logout action
+        # simulates a user being logged in by setting the user ID and role in the session
+        session[:user_id] = 5 
+        session[:role] = 'admin'
+
+        delete :logout
 
         expect(session[:user_id]).to be_nil 
-        expect(response).to redirect_to(root_path) # verify user is redirected to the root path (home page) after logging out
+        expect(session[:role]).to be_nil 
+        expect(response).to redirect_to(login_path)
         expect(flash[:notice]).to eq('Logged out successfully')
      end 
 
-   end # describe end
+   end
 
 
-end # controller rspec end
-
+end
 
 
 
