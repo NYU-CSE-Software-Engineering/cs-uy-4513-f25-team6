@@ -60,11 +60,11 @@ Then('I should see {string} – {string}') do |start_s, end_s|
   expect(page).to have_content("#{start_s} – #{end_s}")
 end
 
-Given('the slot starting at {string} for doctor {string} is already booked') do |slot_time, doc_name|
+Given('the slot starting at {string} on {string} for doctor {string} is already booked') do |slot_time, date, doc_name|
   otherPat = FactoryBot.create(:patient)
   doc = Doctor.find_by!(username: doc_name)
   slot = TimeSlot.find_by!(starts_at: slot_time, doctor: doc)
-  Appointment.create(patient: otherPat, time_slot: slot, date: Date.today)
+  Appointment.create(patient: otherPat, time_slot: slot, date: date)
 end
 
 # Click the "Book this slot" button for a specific slot
@@ -72,15 +72,20 @@ When('I book the slot starting at {string}') do |start_time|
   page.find('td', text: start_time).find('+td button').click
 end
 
+When('I choose the date {string}') do |date|
+  fill_in 'schedule_date', with: date
+  click_button 'Refresh'
+end
+
 Then('I should be on my appointments page') do
   # Adjust if you mount it at /patient/appointments
   expect(page).to have_current_path(%r{\A/patient(/appointments)?\z}, ignore_query: true)
 end
 
-Then('an appointment should exist for patient {string} with doctor {string} at {string}') do |patient_u, doctor_u, starts_at_s|
+Then(/an appointment should( not)? exist for patient "(.*)" with doctor "(.*)" at "(.*)" on "(.*)"/) do |inverse, patient_u, doctor_u, starts_at, date|
   patient = Patient.find_by!(username: patient_u)
   doctor  = Doctor.find_by!(username: doctor_u)
-  slot    = TimeSlot.find_by!(doctor: doctor, starts_at: starts_at_s)
-  expect(Appointment.exists?(patient: patient, time_slot: slot)).to be(true)
+  slot    = TimeSlot.find_by!(doctor: doctor, starts_at: starts_at)
+  expect(Appointment.exists?(patient: patient, time_slot: slot, date: date)).to be(!inverse)
 end
 
