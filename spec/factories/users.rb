@@ -3,14 +3,9 @@ require 'digest'
 FactoryBot.define do
   sequence :tag, "0000"
 
+  # This factory should never be directly used, it just exists to
+  # provide the password functionality to all the actual user types
   factory :user do
-    transient do
-      role { 'patient' }
-    end
-
-    username { "user#{generate :tag}" }
-    email { |u| "#{u.username}@example.com" }
-    
     after(:build) do |user, evaluator|
       # If password is provided as plain text, hash it
       if user.password && user.password.length != 32
@@ -19,42 +14,21 @@ FactoryBot.define do
         user.password = Digest::MD5.hexdigest('secret12')
       end
     end
-
-    initialize_with do
-      attrs = attributes.except(:role)
-      case role
-      when 'patient'
-        Patient.new(attrs)
-      when 'doctor'
-        Doctor.new(attrs)
-      when 'admin'
-        Admin.new(attrs)
-      else
-        Patient.new(attrs)
-      end
-    end
-
-    to_create do |instance|
-      instance.save!
-    end
   end
 
-  factory :patient, class: Patient do
+  factory :patient, parent: :user, class: Patient do
     username { "patient#{generate :tag}" }
-    email { |p| "#{p.username}@example.com" }
-    password { Digest::MD5.hexdigest('secret12') }
+    email { "#{username}@example.com" }
   end
 
-  factory :doctor, class: Doctor do
+  factory :doctor, parent: :user, class: Doctor do
     username { "doctor#{generate :tag}" }
-    email { |d| "#{d.username}@example.com" }
-    password { Digest::MD5.hexdigest('secret12') }
+    email { "#{username}@example.com" }
   end
 
-  factory :admin, class: Admin do
+  factory :admin, parent: :user, class: Admin do
     username { "admin#{generate :tag}" }
-    email { |a| "#{a.username}@example.com" }
-    password { Digest::MD5.hexdigest('secret12') }
+    email { "#{username}@example.com" }
   end
 end
 
