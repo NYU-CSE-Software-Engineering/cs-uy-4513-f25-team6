@@ -31,28 +31,27 @@ Given('I am logged in as patient {string}') do |username|
   fill_in "Password", with: "Secret12"
   choose "Patient"
   click_button "Log In"
-  #expect(page).to have_current_path("/patient", ignore_query: true), "Expected to land on /patient after login"
 end
 
 # ----- Navigation within clinic/doctor browse flow -----
 
 Given('I am on the find doctor page for clinic {string}') do |clinic_name|
   cln = Clinic.find_by!(name: clinic_name)
-  visit "/clinic/#{cln.id}/doctors"
+  visit "/clinics/#{cln.id}/doctors"
 end
 
-Given('I am on the schedule page for doctor {string}') do |doc_name|
+Given('I am on the time slots page for doctor {string}') do |doc_name|
   doc = Doctor.find_by!(username: doc_name)
-  visit "/doctor/#{doc.id}/schedule_appt"
+  visit doctor_time_slots_path(doc.id)
 end
 
-Then('I should be on the schedule page for doctor {string}') do |doctor_username|
-  expect(page).to have_current_path(%r{\A/doctor/.+/schedule_appt\z}, ignore_query: true),
+Then('I should be on the time slots page for doctor {string}') do |doctor_username|
+  expect(page).to have_current_path(%r{\A/doctors/.+/time_slots\z}, ignore_query: true),
     "Expected schedule URI for doctor '#{doctor_username}'"
 end
 
-Then('I should stay on the schedule page for doctor {string}') do |doctor_username|
-  step %(I should be on the schedule page for doctor "#{doctor_username}")
+Then('I should stay on the time slots page for doctor {string}') do |doctor_username|
+  step %(I should be on the time slots page for doctor "#{doctor_username}")
 end
 
 # ----- Slot visibility & actions -----
@@ -61,16 +60,21 @@ Then('I should see {string} – {string}') do |start_s, end_s|
   expect(page).to have_content("#{start_s} – #{end_s}")
 end
 
-Given('time slot {string} for doctor {string} is already booked') do |_slot_time, doc_name|
-  otherPat = Patient.create!(username:"otherPatient",email:"other@test.com",password:Digest::MD5.hexdigest("hello"))
+Given('the slot starting at {string} on {string} for doctor {string} is already booked') do |slot_time, date, doc_name|
+  otherPat = FactoryBot.create(:patient)
   doc = Doctor.find_by!(username: doc_name)
-  slot = TimeSlot.find_by!(starts_at: _slot_time, doctor: doc)
-  Appointment.create(patient: otherPat, time_slot: slot, date: Date.today)
+  slot = TimeSlot.find_by!(starts_at: slot_time, doctor: doc)
+  Appointment.create(patient: otherPat, time_slot: slot, date: date)
 end
 
-# Click the specific "Book ..." button for a slot 
-When('I press "Book {string}"') do |slot_label|
-  click_button "Book #{slot_label}"
+# Click the "Book this slot" button for a specific slot
+When('I book the slot starting at {string}') do |start_time|
+  page.find('td', text: start_time).find('+td button').click
+end
+
+When('I choose the date {string}') do |date|
+  fill_in 'schedule_date', with: date
+  click_button 'Refresh'
 end
 
 Then('I should be on my appointments page') do
@@ -78,11 +82,10 @@ Then('I should be on my appointments page') do
   expect(page).to have_current_path(%r{\A/patient(/appointments)?\z}, ignore_query: true)
 end
 
-Then('an appointment should exist for patient {string} with doctor {string} at {string}') do |patient_u, doctor_u, starts_at_s|
+Then(/an appointment should( not)? exist for patient "(.*)" with doctor "(.*)" at "(.*)" on "(.*)"/) do |inverse, patient_u, doctor_u, starts_at, date|
   patient = Patient.find_by!(username: patient_u)
   doctor  = Doctor.find_by!(username: doctor_u)
-  slot    = TimeSlot.find_by!(doctor: doctor, starts_at: starts_at_s)
-  #t = Time.zone.parse()
-  expect(Appointment.exists?(patient: patient, time_slot: slot)).to be(true)
+  slot    = TimeSlot.find_by!(doctor: doctor, starts_at: starts_at)
+  expect(Appointment.exists?(patient: patient, time_slot: slot, date: date)).to be(!inverse)
 end
 

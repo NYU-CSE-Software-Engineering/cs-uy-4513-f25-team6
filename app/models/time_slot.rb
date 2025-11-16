@@ -17,10 +17,10 @@ class TimeSlot < ApplicationRecord
     def slots_cannot_overlap
         TimeSlot.where(doctor_id: doctor_id).each do |existing|
             if starts_at >= existing.starts_at && starts_at < existing.ends_at
-                errors.add :starts_at, :overlaps_existing, message: "overlaps an existing time slot for doctor #{doctor_id}"
+                errors.add :starts_at, :overlaps_existing, message: "#{starts_at} overlaps an existing time slot from #{existing.starts_at} to #{existing.ends_at} for doctor #{doctor_id}"
                 break
             elsif ends_at > existing.starts_at && ends_at <= existing.ends_at
-                errors.add :ends_at, :overlaps_existing, message: "overlaps an existing time slot for doctor #{doctor_id}"
+                errors.add :ends_at, :overlaps_existing, message: "#{starts_at} overlaps an existing time slot from #{existing.starts_at} to #{existing.ends_at} for doctor #{doctor_id}"
                 break
             end
         end

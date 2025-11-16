@@ -1,0 +1,17 @@
+<h2>Select a date for your appointment</h1>
+<%= form_with method: :get do |form| %>
+    <%= form.date_field :schedule_date, value: @date %>
+    <%= form.submit "Refresh" %>
+<% end %>
+<h2>Available time slots for <%= @date %></h1>
+<table>
+    <% @time_slots.each do |slot| %>
+    <tr>
+        <td><%= slot.starts_at.strftime("%l:%M %p") %> - <%= slot.ends_at.strftime("%l:%M %p") %></td>
+        <td><%= button_to "Book this slot",
+                appointments_path,
+                method: :post,
+                params: { appointment: { time_slot_id: slot.id, doctor_id: @doctor.id, date: @date } } %></td>
+    </tr>
+    <% end %>
+</table>

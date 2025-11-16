@@ -2,8 +2,8 @@ require 'digest'
 
 class LoginController < ApplicationController
     def form
-        if current_user
-            redirect_to dashboard_path_for_user(current_user)
+        if session[:user_id] && session[:role]
+            redirect_to dashboard_path_for(session[:role])
         else
             render :form
         end
@@ -15,75 +15,61 @@ class LoginController < ApplicationController
         role = params[:role]
 
         if email.blank? || password.blank?
-            flash[:danger] = 'Invalid email or password'
+            flash[:alert] = 'Invalid email or password'
             render :form
             return
         elsif role.blank?
-            flash[:danger] = 'You must select a role'
+            flash[:alert] = 'You must select a role'
             render :form
             return
         end
 
-        user = find_user_by_email(email, role)
+        user = find_user_by({
+            email: email, 
+            password: Digest::MD5.hexdigest(password)
+        }, role)
         
-        if user && authenticate_user(user, password)
+        if user
             session[:user_id] = user.id
             session[:role] = role
-            redirect_to dashboard_path_for_user(user)
+            redirect_to dashboard_path_for(role)
         else
-            flash[:danger] = 'Invalid email or password'
+            flash[:alert] = 'Invalid email or password'
             render :form
         end
     end
 
     def logout
         session[:user_id] = nil
-        flash[:info] = 'Logged out successfully'
-        redirect_to root_path
+        session[:role] = nil
+        redirect_to login_path, notice: 'Logged out successfully'
     end
 
     private
 
     def current_user
         return nil unless session[:user_id]
-        
-        @current_user ||= find_user_by_id(session[:user_id], session[:role])
+        find_user_by({id: session[:user_id]}, session[:role])
     end
 
-    def find_user_by_email(email, role)
-        case role
+    def find_user_by(hash, role)
+        case role.downcase
         when 'patient'
-            return Patient.find_by(email: email)
+            return Patient.find_by(hash)
         when 'doctor'
-            return Doctor.find_by(email: email)
+            return Doctor.find_by(hash)
         when 'admin'
-            return Admin.find_by(email: email)
+            return Admin.find_by(hash)
         end
     end
 
-    def find_user_by_id(id, role)
-        case role
+    def dashboard_path_for(role)
+        case role.downcase
         when 'patient'
-            return Patient.find_by(id: id)
-        when 'doctor'
-            return Doctor.find_by(id: id)
-        when 'admin'
-            return Admin.find_by(id: id)
-        end
-    end
-
-    def authenticate_user(user, password)
-        password_hash = Digest::MD5.hexdigest(password)
-        user.password == password_hash
-    end
-
-    def dashboard_path_for_user(user)
-        case user.class.name
-        when 'Patient'
             return patient_dashboard_path
-        when 'Doctor'
+        when 'doctor'
             return doctor_dashboard_path
-        when 'Admin'
+        when 'admin'
             return admin_dashboard_path
         else
             return root_path

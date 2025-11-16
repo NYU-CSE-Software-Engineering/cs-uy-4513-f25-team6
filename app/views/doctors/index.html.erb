@@ -1,0 +1,4 @@
+<p><%= @id %></p>
+<% @doctors.each do |doctor| %>
+    <a href="<%= doctor_time_slots_path(doctor.id) %>"><%= doctor.username %></a><br>
+<% end %>
