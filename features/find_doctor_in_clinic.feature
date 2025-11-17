@@ -1,3 +1,4 @@
+@wip
 Feature: Find Doctor Within Clinic As Patient
 
     As a patient

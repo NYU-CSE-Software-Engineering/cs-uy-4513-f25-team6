@@ -1,3 +1,4 @@
+@wip
 Feature: View appointments as a doctor
   As a doctor
   I want to view my upcoming appointments

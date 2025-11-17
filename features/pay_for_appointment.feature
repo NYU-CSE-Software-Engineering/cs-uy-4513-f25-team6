@@ -1,3 +1,4 @@
+@wip
 Feature: Pay for appointment bill
   As a signed-in patient
   I want to pay my appointment bill

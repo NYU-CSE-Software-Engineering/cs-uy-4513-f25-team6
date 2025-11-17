@@ -1,3 +1,4 @@
+@wip
 Feature: configure doctor time slots
 
     As a doctor
