@@ -14,7 +14,7 @@ Rails.application.routes.draw do
   # Login routes
   get '/login', to: 'login#form', as: :login
   post '/login', to: 'login#login'
-  delete '/logout', to: 'login#logout', as: :logout
+  get '/logout', to: 'login#logout', as: :logout
 
   # Non-RESTful patient routes
   get '/patient/dashboard', to: 'dashboard#patient', as: :patient_dashboard

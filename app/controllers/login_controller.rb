@@ -42,7 +42,7 @@ class LoginController < ApplicationController
     def logout
         session[:user_id] = nil
         session[:role] = nil
-        redirect_to login_path, notice: 'Logged out successfully'
+        redirect_to login_path, notice: 'Successfully logged out'
     end
 
     private
