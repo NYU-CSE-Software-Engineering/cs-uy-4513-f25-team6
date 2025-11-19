@@ -18,7 +18,7 @@ Feature: User logs in
     And I fill in "Password:" with "Secret12"
     And I choose "Patient"
     And I click "Log In"
-    Then I should see "Welcome, pat_user"
+    Then I should see the string "Welcome, pat_user"
     And I should be on the patient dashboard page
 
   @username_login
@@ -28,7 +28,7 @@ Feature: User logs in
     And I fill in "Password:" with "Secret12"
     And I choose "Doctor"
     And I click "Log In"
-    Then I should see "Welcome, dr_smith"
+    Then I should see the string "Welcome, dr_smith"
     And I should be on the doctor dashboard page
 
   @sad_path
@@ -38,5 +38,5 @@ Feature: User logs in
     And I fill in "Password:" with "wrongpass"
     And I choose "Admin"
     And I click "Log In"
-    Then I should see "Invalid email or password"
+    Then I should see the string "Invalid email or password"
     And I should be on the login page

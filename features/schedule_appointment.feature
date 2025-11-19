@@ -20,13 +20,13 @@ Feature: Patient picks an appointment time with a doctor
   Scenario: Patient books an available time slot
     Given I am logged in as patient "pat_user"
     And I am on the find doctor page for clinic "Midtown Health"
-    Then I should see "dr_user"
+    Then I should see the string "dr_user"
     When I click "dr_user"
     Then I should be on the time slots page for doctor "dr_user"
     When I choose the date "2025-06-14"
-    Then I should see "9:00 AM - 9:30 AM"
+    Then I should see the string "9:00 AM - 9:30 AM"
     When I book the slot starting at "9:00 AM"
-    Then I should see "Appointment confirmed"
+    Then I should see the string "Appointment confirmed"
     And I should be on my appointments page
     And an appointment should exist for patient "pat_user" with doctor "dr_user" at "09:00 AM" on "2025-06-14"
 
@@ -36,7 +36,7 @@ Feature: Patient picks an appointment time with a doctor
     And the slot starting at "9:00 AM" on "2025-07-11" for doctor "dr_user" is already booked
     And I am on the time slots page for doctor "dr_user"
     And I choose the date "2025-07-11"
-    Then I should not see "9:00 AM - 9:30 AM"
+    Then I should not see the string "9:00 AM - 9:30 AM"
 
   @sad_path
   Scenario: Patient cannot book a slot that was booked while they were viewing the page
@@ -44,8 +44,8 @@ Feature: Patient picks an appointment time with a doctor
     And I am on the time slots page for doctor "dr_user"
     And I choose the date "2025-05-23"
     And the slot starting at "9:00 AM" on "2025-05-23" for doctor "dr_user" is already booked
-    Then I should see "9:00 AM - 9:30 AM"
+    Then I should see the string "9:00 AM - 9:30 AM"
     When I book the slot starting at "9:00"
-    Then I should see "Time slot no longer available"
+    Then I should see the string "Time slot no longer available"
     And an appointment should not exist for patient "pat_user" with doctor "dr_user" at "09:00 AM" on "2025-05-23"
     And I should stay on the time slots page for doctor "dr_user"

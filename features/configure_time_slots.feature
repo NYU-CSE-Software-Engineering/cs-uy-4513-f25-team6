@@ -12,7 +12,7 @@ Scenario: doctor vists the time slot page
 Scenario: non-doctor fails to visit the time slot page
     Given I am on the time slot page
     Then I should be on the login page
-    And I should see "This page requires you to be logged in"
+    And I should see the string "This page or action requires you to be logged in"
 
 Scenario: doctor changes time slots
     Given I am signed in as a doctor

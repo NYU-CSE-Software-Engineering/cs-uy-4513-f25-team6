@@ -21,12 +21,12 @@ Feature: View prescriptions
   Scenario: Empty table when the patient has no prescriptions
     Given I have no prescriptions
     And I am on the prescriptions page
-    Then I should see "You don't have any prescriptions yet."
+    Then I should see the string "You don't have any prescriptions yet."
 
   Scenario: Patient cannot view another patient's prescriptions
     Given another patient exists with a prescription "ConfidentialMed"
     And I am on the prescriptions page
-    Then I should not see "ConfidentialMed"
+    Then I should not see the string "ConfidentialMed"
 
   Scenario: Patient filters prescriptions by status
     Given the following prescriptions exist for me:
@@ -37,9 +37,9 @@ Feature: View prescriptions
     And I am on the prescriptions page
     And I choose "active" in the status filter
     And I apply the filter
-    Then I should see "Ibuprofen"
-    And I should see "Panadol"
-    And I should not see "Zyrtec"
+    Then I should see the string "Ibuprofen"
+    And I should see the string "Panadol"
+    And I should not see the string "Zyrtec"
 
   Scenario: Patient filters and there are no matching records
     Given the following prescriptions exist for me:
@@ -48,4 +48,4 @@ Feature: View prescriptions
       | Zyrtec          | 2 tablets daily  | Take with meal               | Dr Smith    | 2025-09-20 | expired|
       | Panadol         | 1 tablet daily   | Take with evening meal       | Dr Rivera   | 2025-10-10 | active |
     When I visit the prescriptions page with status "cancelled"
-    Then I should see "No prescriptions match your filter."
+    Then I should see the string "No prescriptions match your filter."

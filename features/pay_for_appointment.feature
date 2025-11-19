@@ -16,8 +16,8 @@ Feature: Pay for appointment bill
     And I fill in "Expiration Year" with "2030"
     And I fill in "CVC" with "123"
     And I click "Pay Now"
-    Then I should see "Payment successful"
-    And I should see "Status: paid"
+    Then I should see the string "Payment successful"
+    And I should see the string "Status: paid"
     And the bill should be marked paid
 
   @sad
@@ -25,19 +25,19 @@ Feature: Pay for appointment bill
     Given I am on the page for my unpaid bill
     When I fill in "Card Number" with ""
     And I click "Pay Now"
-    Then I should see "Please enter a valid card number"
-    And I should see "Status: unpaid"
+    Then I should see the string "Please enter a valid card number"
+    And I should see the string "Status: unpaid"
 
   @edge
   Scenario: Patient attempts to pay an already-paid bill
     Given I have a paid bill
     And I am on the page for my paid bill
     When I click "Pay Now"
-    Then I should see "This bill is already paid"
-    And I should see "Status: paid"
+    Then I should see the string "This bill is already paid"
+    And I should see the string "Status: paid"
 
   @authz
   Scenario: Patient tries to access someone else's bill
     Given another patient exists with a different unpaid bill
     When I visit that other patient's bill page
-    Then I should see "You are not authorized to access this bill"
+    Then I should see the string "You are not authorized to access this bill"

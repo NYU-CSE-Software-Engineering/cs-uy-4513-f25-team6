@@ -18,17 +18,17 @@ Feature: Doctor signs up for the clinic
     And I fill in "Account Number" with "1234567890"
     And I select "Cardiology" from "Specialty"
     And I click "Create Account"
-    Then I should see "Welcome, Dr. Ada Lovelace" or "A message with a confirmation link has been sent to your email address"
+    Then I should see the string "Welcome, Dr. Ada Lovelace" or "A message with a confirmation link has been sent to your email address"
     And I should be on the doctor dashboard page
 
   @missing_fields
   Scenario: Missing required fields
     When I click "Create Account"
-    Then I should see "Email can't be blank"
-    And I should see "Password can't be blank"
-    And I should see "Medical License Number can't be blank"
-    And I should see "Phone Number can't be blank"
-    And I should see "Account Number can't be blank"
+    Then I should see the string "Email can't be blank"
+    And I should see the string "Password can't be blank"
+    And I should see the string "Medical License Number can't be blank"
+    And I should see the string "Phone Number can't be blank"
+    And I should see the string "Account Number can't be blank"
 
   @duplicate_email
   Scenario: Email already taken
@@ -40,7 +40,7 @@ Feature: Doctor signs up for the clinic
     And I fill in "Medical License Number" with "CA-777777"
     And I select "Dermatology" from "Specialty"
     And I click "Create Account"
-    Then I should see "Email has already been taken"
+    Then I should see the string "Email has already been taken"
 
   @invalid_license
   Scenario: Invalid medical license format
@@ -51,7 +51,7 @@ Feature: Doctor signs up for the clinic
     And I fill in "Medical License Number" with "??bad??"
     And I select "Radiology" from "Specialty"
     And I click "Create Account"
-    Then I should see "Medical License Number is invalid"
+    Then I should see the string "Medical License Number is invalid"
 
   @invalid_phone
   Scenario: Invalid phone number format
@@ -64,7 +64,7 @@ Feature: Doctor signs up for the clinic
     And I fill in "Account Number" with "1234567890"
     And I select "Radiology" from "Specialty"
     And I click "Create Account"
-    Then I should see "Phone Number is invalid"
+    Then I should see the string "Phone Number is invalid"
 
   @invalid_account
   Scenario: Invalid account number format
@@ -77,7 +77,7 @@ Feature: Doctor signs up for the clinic
     And I fill in "Account Number" with "12ab"
     And I select "Oncology" from "Specialty"
     And I click "Create Account"
-    Then I should see "Account Number is invalid"
+    Then I should see the string "Account Number is invalid"
 
   @weak_password
   Scenario: Weak password
@@ -88,6 +88,6 @@ Feature: Doctor signs up for the clinic
     And I fill in "Medical License Number" with "NJ-555555"
     And I select "Oncology" from "Specialty"
     And I click "Create Account"
-    Then I should see "Password is too short"
+    Then I should see the string "Password is too short"
 
 
