@@ -1,0 +1,21 @@
+<h2>Add a new time slot</h1>
+<%= form_with method: :post, url: doctor_time_slots_path(session[:user_id]) do |form| %>
+    <label for="starts_at">Start time:</label>
+    <%= form.time_field :starts_at %>
+    <label for="starts_at">End time:</label>
+    <%= form.time_field :ends_at %>
+    <%= form.submit "Add" %>
+<% end %>
+<h2>Your current time slots</h1>
+<table>
+    <% @time_slots.each do |slot| %>
+    <tr>
+        <td><%= slot.starts_at.strftime("%l:%M %p") %> - <%= slot.ends_at.strftime("%l:%M %p") %></td>
+        <td><%= 
+            button_to "Remove this slot",
+            doctor_time_slot_path(session[:user_id], slot.id),
+            method: :delete
+        %></td>
+    </tr>
+    <% end %>
+</table>

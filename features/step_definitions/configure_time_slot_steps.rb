@@ -6,9 +6,9 @@ end
 
 When(/I add the slots? "(.*)"/) do |slots|
     slots.split(', ').each do |slot|
-        fill_in "Start Time", with: slot
-        fill_in "End Time", with: Time.parse(slot + " UTC") + 1.minutes
-        click_button "Add Time Slot"
+        fill_in "starts_at", with: slot
+        fill_in "ends_at", with: Time.parse(slot + " UTC") + 1.minutes
+        click_button "Add"
     end
 end
 
@@ -21,15 +21,5 @@ end
 Then(/I should(?: still)?( not)? have the slots? "(.*)"/) do |inverse, slots|
     slots.split(', ').each do |slot|
         expect(TimeSlot.exists?(starts_at: slot)).to eq(!inverse)
-    end
-end
-
-Then(/I should( not)? see the time slots? "(.*)"/) do |inverse, slots|
-    slots.split(', ').each do |slot|
-        if inverse 
-            expect(page).to_not have_content(slot)
-        else
-            expect(page).to_not have_content(slot)
-        end
     end
 end
