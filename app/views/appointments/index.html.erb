@@ -1,0 +1,26 @@
+<h1>My Appointments</h1>
+
+<% if flash[:notice].present? %>
+  <p><%= flash[:notice] %></p>
+<% end %>
+
+<% if @appointments.any? %>
+  <ul>
+    <% @appointments.each do |appointment| %>
+      <li>
+        <strong>Date:</strong>
+        <%= appointment.date %><br>
+
+        <strong>Time:</strong>
+        <%= appointment.time_slot.starts_at.strftime("%I:%M %p") %> –
+        <%= appointment.time_slot.ends_at.strftime("%I:%M %p") %><br>
+
+        <strong>Doctor:</strong>
+        <%= appointment.doctor&.username || "Doctor" %>
+      </li>
+      <hr>
+    <% end %>
+  </ul>
+<% else %>
+  <p>You have no upcoming appointments.</p>
+<% end %>
