@@ -1,0 +1,44 @@
+<h1>Bill Details</h1>
+
+<p>
+  <strong>Appointment date:</strong>
+  <%= @bill.appointment.date %>
+</p>
+
+<p>
+  <strong>Doctor:</strong>
+  <%= @bill.appointment.doctor&.username || "N/A" %>
+</p>
+
+<p>
+  <strong>Amount:</strong>
+  $<%= @bill.amount %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @bill.status.capitalize %>
+</p>
+
+<% if @bill.due_date.present? %>
+  <p>
+    <strong>Due date:</strong>
+    <%= @bill.due_date %>
+  </p>
+<% end %>
+
+<% if flash[:notice].present? %>
+  <p><%= flash[:notice] %></p>
+<% end %>
+
+<% if flash[:alert].present? %>
+  <p><%= flash[:alert] %></p>
+<% end %>
+
+<% if @bill.status == "unpaid" %>
+  <%= form_with url: billing_path(@bill), method: :patch do |f| %>
+    <%= f.submit "Pay now" %>
+  <% end %>
+<% else %>
+  <p>This bill is already paid.</p>
+<% end %>

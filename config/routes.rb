@@ -37,4 +37,6 @@ Rails.application.routes.draw do
   end
   
   resources :appointments, only: [:create]
+
+  resources :bills, only: [:show, :update], path: "billing", as: "billing"
 end
