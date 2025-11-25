@@ -14,6 +14,11 @@ class AppointmentsController < ApplicationController
   end
 
   def index
-    render inline: "<h1>My Appointments</h1><p><%= flash[:notice] %></p>"
+    if Appointment.respond_to?(:includes) && Appointment.respond_to?(:where)
+      @appointments = Appointment.includes(:time_slot, :doctor).where(patient_id: session[:user_id])
+    else
+      @appointments = []
+    end
+  # Rails will automatically render app/views/appointments/index.html.erb
   end
 end
