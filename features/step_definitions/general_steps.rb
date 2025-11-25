@@ -38,9 +38,9 @@ Given('the following users exist:') do |table|
     end
 end
 
-Given(/I am signed in as a (.*)/) do |type|
+Given(/I am signed in as a (.*)/) do |role|
     pass_hash = Digest::MD5.hexdigest('testPassword')
-    case type
+    case role
     when 'patient'
         @test_user = Patient.create!(email: 'patient@example.com', username: 'testPatient', password: pass_hash)
     when 'doctor'
@@ -48,11 +48,12 @@ Given(/I am signed in as a (.*)/) do |type|
     when 'admin'
         @test_user = Admin.create!(email: 'admin@example.com', username: 'testAdmin', password: pass_hash)
     else
-        raise "#{type} is not a valid role."
+        raise "#{role} is not a valid role."
     end
     visit '/login'
     fill_in 'Email', with: @test_user.email
     fill_in 'Password', with: 'testPassword'
+    choose role.capitalize
     click_button 'Log In'
 end
 
@@ -77,15 +78,17 @@ Then(/I should be on the (.*) page$/) do |page_name|
     assert_equal path_to(page_name), current_path
 end
 
-Then(/I should( not)? see "(.*)"/) do |inverse, text|
-    if (inverse)
-        expect(page).not_to have_content(text)
-    else
-        expect(page).to have_content(text)
+Then(/I should( not)? see the strings? "(.*)"/) do |inverse, strings|
+    strings.split(', ').each do |text|
+        if inverse 
+            expect(page).to_not have_content(text)
+        else
+            expect(page).to have_content(text)
+        end
     end
 end
 
-Then("I should see {string} before {string}") do |first_text, second_text|
+Then(/I should see "(.*)" before "(.*)"/) do |first_text, second_text|
     a = page.text.index(first_text)
     b = page.text.index(second_text)
     expect(a).not_to be_nil, "Expected to find '#{first_text}'"
