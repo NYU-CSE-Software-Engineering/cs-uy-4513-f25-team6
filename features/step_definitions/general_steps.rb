@@ -38,7 +38,7 @@ Given('the following users exist:') do |table|
     end
 end
 
-Given(/I am signed in as a (.*)/) do |role|
+Given(/I am signed in as an? (.*)/) do |role|
     pass_hash = Digest::MD5.hexdigest('testPassword')
     case role
     when 'patient'
