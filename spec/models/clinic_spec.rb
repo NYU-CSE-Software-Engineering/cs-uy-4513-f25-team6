@@ -65,5 +65,68 @@ describe Clinic do
         # Rating greater than 5.0 should fail
         expect { Clinic.create!(name: "Clinic B", rating: 5.1) }.to raise_error(ActiveRecord::RecordInvalid)
     end
+
+
+    # This is testing the Search method of the Clinic Model
+    describe '.search_clinic' do # start of testing the .search_by_specialty() method in the Clinic Model
+
+        # set up the test environment
+          # create three fake clinics with different specialties and locations
+        before do
+            @clinic1 = Clinic.create!(name: "NYC Dermatology", specialty: "Dermatology", location: "New York", rating: 4.5)
+            @clinic2 = Clinic.create!(name: "LA Dermatology", specialty: "Dermatology", location: "Los Angeles", rating: 4.0)
+            @clinic3 = Clinic.create!(name: "NYC Cardiology", specialty: "Cardiology", location: "New York", rating: 3.5)
+        end
+        
+        # this is testing a scenario of the .search_by_specialty() method --- it should return clinics matching both specialty and location
+        it 'returns clinics matching both specialty and location' do
+            results = Clinic.search_clinic("Dermatology", "New York")
+            expect(results).to include(@clinic1)
+            expect(results).not_to include(@clinic2, @clinic3)
+        end
+        
+        # this is testing a scenario of the .search_by_specialty() method --- it should return clinics matching only specialty 
+        it 'returns clinics matching only specialty' do
+            results = Clinic.search_clinic("Dermatology", "")
+            expect(results).to include(@clinic1, @clinic2)
+            expect(results).not_to include(@clinic3)
+        end
+        
+        # this is testing a scenario of the .search_by_specialty() method --- it should return clinics matching only location
+        it 'returns clinics matching only location' do
+            results = Clinic.search_clinic("", "New York")
+            expect(results).to include(@clinic1, @clinic3)
+            expect(results).not_to include(@clinic2)
+        end
+        
+        # this is testing a scenario of the .search_by_specialty() method --- it should return an empty array when no clinics match
+        it 'returns empty array when no clinics match' do
+            results = Clinic.search_clinic("Pediatrics", "Chicago")
+            expect(results).to be_empty
+        end
+    end # end of testing the .search_by_specialty() method in the Clinic Model
+
+
+    describe '.sort_by_rating' do # start of testing the .sort_by_rating() method in the Clinic Model
+        
+        # set up the test environment
+           # create three fake clinics with different ratings
+        before do
+            @low_rated_clinic = Clinic.create!(name: "Low Clinic", rating: 2.0)
+            @medium_rated_clinic = Clinic.create!(name: "Medium Clinic", rating: 3.0)
+            @high_rated_clinic = Clinic.create!(name: "High Clinic", rating: 4.0)
+        end 
+        
+        # this is testing a scenario of the .sort_by_rating() method -- it should return clinics sorted by rating in descending order
+        it 'returns clinics sorted by rating in descending order' do
+            results = Clinic.sort_by_rating.to_a
+            expect(results.first).to eq(@high_rated_clinic)
+            expect(results.last).to eq(@low_rated_clinic)
+        end
+
+    end # end of testing the .sort_by_ratings() method in the Clinic model 
+
+
 end
+
 

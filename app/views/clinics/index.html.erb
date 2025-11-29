@@ -1,0 +1,72 @@
+<h1> Find Clinics </h1>      <!--page header for the clinic search page -->
+
+<%= form_tag(search_clinics_path, method: :get) do %>       <!-- start a form that will be submitted to the search_clinics_path route using the GET method -->
+
+  <%= label_tag :specialty %>
+  <%= select_tag :specialty,
+    options_for_select(Clinic.distinct.order(:specialty).pluck(:specialty), # unique specialties from the Clinics database
+    params[:specialty]
+    ),
+    include_blank: 'Any Specialty'
+  %>
+
+  <%= label_tag :location %>
+  <%= select_tag :location,
+    options_for_select(Clinic.distinct.order(:location).pluck(:location), # unique locations from the Clinics database
+    params[:location]
+    ),
+    include_blank: 'Any Location'
+  %>
+
+  <%= submit_tag "Search" %>
+
+<% end %>                          <!--end the form -->
+
+
+
+
+
+
+<% if flash[:error] %>                      <!--if there is an error message stored in the flash hash... -->
+   <p style="color: red;"><%= flash[:error] %></p>  <!-- display the error message in red text -->
+<% end %> 
+
+
+
+
+<% if @clinics.present? %>                   <!-- if @clinics is not nil/empty... render the table of clinics -->
+   <table>
+      <thead>
+         <tr>
+            <th>Name</th>
+            <th>Specialty</th>
+            <th>Location</th>
+            <th>Rating</th>
+         </tr>
+      </thead>
+      <tbody>
+          <% @clinics.each do |clinic| %>                  <!-- iterate over each clinic in the @clinics array --> 
+             <tr>
+                <td><%= clinic.name %></td>
+                <td><%= clinic.specialty %></td>
+                <td><%= clinic.location %></td>
+                <td><%= clinic.rating %></td>
+             </tr>                                                                                   
+         <% end %>
+      </tbody>
+   </table>
+<% end %>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

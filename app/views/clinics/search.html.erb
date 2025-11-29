@@ -1,0 +1,50 @@
+<h1> Search Results </h1>         <!-- page header for the clinic search results page -->
+
+
+
+
+
+<!-- if there is an error, display it -->
+<% if flash[:error] %>
+   <p style="color: red;"><%= flash[:error] %></p>
+<% end %>
+
+
+
+<!-- if there are any clinics found, display them in a table -->
+<% if @clinics.present? %>
+   <table>
+       <thead>
+          <tr>
+              <th>Name</th>
+              <th>Specialty</th>
+              <th>Location</th>
+              <th>
+                 <%= link_to "Rating", search_clinics_path(
+                     specialty: params[:specialty],
+                     location: params[:location],
+                     sort: "rating"
+                 ) %>
+              </th>
+          </tr>
+       </thead>
+       <tbody>
+           <% @clinics.each do |clinic| %>
+              <tr>
+                 <td><%= clinic.name %></td>
+                 <td><%= clinic.specialty %></td>
+                 <td><%= clinic.location %></td>
+                 <td><%= clinic.rating %></td>
+              </tr>
+           <% end %>
+       </tbody>
+    </table>
+<% else %>
+    <p> No clinics found </p>
+<% end %>
+
+
+
+<%= link_to "Back to Search", clinics_path %>        <!-- link to the clinic search page (find clinics page) -->
+
+
