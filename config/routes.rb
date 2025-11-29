@@ -22,6 +22,7 @@ Rails.application.routes.draw do
 
   # Non-RESTful doctor routes
   get '/doctor/dashboard', to: 'dashboard#doctor', as: :doctor_dashboard
+  get '/doctor/time_slots', to: 'time_slots#configure', as: :configure_time_slots
 
   # Non-RESTful admin routes
   get '/admin/dashboard', to: 'dashboard#admin', as: :admin_dashboard
@@ -33,7 +34,7 @@ Rails.application.routes.draw do
 
   # /doctors/:doctor_id/time_slots
   resources :doctors, only: [] do
-    resources :time_slots, only: [:index]
+    resources :time_slots, only: [:index, :create, :destroy]
   end
   
   resources :appointments, only: [:create]

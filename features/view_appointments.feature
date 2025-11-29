@@ -27,8 +27,8 @@ Feature: View appointments as a doctor
   Scenario: Doctor has no upcoming appointments
     Given I am signed in as a doctor
     And I am on the doctor appointments page
-    Then I should see "No upcoming appointments found."
+    Then I should see the string "No upcoming appointments found."
 
   Scenario: Unauthorized user tries to view doctor appointments
     Given I am on the doctor appointments page
-    Then I should see "You are not authorized to view this page."
+    Then I should see the string "You are not authorized to view this page."
