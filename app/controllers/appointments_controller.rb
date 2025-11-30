@@ -14,11 +14,20 @@ class AppointmentsController < ApplicationController
   end
 
   def index
-    if Appointment.respond_to?(:includes) && Appointment.respond_to?(:where)
-      @appointments = Appointment.includes(:time_slot, :doctor).where(patient_id: session[:user_id])
+    # Check if the logged-in user is a Doctor
+    is_doctor = defined?(Doctor) && Doctor.exists?(session[:user_id])
+
+    if is_doctor
+      # Logic for Doctor: Find appointments through their time slots
+      @appointments = Appointment.includes(:time_slot, :patient)
+                                 .where(time_slots: { doctor_id: session[:user_id] })
+    elsif Appointment.respond_to?(:includes) && Appointment.respond_to?(:where)
+      # Logic for Patient: Find appointments by patient_id
+      @appointments = Appointment.includes(:time_slot, :doctor)
+                                 .where(patient_id: session[:user_id])
     else
       @appointments = []
     end
-  # Rails will automatically render app/views/appointments/index.html.erb
+    # Rails will automatically render app/views/appointments/index.html.erb
   end
 end

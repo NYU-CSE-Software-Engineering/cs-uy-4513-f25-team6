@@ -61,6 +61,11 @@ RSpec.describe AppointmentsController, type: :controller do
 
   describe "GET #index" do
     before do
+      # Fix ID Collision: Move patient to ID 555 so they aren't mistaken for Doctor (ID 1)
+      patient.update(id: 555)
+      # Must update the associated appointments so they still belong to this patient
+      appt1.update(patient_id: 555)
+      appt2.update(patient_id: 555)
       # simulate logged-in patient
       session[:user_id] = patient.id
       get :index
@@ -77,7 +82,7 @@ RSpec.describe AppointmentsController, type: :controller do
 
     context "when logged in as a doctor" do
       before do
-        # Simulate logged-in doctor (overrides the patient login from the parent block)
+        # Simulate logged-in doctor 
         session[:user_id] = doctor.id
         get :index
       end
