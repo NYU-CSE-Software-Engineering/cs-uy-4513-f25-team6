@@ -74,5 +74,27 @@ RSpec.describe AppointmentsController, type: :controller do
     it "renders the index template" do
       expect(response).to render_template(:index)
     end
+
+    context "when logged in as a doctor" do
+      before do
+        # Simulate logged-in doctor (overrides the patient login from the parent block)
+        session[:user_id] = doctor.id
+        get :index
+      end
+
+      it "assigns the doctor's appointments" do
+        # appt1 and appt2 belong to 'doctor' defined in your let block
+        expect(assigns(:appointments)).to include(appt1, appt2)
+      end
+
+      it "does not include appointments for other doctors" do
+        # Create a generic appointment for a DIFFERENT doctor to ensure isolation
+        other_doctor = FactoryBot.create(:doctor)
+        other_slot = FactoryBot.create(:time_slot, doctor: other_doctor)
+        other_doc_appt = FactoryBot.create(:appointment, time_slot: other_slot)
+        
+        expect(assigns(:appointments)).not_to include(other_doc_appt)
+      end
+    end
   end
 end
