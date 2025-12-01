@@ -1,2 +1,31 @@
-<p>Welcome, <%= @user.username %></p>
-<p>This is the patient dashboard</p>
+<h1>Patient Dashboard</h1>
+
+<p>Welcome, <%= @patient.username %>!</p>
+
+<hr>
+
+<h2>Upcoming Appointments</h2>
+
+<% if @upcoming_appointments.any? %>
+  <ul>
+    <% @upcoming_appointments.each do |appt| %>
+      <li>
+        <strong>Date:</strong> <%= appt.date %><br>
+        <strong>Time:</strong>
+        <%= appt.time_slot.starts_at.strftime("%I:%M %p") %> –
+        <%= appt.time_slot.ends_at.strftime("%I:%M %p") %><br>
+        <strong>Doctor:</strong>
+        <%= appt.doctor&.username || "Doctor" %>
+      </li>
+      <hr>
+    <% end %>
+  </ul>
+<% else %>
+  <p>You have no upcoming appointments.</p>
+<% end %>
+
+<hr>
+
+<p>
+  <%= link_to "View all appointments", patient_appointments_path %>
+</p>
