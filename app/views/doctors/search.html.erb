@@ -1,0 +1,30 @@
+<h1>Search Results</h1>
+
+<%= link_to "Back to Doctors", clinic_doctors_path(@clinic) %>
+
+<% if flash[:error] %>
+    <p style="color: red;"><%= flash[:error] %></p>
+<% end %>
+
+<% if @doctors.present? %>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Specialty</th>
+                <th>Rating</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% @doctors.each do |doctor| %>
+                <tr>
+                    <td><%= doctor.username %></td>
+                    <td><%= doctor.specialty %></td>
+                    <td><%= doctor.rating %></td>
+                </tr>
+            <% end %>
+        </tbody>
+    </table>
+<% else %>
+    <p>No doctors found.</p>
+<% end %>

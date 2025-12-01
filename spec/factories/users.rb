@@ -21,11 +21,12 @@ FactoryBot.define do
     email { "#{username}@example.com" }
   end
 
+  '''
   factory :doctor, parent: :user, class: Doctor do
     username { "doctor#{generate :tag}" }
     email { "#{username}@example.com" }
   end
-
+  '''
   factory :admin, parent: :user, class: Admin do
     username { "admin#{generate :tag}" }
     email { "#{username}@example.com" }
