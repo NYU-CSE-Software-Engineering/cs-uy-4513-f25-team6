@@ -16,6 +16,10 @@ class BillsController < ApplicationController
   private
 
   def set_bill
-    @bill = Bill.find(params[:id])
+    @bill = Bill.joins(appointment: :patient)
+                .where(patients: { id: session[:user_id] })
+                .find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    redirect_to root_path, alert: "Unauthorized access"
   end
 end
