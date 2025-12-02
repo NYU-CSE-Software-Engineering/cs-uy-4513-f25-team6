@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_07_145100) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_01_150000) do
   create_table "admins", force: :cascade do |t|
     t.string "email"
     t.string "username"
@@ -27,6 +27,20 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_07_145100) do
     t.datetime "updated_at", null: false
     t.index ["patient_id"], name: "index_appointments_on_patient_id"
     t.index ["time_slot_id"], name: "index_appointments_on_time_slot_id"
+  end
+
+  create_table "bills", force: :cascade do |t|
+    t.integer "patient_id", null: false
+    t.integer "appointment_id", null: false
+    t.integer "amount_cents", null: false
+    t.string "status", default: "unpaid", null: false
+    t.datetime "paid_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["appointment_id"], name: "index_bills_on_appointment_id", unique: true
+    t.index ["paid_at"], name: "index_bills_on_paid_at"
+    t.index ["patient_id"], name: "index_bills_on_patient_id"
+    t.index ["status"], name: "index_bills_on_status"
   end
 
   create_table "clinics", force: :cascade do |t|

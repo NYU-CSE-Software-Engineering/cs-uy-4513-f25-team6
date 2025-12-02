@@ -2,6 +2,7 @@ class Appointment < ApplicationRecord
     belongs_to :patient
     belongs_to :time_slot
     has_one :doctor, through: :time_slot
+    has_one :bill, dependent: :destroy
 
     # all attributes must be present
     validates :patient_id, :time_slot_id, :date, presence: true

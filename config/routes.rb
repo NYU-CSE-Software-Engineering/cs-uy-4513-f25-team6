@@ -19,6 +19,8 @@ Rails.application.routes.draw do
   # Non-RESTful patient routes
   get '/patient/dashboard', to: 'dashboard#patient', as: :patient_dashboard
   get '/patient/appointments', to: 'appointments#index', as: :patient_appointments
+  get '/patient/billing/:id', to: 'bills#show', as: :patient_bill
+  post '/patient/billing/:id/pay', to: 'bills#pay', as: :pay_patient_bill
 
   # Non-RESTful doctor routes
   get '/doctor/dashboard', to: 'dashboard#doctor', as: :doctor_dashboard
