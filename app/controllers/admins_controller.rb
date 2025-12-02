@@ -1,0 +1,29 @@
+class AdminsController < ApplicationController
+    def new
+    end
+
+    def create
+        begin
+            filtered = params.expect(admin: [:email, :username, :password])
+        rescue ActionController::ParameterMissing
+            flash[:alert] = 'Missing required information'
+            render :new
+            return
+        end
+
+        filtered[:password] = Digest::MD5.hexdigest(filtered[:password])
+        @new_admin = Admin.new(filtered)
+
+        if (@new_admin.valid?)
+            @new_admin.save
+            session[:user_id] = @new_admin.id
+            session[:role] = 'admin'
+            flash[:notice] = 'Admin account created'
+            redirect_to admin_dashboard_path
+        else
+            flash[:alert] = 'Invalid account details'
+            render :new
+            return
+        end
+    end
+end

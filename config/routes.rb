@@ -41,10 +41,13 @@ Rails.application.routes.draw do
     resources :doctors, only: [:index]
   end
 
-  # /doctors/:doctor_id/time_slots
-  resources :doctors, only: [] do
+  resources :patients, only: [:new, :create]
+
+  resources :doctors, only: [:new, :create] do
     resources :time_slots, only: [:index, :create, :destroy]
   end
+
+  resources :admins, only: [:new, :create]
   
   resources :appointments, only: [:create]
 end
