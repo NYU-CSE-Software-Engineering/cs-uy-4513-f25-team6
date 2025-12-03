@@ -12,7 +12,7 @@ class DoctorsController < ApplicationController
             filtered = params.expect(doctor: [:email, :username, :password, :specialty, :phone])
         rescue ActionController::ParameterMissing
             flash[:alert] = 'Missing required information'
-            redirect_to new_doctor_path
+            render :new
             return
         end
 
@@ -28,7 +28,7 @@ class DoctorsController < ApplicationController
             return
         else
             flash[:alert] = 'Invalid account details: '+@new_doctor.errors.full_messages.to_s
-            redirect_to new_doctor_path
+            render :new
             return
         end
     end

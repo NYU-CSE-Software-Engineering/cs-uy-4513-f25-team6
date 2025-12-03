@@ -7,7 +7,7 @@ class AdminsController < ApplicationController
             filtered = params.expect(admin: [:email, :username, :password])
         rescue ActionController::ParameterMissing
             flash[:alert] = 'Missing required information'
-            redirect_to new_admin_path
+            render :new
             return
         end
 
@@ -23,7 +23,7 @@ class AdminsController < ApplicationController
             return
         else
             flash[:alert] = 'Invalid account details: '+@new_admin.errors.full_messages.to_s
-            redirect_to new_admin_path
+            render :new
             return
         end
     end

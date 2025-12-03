@@ -38,7 +38,7 @@ Scenario: user fails to create account with no email
     And I fill in "patient_username" with "user"
     And I fill in "patient_password" with "password"
     When I click "Register"
-    Then I should be on the patient sign up page
+    Then I should not be on the patient dashboard page
     And I should see the string "Invalid account details"
 
 Scenario: user fails to create account with no username
@@ -46,7 +46,7 @@ Scenario: user fails to create account with no username
     When I fill in "doctor_email" with "user@test.com"
     And I fill in "doctor_password" with "password"
     When I click "Register"
-    Then I should be on the doctor sign up page
+    Then I should not be on the doctor dashboard page
     And I should see the string "Invalid account details"
 
 Scenario: user fails to create account with no password
@@ -54,7 +54,7 @@ Scenario: user fails to create account with no password
     When I fill in "admin_email" with "user@test.com"
     And I fill in "admin_username" with "user"
     When I click "Register"
-    Then I should be on the admin sign up page
+    Then I should not be on the admin dashboard page
     And I should see the string "Invalid account details"
 
 Scenario: user fails to create account when email already exists
@@ -66,7 +66,7 @@ Scenario: user fails to create account when email already exists
     And I fill in "patient_username" with "new patient"
     And I fill in "patient_password" with "batterystaple"
     And I click "Register"
-    Then I should be on the patient sign up page
+    Then I should not be on the patient dashboard page
     And I should see the string "Invalid account details"
 
 Scenario: user successfully creates account when email exists for a different role
