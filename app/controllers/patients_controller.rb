@@ -7,7 +7,7 @@ class PatientsController < ApplicationController
             filtered = params.expect(patient: [:email, :username, :password, :age, :height, :gender])
         rescue ActionController::ParameterMissing
             flash[:alert] = 'Missing required information'
-            render :new
+            redirect_to new_patient_path
             return
         end
 
@@ -20,9 +20,10 @@ class PatientsController < ApplicationController
             session[:role] = 'patient'
             flash[:notice] = 'Patient account created'
             redirect_to patient_dashboard_path
+            return
         else
-            flash[:alert] = 'Invalid account details'
-            render :new
+            flash[:alert] = 'Invalid account details: '+@new_patient.errors.full_messages.to_s
+            redirect_to new_patient_path
             return
         end
     end

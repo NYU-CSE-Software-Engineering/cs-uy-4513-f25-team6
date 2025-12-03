@@ -6,7 +6,9 @@ def path_to(page_name)
 
     # add whatever pages you need to this mapping
     when 'login' then '/login'
-    when 'doctor sign up' then '/login/signup_doctor'
+    when 'patient sign up' then '/patients/new'
+    when 'doctor sign up' then '/doctors/new'
+    when 'admin sign up' then '/admins/new'
 
     when 'patient dashboard' then '/patient/dashboard'
     when 'prescriptions' then '/patient/prescriptions'
