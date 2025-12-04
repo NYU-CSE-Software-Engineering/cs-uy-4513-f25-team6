@@ -7,11 +7,12 @@ RSpec.describe "Configure Time Slots (request)", type: :request do
     describe "while logged in" do
         before :each do
             @doc = login_doctor
+            expect(doctor_class).to receive(:find).with(@doc.id).and_return(@doc)
         end
 
         def expect_configure_redirect
             expect(response).to redirect_to(configure_time_slots_path)
-            expect(doctor_class).to receive(:find).and_return(@doc)
+            expect(doctor_class).to receive(:find).and_return(@doc).twice
             expect(@doc).to receive(:time_slots).and_return([])
             follow_redirect!
         end
@@ -36,7 +37,7 @@ RSpec.describe "Configure Time Slots (request)", type: :request do
             end
         end
     
-        describe "POST /doctors/:id/time_slots" do
+        describe "POST /doctors/:doctor_id/time_slots" do
             it "attempts to create a new time slot" do
                 new_slot = instance_double("TimeSlot")
                 expect(time_slot_class).to receive(:new).with({doctor_id: @doc.id.to_s, starts_at: "3:00 PM", ends_at: "3:15 PM"}).and_return(new_slot)
@@ -72,7 +73,7 @@ RSpec.describe "Configure Time Slots (request)", type: :request do
             end
         end
     
-        describe "DELETE /doctors/:id/time_slots/:tid" do
+        describe "DELETE /doctors/:doctor_id/time_slots/:tid" do
             it "attempts to delete the specified time slot" do
                 to_delete = instance_double("TimeSlot")
                 expect(time_slot_class).to receive(:find_by).with({id: "14"}).and_return(to_delete)
@@ -117,7 +118,7 @@ RSpec.describe "Configure Time Slots (request)", type: :request do
             expect(response.body).to include("This page or action requires you to be logged in")
         end
 
-        it "POST /doctors/:id/time_slots kicks you out" do
+        it "POST /doctors/:doctor_id/time_slots kicks you out" do
             post doctor_time_slots_path(7), params: {starts_at: "3:00 PM", ends_at: "3:15 PM"}
 
             expect(response).to redirect_to(login_path)
@@ -125,7 +126,7 @@ RSpec.describe "Configure Time Slots (request)", type: :request do
             expect(response.body).to include("This page or action requires you to be logged in")
         end
 
-        it "DELETE /doctors/:id/time_slots/:tid kicks you out" do
+        it "DELETE /doctors/:doctor_id/time_slots/:tid kicks you out" do
             delete doctor_time_slot_path(7, 14)
 
             expect(response).to redirect_to(login_path)

@@ -6,7 +6,9 @@ def path_to(page_name)
 
     # add whatever pages you need to this mapping
     when 'login' then '/login'
-    when 'doctor sign up' then '/login/signup_doctor'
+    when 'patient sign up' then '/patients/new'
+    when 'doctor sign up' then '/doctors/new'
+    when 'admin sign up' then '/admins/new'
 
     when 'patient dashboard' then '/patient/dashboard'
     when 'prescriptions' then '/patient/prescriptions'
@@ -73,9 +75,13 @@ When(/I fill in "(.*)" with "(.*)"/) do |label, value|
     fill_in label, with: value
 end
 
-Then(/I should be on the (.*) page$/) do |page_name|
+Then(/I should( not)? be on the (.*) page$/) do |inverse, page_name|
     current_path = URI.parse(current_url).path
-    assert_equal path_to(page_name), current_path
+    if inverse
+        assert_not_equal path_to(page_name), current_path
+    else
+        assert_equal path_to(page_name), current_path
+    end
 end
 
 Then(/I should( not)? see the strings? "(.*)"/) do |inverse, strings|
