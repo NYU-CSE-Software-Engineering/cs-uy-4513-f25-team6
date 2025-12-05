@@ -22,6 +22,22 @@
   </head>
 
   <body>
+    <header style="display: flex; justify-content: space-between">
+      <span><b>MediTracker</b></span>
+      <% if session[:role] != nil %>
+        <span>
+          Logged in as <%= @user.username %> (<%= session[:role].titleize %>) | 
+          <%= link_to "Log Out", logout_path %>
+        </span>
+      <% else %>
+        <span>
+          Not logged in | Sign up as: 
+          <%= link_to "Patient", new_patient_path %>
+          <%= link_to "Doctor", new_doctor_path %>
+          <%= link_to "Admin", new_admin_path %>
+        </span>
+      <% end %>
+    </header>
     <% if flash[:notice] %>
       <div class="alert alert-info" role="alert" id="notice">
         <%= flash[:notice] %>

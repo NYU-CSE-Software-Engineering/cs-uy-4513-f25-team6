@@ -17,7 +17,7 @@ When("I select {string} from {string}") do |option, select_box_label|
   select option, from: select_box_label
 end
 
-Then('I should see "Welcome, Dr. Ada Lovelace" or "A message with a confirmation link has been sent to your email address"') do
+Then('I should see the string "Welcome, Dr. Ada Lovelace" or "A message with a confirmation link has been sent to your email address"') do
   expect(page).to have_text("Welcome, Dr. Ada Lovelace").or(
     have_text("A message with a confirmation link has been sent to your email address")
   )

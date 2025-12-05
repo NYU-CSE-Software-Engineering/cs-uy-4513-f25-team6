@@ -12,9 +12,7 @@ RSpec.describe LoginController, type: :controller do
         end 
 
         it 'redirects already authenticated users to their dashboards' do 
-            # simulates a user being logged in by setting the user ID and role in the session
-            session[:user_id] = 4
-            session[:role] = 'patient'
+            login_patient(true)
 
             get :form 
             
@@ -105,19 +103,17 @@ RSpec.describe LoginController, type: :controller do
     end
 
     
-   describe 'DELETE #logout' do
+   describe 'GET #logout' do
 
      it 'logs out the user' do
-        # simulates a user being logged in by setting the user ID and role in the session
-        session[:user_id] = 5 
-        session[:role] = 'admin'
+        login_admin(true)
 
-        delete :logout
+        get :logout
 
         expect(session[:user_id]).to be_nil 
         expect(session[:role]).to be_nil 
         expect(response).to redirect_to(login_path)
-        expect(flash[:notice]).to eq('Logged out successfully')
+        expect(flash[:notice]).to eq('Successfully logged out')
      end 
 
    end

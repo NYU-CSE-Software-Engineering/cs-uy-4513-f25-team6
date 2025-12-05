@@ -1,42 +1,26 @@
-@wip
 Feature: configure doctor time slots
-
     As a doctor
     I want to configure my time slots
     So that patients can see when I'm available
 
 Scenario: doctor vists the time slot page
     Given I am signed in as a doctor
-    And I am on the doctor dashboard page
-    And I have the slots "10:00am, 3:30pm"
-    When I try to edit my time slots
-    Then I should be on the time slot page
-    And my current time slots should be selected
+    And I have the slots "10:00 AM, 3:30 PM"
+    And I am on the time slot page
+    Then I should see "10:00 AM - " before "3:30 PM -"
 
 Scenario: non-doctor fails to visit the time slot page
-    Given I am on the doctor dashboard page
-    When I try to edit my time slots
+    Given I am on the time slot page
     Then I should be on the login page
-    And I should see "You cannot perform this action without logging in!"
+    And I should see the string "This page or action requires you to be logged in"
 
 Scenario: doctor changes time slots
     Given I am signed in as a doctor
-    And I have the slots "10:00am, 3:30pm"
+    And I have the slots "10:00 AM, 3:30 PM"
     And I am on the time slot page
-    When I confirm the slots "9:30am, 11:00am, 1:30pm"
-    Then I should be on the doctor dashboard page
-    And I should see the time slots "9:30am, 11:00am, 1:30pm"
-    And I should not see the time slots "10:00am, 3:30pm"
-
-Scenario: doctor fails to confirm time slots with none selected
-    Given I am signed in as a doctor
-    And I am on the time slot page
-    When I confirm the slots ""
-    Then I should be on the time slot page
-    And I should see "You must select at least one time slot!"
-
-Scenario: non-doctor fails to confirm time slots
-    Given I am on the time slot page
-    When I confirm the slots "9:30am, 11:00am, 1:30pm"
-    Then I should be on the login page
-    And I should see "You cannot perform this action without logging in!"
+    When I add the slots "9:30 AM, 11:00 AM"
+    And I remove the slot "10:00 AM"
+    Then I should have the slots "9:30 AM, 11:00 AM, 3:30 PM"
+    And I should see the strings "9:30 AM -, 11:00 AM -, 3:30 PM -"
+    And I should not have the slot "10:00 AM"
+    And I should not see the string "10:00 AM"
