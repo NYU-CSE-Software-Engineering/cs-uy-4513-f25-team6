@@ -50,4 +50,6 @@ Rails.application.routes.draw do
   resources :admins, only: [:new, :create]
   
   resources :appointments, only: [:create]
+
+  resources :bills, only: [:show, :update], path: "billing", as: "billing"
 end
