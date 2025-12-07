@@ -5,6 +5,7 @@ class BillsController < ApplicationController
 
   def show
     return if performed?
+    render :show, status: :ok
   end
 
   def pay
@@ -17,6 +18,7 @@ class BillsController < ApplicationController
 
     unless valid_card_params?
       flash.now[:alert] = "Please enter a valid card number"
+      flash[:alert] = "Please enter a valid card number"
       render :show, status: :unprocessable_entity
       return
     end
@@ -36,7 +38,7 @@ class BillsController < ApplicationController
   def authorize_bill!
     return if performed?
 
-    if @bill.patient_id != session[:user_id]
+    if @bill.patient_id.to_i != session[:user_id].to_i
       redirect_to patient_dashboard_path, alert: "You are not authorized to access this bill"
     end
   end
