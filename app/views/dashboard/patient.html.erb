@@ -14,11 +14,10 @@
       </li>
     <% end %>
   </ul>
-
-  <p><%= link_to "View all appointments", patient_appointments_path %></p>
 <% else %>
   <p>You have no upcoming appointments.</p>
 <% end %>
+<p><%= link_to "View all appointments", patient_appointments_path %></p>
 
 <h2>Unpaid Bills</h2>
 <% if @unpaid_bills.any? %>

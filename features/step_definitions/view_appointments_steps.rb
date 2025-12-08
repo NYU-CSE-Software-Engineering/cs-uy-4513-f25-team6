@@ -19,7 +19,7 @@ end
 Then(/I should see all my( upcoming)? appointments/) do |upcoming|
   apps = @test_user.appointments
   if upcoming
-    apps = apps.joins(:time_slot).where('time_slots.starts_at < ?', DateTime.now)
+    apps = apps.where('date > ?', Date.yesterday)
   end
   apps = apps.includes(:doctor, :time_slot)
   apps.each do |app|
