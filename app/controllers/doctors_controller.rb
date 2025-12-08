@@ -1,6 +1,8 @@
 class DoctorsController < ApplicationController
-  # Require doctor login for index and update; new/create are for signup
-  before_action -> { check_login ['doctor'] }, only: [:index, :update]
+  # Only doctor role is required for updating employment
+  before_action only: [:update] do
+    check_login ['doctor']
+  end
 
   def index
     @id = params[:cl_id]
@@ -35,25 +37,17 @@ class DoctorsController < ApplicationController
   end
 
   def update
-    @doctor = Doctor.find(params[:id])
+    doctor = Doctor.find(params[:id])
+    clinic = Clinic.find(params[:clinic_id])
 
-    unless session[:user_id] == @doctor.id && session[:role] == 'doctor'
-      redirect_to login_path, alert: "You must be logged in as this doctor to perform this action"
-      return
-    end
-
-    clinic = Clinic.find_by(id: params[:clinic_id])
-    if clinic.nil?
-      redirect_to clinics_path, alert: "Clinic not found"
-      return
-    end
-
-    if @doctor.clinic == clinic
+    if doctor.clinic == clinic
       flash[:alert] = "You are already employed at this clinic"
-    elsif @doctor.update(clinic: clinic)
-      flash[:notice] = "You are now employed at #{clinic.name}"
     else
-      flash[:alert] = "Unable to sign up for this clinic"
+      if doctor.update(clinic: clinic)
+        flash[:notice] = "You are now employed at #{clinic.name}"
+      else
+        flash[:alert] = "Unable to sign up for clinic"
+      end
     end
 
     redirect_to clinics_path
