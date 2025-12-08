@@ -4,7 +4,7 @@ class AppointmentsController < ApplicationController
     slot = TimeSlot.find(params.dig(:appointment, :time_slot_id))
     date = params.dig(:appointment, :date)
 
-    if Appointment.exists?(time_slot: slot)
+    if Appointment.exists?(time_slot: slot, date: date)
       redirect_to doctor_time_slots_path(slot.doctor.id), alert: "Time slot no longer available"
       return
     end

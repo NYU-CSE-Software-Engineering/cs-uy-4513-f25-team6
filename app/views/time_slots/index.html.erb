@@ -7,7 +7,7 @@
 <table>
     <% @time_slots.each do |slot| %>
     <tr>
-        <td><%= slot.starts_at.strftime("%l:%M %p") %> - <%= slot.ends_at.strftime("%l:%M %p") %></td>
+        <td><%= slot.starts_at.strftime("%-l:%M %p") %> - <%= slot.ends_at.strftime("%-l:%M %p") %></td>
         <td><%= button_to "Book this slot",
                 appointments_path,
                 method: :post,

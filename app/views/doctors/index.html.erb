@@ -15,7 +15,7 @@
     <tbody>
         <% @doctors.each do |doctor| %>
             <tr>
-                <td><%= doctor.username %></td>
+                <td><%= link_to doctor.username, doctor_time_slots_path(doctor)%></td>
                 <td><%= doctor.specialty %></td>
                 <td><%= doctor.rating %></td>
             </tr>
