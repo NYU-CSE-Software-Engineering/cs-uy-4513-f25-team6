@@ -1,4 +1,8 @@
-Then(/a clinic called "(.*)" in "(.*)" should( not)? exist with specialty "(.*)" and rating "(.*)/) do |name, location, inverse, specialty, rating|
+Given(/a clinic named "(.*)" already exists/) do |name|
+    FactoryBot.create(:clinic, name: name)
+end
+
+Then(/a clinic named "(.*)" in "(.*)" should( not)? exist with specialty "(.*)" and rating "(.*)/) do |name, location, inverse, specialty, rating|
     clinic = Clinic.find_by(name: name, location: location, specialty: specialty, rating: rating)
     if inverse
         expect(clinic).to be_nil
@@ -7,6 +11,6 @@ Then(/a clinic called "(.*)" in "(.*)" should( not)? exist with specialty "(.*)"
     end
 end
 
-Then('No clinics should exist') do
+Then('no clinics should exist') do
     expect(Clinic.count).to eq(0)
 end

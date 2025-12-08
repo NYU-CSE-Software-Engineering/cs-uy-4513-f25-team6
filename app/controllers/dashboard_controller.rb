@@ -1,6 +1,9 @@
 class DashboardController < ApplicationController
+  before_action(only: [:patient]) { check_login ['patient'] }
+  before_action(only: [:doctor]) { check_login ['doctor'] }
+  before_action(only: [:admin]) { check_login ['admin'] }
+  
   def patient
-
     @appointments = Appointment
                       .joins(:time_slot)
                       .includes(:time_slot, :doctor)

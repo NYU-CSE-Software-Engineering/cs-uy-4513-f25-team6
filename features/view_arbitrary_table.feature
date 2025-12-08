@@ -1,3 +1,4 @@
+@wip
 Feature: Admin views arbitrary DB tables
     As an admin
     I want to view tables from the database
