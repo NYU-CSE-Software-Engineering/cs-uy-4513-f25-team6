@@ -22,19 +22,8 @@
 
 <% end %>                          <!--end the form -->
 
-
-
-
-
-
-<% if flash[:error] %>                      <!--if there is an error message stored in the flash hash... -->
-   <p style="color: red;"><%= flash[:error] %></p>  <!-- display the error message in red text -->
-<% end %> 
-
-
-
-
 <% if @clinics.present? %>                   <!-- if @clinics is not nil/empty... render the table of clinics -->
+   <h2>All Clinics</h2>
    <table>
       <thead>
          <tr>

@@ -5,6 +5,7 @@ class DashboardController < ApplicationController
                       .joins(:time_slot)
                       .includes(:time_slot, :doctor)
                       .where(patient_id: @user.id)
+                      .where('date > ?', Date.yesterday)
                       .order(:date, 'time_slots.starts_at')
 
     @unpaid_bills = Bill
