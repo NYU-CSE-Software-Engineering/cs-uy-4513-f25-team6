@@ -37,7 +37,21 @@ RSpec.describe DoctorsController, type: :controller do
     )
   end
 
+  let!(:unemployed_doctor) do
+    Doctor.create!(
+      email:    "free@example.com",
+      username: "free_doc",
+      password: "c" * 32,
+      clinic:   nil
+    )
+  end
+
   describe "GET #index" do
+    before do
+      session[:user_id] = doctor_ny.id
+      session[:role]    = "doctor"
+    end
+
     it "lists only doctors for the given clinic" do
       get :index, params: { clinic_id: clinic_ny.id }
 
@@ -50,6 +64,41 @@ RSpec.describe DoctorsController, type: :controller do
       get :index, params: { clinic_id: clinic_ny.id }
 
       expect(response).to render_template(:index)
+    end
+  end
+
+  describe "PATCH #update" do
+    before do
+      session[:user_id] = unemployed_doctor.id
+      session[:role]    = "doctor"
+    end
+
+    it "assigns the doctor to the given clinic and sets a success notice" do
+      patch :update, params: { id: unemployed_doctor.id, clinic_id: clinic_ny.id }
+
+      expect(response).to redirect_to(clinics_path)
+      expect(flash[:notice]).to eq("You are now employed at ClinA")
+      expect(unemployed_doctor.reload.clinic).to eq(clinic_ny)
+    end
+
+    it "does not change clinic if already employed there and sets an alert" do
+      unemployed_doctor.update!(clinic: clinic_ny)
+
+      patch :update, params: { id: unemployed_doctor.id, clinic_id: clinic_ny.id }
+
+      expect(response).to redirect_to(clinics_path)
+      expect(flash[:alert]).to eq("You are already employed at this clinic")
+      expect(unemployed_doctor.reload.clinic).to eq(clinic_ny)
+    end
+
+    it "redirects to login if not logged in as a doctor" do
+      session[:user_id] = nil
+      session[:role]    = nil
+
+      patch :update, params: { id: unemployed_doctor.id, clinic_id: clinic_ny.id }
+
+      expect(response).to redirect_to(login_path)
+      expect(flash[:alert]).to eq('This page or action requires you to be logged in as: ["doctor"]')
     end
   end
 end

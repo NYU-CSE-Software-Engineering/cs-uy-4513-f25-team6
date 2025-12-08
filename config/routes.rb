@@ -27,12 +27,6 @@ Rails.application.routes.draw do
   # Non-RESTful admin routes
   get '/admin/dashboard', to: 'dashboard#admin', as: :admin_dashboard
 
-  # Routes to sign up for clinics as doctor
-  get  '/clinic_employment', to: 'clinic_employment#index',  as: :clinic_employment
-  post '/clinic_employment', to: 'clinic_employment#create'
-
-
-
   # /clinics/:clinic_id/doctors
   resources :clinics do
 
@@ -49,7 +43,7 @@ Rails.application.routes.draw do
 
   resources :patients, only: [:new, :create]
 
-  resources :doctors, only: [:new, :create] do
+  resources :doctors, only: [:new, :create, :update] do
     resources :time_slots, only: [:index, :create, :destroy]
   end
 
