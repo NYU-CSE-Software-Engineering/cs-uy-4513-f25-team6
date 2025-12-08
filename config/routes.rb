@@ -46,10 +46,15 @@ Rails.application.routes.draw do
     
   end
 
-  # /doctors/:doctor_id/time_slots
-  resources :doctors, only: [] do
+  resources :patients, only: [:new, :create]
+
+  resources :doctors, only: [:new, :create] do
     resources :time_slots, only: [:index, :create, :destroy]
   end
+
+  resources :admins, only: [:new, :create]
   
   resources :appointments, only: [:create]
+
+  resources :bills, only: [:show, :update], path: "billing", as: "billing"
 end
