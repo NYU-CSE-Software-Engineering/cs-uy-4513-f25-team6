@@ -30,5 +30,31 @@ class DashboardController < ApplicationController
     @doctors_count      = Doctor.count
     @appointments_count = Appointment.count
     @unpaid_bills_count = Bill.where(status: "unpaid").count
+
+    @models = [
+      'Patient', 'Doctor', 'Admin', 'Clinic',
+      'Bill', 'Appointment', 'Prescription', 'TimeSlot'
+    ]
+    tableName = params[:table]
+    if tableName != nil
+      invalid = false
+
+      # make sure it's a real class, and that it's a usable model
+      begin
+        tableClass = tableName.constantize
+        if !(tableClass < ApplicationRecord) || tableClass.abstract_class
+          invalid = true
+        end
+      rescue NameError
+        invalid = true
+      end
+      
+      if invalid
+        flash[:alert] = "The database has no table called '#{tableName}'"
+      else
+        @col_names = tableClass.attribute_names
+        @rows = tableClass.all
+      end
+    end
   end
 end

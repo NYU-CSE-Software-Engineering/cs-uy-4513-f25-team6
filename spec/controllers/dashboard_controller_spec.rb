@@ -57,5 +57,41 @@ RSpec.describe DashboardController, type: :controller do
       expect(response).to have_http_status(:ok)
       expect(response).to render_template(:admin)
     end
+
+  end
+
+  describe "GET #admin with table parameter" do  
+    before :each do 
+      login_admin(true)
+    end
+
+    it 'loads all records from a table that exists' do
+      allow(Doctor).to receive(:count) # needed because of line 30
+
+      expect(Doctor).to receive(:<).and_return(true)
+      expect(Doctor).to receive(:abstract_class).and_return(false)
+      expect(Doctor).to receive(:attribute_names)
+      expect(Doctor).to receive(:all)
+
+      get :admin, params: { table: 'Doctor' }
+      
+      expect(response).to have_http_status(:ok)
+    end
+
+    it 'displays an error for a table that does not exist' do
+      get :admin, params: { table: 'bongo' }
+
+      expect(response).to have_http_status(:ok)
+      expect(flash[:alert]).to eq('The database has no table called \'bongo\'')
+    end
+
+    it 'displays an error for a class that is not a table' do
+      expect(LoginController).to receive(:<).and_return(false)
+
+      get :admin, params: { table: 'LoginController' }
+
+      expect(response).to have_http_status(:ok)
+      expect(flash[:alert]).to eq('The database has no table called \'LoginController\'')
+    end
   end
 end

@@ -25,3 +25,32 @@
   <br>
   <%= form.submit "Create clinic" %>
 <% end %>
+
+<h2>View database tables</h2>
+<form>
+  <label for="table">Select a table: </label>
+  <select name="table" id="table">
+    <% @models.each do |model| %>
+      <option <% if model == params[:table] then %>selected<% end %>><%= model %></option>
+    <% end %>
+  </select>
+  <input type="submit" value="View">
+</form>
+<% if @rows %>
+  <table>
+    <tr>
+      <% @col_names.each do |col_name| %>
+        <% if col_name == 'password' then next end %>
+        <th><%= col_name %></th>
+      <% end %>
+    </tr>
+    <% @rows.each do |row| %>
+      <tr>
+        <% row.attributes.each do |key, val| %>
+          <% if key == 'password' then next end %>
+          <td><%= val %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </table>
+<% end %>
