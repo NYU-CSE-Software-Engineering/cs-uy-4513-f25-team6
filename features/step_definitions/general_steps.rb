@@ -20,6 +20,8 @@ def path_to(page_name)
 
     when 'admin dashboard' then '/admin/dashboard'
     
+    when 'find clinics' then '/clinics'
+    when 'clinic search results' then '/clinics/search'
 
     else raise "Can't find mapping from \"#{page_name}\" to a path."
     end
@@ -70,6 +72,10 @@ end
 
 When(/I choose "(.*)"/) do |label|
     choose label
+end
+
+When(/I select "(.*)" from "(.*)"/) do |option, dropdown|
+    select option, from: dropdown
 end
 
 When(/I fill in "(.*)" with "(.*)"/) do |label, value|

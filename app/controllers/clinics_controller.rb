@@ -26,7 +26,7 @@ class ClinicsController < ApplicationController
 
         # check that at least one search parameter is present
         if specialty.blank? && location.blank?
-            flash[:error] = "Please provide at least a specialty or location to search"
+            flash[:alert] = "Please provide at least a specialty or location to search"
             @clinics = Clinic.none
             return
         end

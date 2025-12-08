@@ -62,7 +62,7 @@ RSpec.describe ClinicsController, type: :controller do
 
             it 'shows an error message when both are missing' do
                 get :search, params: { specialty: "", location: ""}
-                expect(flash[:error]).to be_present
+                expect(flash[:alert]).to be_present
             end
         end
 
