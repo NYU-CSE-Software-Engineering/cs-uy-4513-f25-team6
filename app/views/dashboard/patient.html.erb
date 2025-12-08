@@ -6,7 +6,7 @@
 <% if @appointments.any? %>
   <ul>
     <% @appointments.each do |appointment| %>
-      <li>
+      <li class="appointment-row">
         <strong><%= appointment.date %></strong><br>
         <%= appointment.time_slot.starts_at.strftime("%I:%M %p") %> –
         <%= appointment.time_slot.ends_at.strftime("%I:%M %p") %><br>
