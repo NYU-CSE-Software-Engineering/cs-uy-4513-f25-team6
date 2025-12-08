@@ -1,37 +1,48 @@
-<h1> Search Results </h1>         <!-- page header for the clinic search results page -->
+<h1>Search Results</h1>
 
-<!-- if there are any clinics found, display them in a table -->
 <% if @clinics.present? %>
-   <table>
-       <thead>
-          <tr>
-              <th>Name</th>
-              <th>Specialty</th>
-              <th>Location</th>
-              <th>
-                 <%= link_to "Rating", search_clinics_path(
-                     specialty: params[:specialty],
-                     location: params[:location],
-                     sort: "rating"
-                 ) %>
-              </th>
-          </tr>
-       </thead>
-       <tbody>
-           <% @clinics.each do |clinic| %>
-              <tr>
-                 <td><%= clinic.name %></td>
-                 <td><%= clinic.specialty %></td>
-                 <td><%= clinic.location %></td>
-                 <td class="rating"><%= clinic.rating %></td>
-              </tr>
-           <% end %>
-       </tbody>
-    </table>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Specialty</th>
+        <th>Location</th>
+        <th>
+          <%= link_to "Rating", search_clinics_path(
+            specialty: params[:specialty],
+            location:  params[:location],
+            sort:      "rating"
+          ) %>
+        </th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @clinics.each do |clinic| %>
+        <tr>
+          <!-- patient flow: click clinic → doctor search -->
+          <td><%= link_to clinic.name, clinic_doctors_path(clinic) %></td>
+          <td><%= clinic.specialty %></td>
+          <td><%= clinic.location %></td>
+          <td class="rating"><%= clinic.rating %></td>
+          <td>
+            <!-- patient/general: explicit doctor list link -->
+            <%= link_to "View doctors", clinic_doctors_path(clinic) %>
+
+            <!-- doctor-only: sign up to work here -->
+            <% if session[:role] == "doctor" %>
+              <%= button_to "Sign up to work here",
+                    clinic_employment_path(clinic_id: clinic.id),
+                    method: :post %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 <% else %>
-    <p> No clinics found </p>
+  <p>No clinics found</p>
 <% end %>
 
-<%= link_to "Back to Search", clinics_path %>        <!-- link to the clinic search page (find clinics page) -->
-
-
+<%= link_to "Back to Search", clinics_path %>
