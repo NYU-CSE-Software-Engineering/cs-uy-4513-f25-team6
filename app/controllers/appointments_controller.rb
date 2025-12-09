@@ -7,14 +7,12 @@ class AppointmentsController < ApplicationController
       return
     end
 
-    is_doctor = defined?(Doctor) && Doctor.exists?(session[:user_id])
-
-    if is_doctor
+    if session[:role] == 'doctor'
       # Logic for Doctor
       @appointments = Appointment.includes(:time_slot, :patient)
                                  .where(time_slots: { doctor_id: session[:user_id] })
 
-      if params[:status].present? && params[:status] != "All Statuses"
+      if params[:status].present? && params[:status] != "All"
         @appointments = @appointments.where(status: params[:status])
       end
 

@@ -68,6 +68,7 @@ RSpec.describe AppointmentsController, type: :controller do
       appt2.update(patient_id: 555)
       # simulate logged-in patient
       session[:user_id] = patient.id
+      session[:role] = 'patient'
       get :index
     end
 
@@ -84,6 +85,7 @@ RSpec.describe AppointmentsController, type: :controller do
       before do
         # Simulate logged-in doctor 
         session[:user_id] = doctor.id
+        session[:role] = 'doctor'
         get :index
       end
 

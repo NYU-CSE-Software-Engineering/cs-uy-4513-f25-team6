@@ -1,9 +1,9 @@
-<h1>Upcoming Appointments</h1>
+<h1><%= params[:status] || 'All' %> Appointments</h1>
 
 <div class="filter-section">
   <%= form_with url: request.path, method: :get, local: true do |form| %>
     <%= form.label :status, "Status" %>
-    <%= form.select :status, options_for_select(['Upcoming', 'Completed'], params[:status]), include_blank: "All Statuses" %>
+    <%= form.select :status, options_for_select(['All', 'Upcoming', 'Completed'], params[:status]) %>
     <%= form.submit "Filter" %>
   <% end %>
 </div>
@@ -21,7 +21,7 @@
         <%= appointment.time_slot.starts_at.strftime("%I:%M %p") %> –
         <%= appointment.time_slot.ends_at.strftime("%I:%M %p") %><br>
 
-        <% if defined?(Doctor) && Doctor.exists?(session[:user_id]) %>
+        <% if session[:role] == 'doctor' %>
            <strong>Patient:</strong>
            <%= appointment.patient&.username || "Patient" %>
         <% else %>
@@ -32,6 +32,8 @@
         <%# Ensure clinic name is displayed if present %>
         <% if appointment.respond_to?(:clinic_name) && appointment.clinic_name.present? %>
           <br><strong>Clinic:</strong> <%= appointment.clinic_name %>
+        <% else %>
+          <br><strong>Clinic:</strong> N/A
         <% end %>
       </li>
       <hr>
