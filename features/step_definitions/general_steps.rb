@@ -67,7 +67,7 @@ Given(/I am on the (.*) page$/) do |page_name|
     visit path_to(page_name)
 end
 
-When(/I click "(.*)"/) do |label|
+When(/^I click "([^"]+)"$/) do |label|
     click_on label
 end
 
@@ -108,4 +108,8 @@ Then(/I should see "(.*)" before "(.*)"/) do |first_text, second_text|
     expect(a).not_to be_nil, "Expected to find '#{first_text}'"
     expect(b).not_to be_nil, "Expected to find '#{second_text}'"
     expect(a).to be < b
+end
+
+Then('I should see {string}') do |text|
+  expect(page).to have_content(text)
 end

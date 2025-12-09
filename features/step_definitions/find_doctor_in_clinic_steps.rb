@@ -1,15 +1,22 @@
-Given(/^I've chosen a clinic already$/) do
-    @clinic = FactoryBot.create(:clinic, name: 'Downtown Clinic')
-    # sample doctors for deterministic checks; adjust fields to your schema
-    @doc1 = FactoryBot.create(:doctor, clinic: @clinic, name: 'John Simth',
-                              specialty: 'Physical therapy', rating: 4.8)
-    @doc2 = FactoryBot.create(:doctor, clinic: @clinic, name: 'Alice Doe',
-                              specialty: 'Dermatology', rating: 4.2)
+Given("a clinic exists with the following doctors") do |table|
+  @clinic = FactoryBot.create(:clinic)
+  table.hashes.each do |row|
+    FactoryBot.create(:doctor, clinic: @clinic, username: row[:name], 
+                      specialty: row[:specialty], rating: row[:rating])
+  end
 end
 
 # If you don’t already have a generic “I am on ... page” step
 Given(/^I am on the "Find a Doctor" page for that clinic$/) do
     visit clinic_doctors_path(@clinic)  # change to your route
+end
+
+Then("I should see all the doctors at that clinic") do
+  Doctor.where(clinic: @clinic).each do |doctor|
+    expect(page).to have_content(doctor.username)
+    expect(page).to have_content(doctor.specialty)
+    expect(page).to have_content(doctor.rating.to_s)
+  end
 end
   
 Then(/^I should see a doctor named "(.*)" specializing in "(.*)"$/) do |name, specialty|

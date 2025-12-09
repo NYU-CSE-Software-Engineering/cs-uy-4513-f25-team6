@@ -1,7 +1,7 @@
 class Clinic < ApplicationRecord # start of Clinic model
     has_many :doctors
 
-    validates :name, presence: true # name is required
+    validates :name, :specialty, :location, :rating, presence: true # all fields required
     validates :name, uniqueness: { case_sensitive: false }  # name must be unique (case-insensitive)
     validates :rating, numericality: { greater_than_or_equal_to: 0.0, less_than_or_equal_to: 5.0 }, allow_nil: true # rating must be between 0.0 and 5.0 if present
 

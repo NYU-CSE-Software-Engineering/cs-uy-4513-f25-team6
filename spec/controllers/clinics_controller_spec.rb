@@ -8,9 +8,7 @@ RSpec.describe ClinicsController, type: :controller do
         context 'when user is signed in as a patient' do # start of context block: all scenarios here are for signed in patients
 
             before do # run `before` each test scenario in this context block
-                @patient = FactoryBot.create(:patient)
-                session[:user_id] = @patient.id
-                session[:user_type] = 'patient'
+                @patient = login_patient(true)
             end
             
             # this is testing a scenario of the GET #index action in the ClinicsController --- it should render the index template
@@ -41,9 +39,7 @@ RSpec.describe ClinicsController, type: :controller do
     describe 'GET #search' do # start testing the GET #search action in the ClinicsController
         
         before do
-            @patient = FactoryBot.create(:patient)
-            session[:user_id] = @patient.id
-            session[:user_type] = 'patient'
+            @patient = login_patient(true)
 
             @clinic1 = Clinic.create!(name: "NYC Dermatology", specialty: "Dermatology", location: "New York", rating: 4.5)
             @clinic2 = Clinic.create!(name: "LA Dermatology", specialty: "Dermatology", location: "Los Angeles", rating: 4.0)
@@ -76,7 +72,37 @@ RSpec.describe ClinicsController, type: :controller do
         end
     end # end of testing the GET #search action in the ClinicsController
 
+    describe 'POST #create' do
+        it 'creates a new clinic with valid details' do
+            login_admin(true)
+            new_clin = {name: 'fakeClin', specialty: 'spec', location: 'loc', rating: 4.2}
 
+            post :create, params: {clinic: new_clin}
+
+            expect(Clinic.exists?(new_clin)).to be_truthy
+            expect(response).to redirect_to(admin_dashboard_path)
+        end
+
+        it 'does not create a new clinic with missing details' do
+            login_admin(true)
+            bad_clin = {name: 'badClin', rating: 4.2}
+            pre_count = Clinic.count
+
+            post :create, params: {clinic: bad_clin}
+
+            expect(Clinic.count).to eq(pre_count)
+            expect(response).to redirect_to(admin_dashboard_path)
+        end
+
+        it 'does not create a new clinic when not an admin' do
+            new_clin = {name: 'fakeClin', specialty: 'spec', location: 'loc', rating: 4.2}
+
+            post :create, params: {clinic: new_clin}
+
+            expect(Clinic.exists?(new_clin)).to be_falsy
+            expect(response).to redirect_to(login_path)
+        end
+    end
 end
 
 

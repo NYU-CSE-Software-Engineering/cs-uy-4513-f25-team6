@@ -32,11 +32,8 @@ Rails.application.routes.draw do
 
   # /clinics/:clinic_id/doctors
   resources :clinics do
-
     collection do
-
       # collection routes are routes that are not associated with a specific clinic --- routes operate on the entire collection of clinics resource
-
       get 'search' # maps `GET /clinics/search` to ClinicsController#search action
                     # creating a custom route (not one of the default RESTful routes)
     end
@@ -46,7 +43,7 @@ Rails.application.routes.draw do
 
   resources :patients, only: [:new, :create]
 
-  resources :doctors, only: [:new, :create] do
+  resources :doctors, only: [:new, :create, :update] do
     resources :time_slots, only: [:index, :create, :destroy]
   end
 
@@ -54,5 +51,5 @@ Rails.application.routes.draw do
   
   resources :appointments, only: [:create]
 
-  resources :bills, only: [:show, :update], path: "billing", as: "billing"
+  resources :bills, only: [:show, :update]
 end

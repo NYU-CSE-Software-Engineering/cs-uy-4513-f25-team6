@@ -14,8 +14,8 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def check_login(roles)
-    if (!session[:user_id] || !roles.include?(session[:role]))
+  def check_login(roles = ['any'])
+    if !session[:user_id] || (roles != ['any'] && !roles.include?(session[:role]))
       redirect_to login_path, alert: "This page or action requires you to be logged in as: #{roles}"
     end
   end
