@@ -47,21 +47,6 @@ RSpec.describe DoctorsController, type: :controller do
 
         end # end of context block: all scenarios here are for signed in patients
 
-
-        context 'when user is not signed in' do # start of context block: all scenarios here are for unsigned in users
-
-            before do
-                @clinic = FactoryBot.create(:clinic, name: "Test Clinic")
-            end
-
-            # Test scenario: it should redirect to the login page
-            it 'redirects to the login page' do
-                get :index, params: { clinic_id: @clinic.id }
-                expect(response).to redirect_to(login_path)
-            end
-
-        end # end of context block: all scenarios here are for unsigned in users
-
     end # end of testing the GET #index action in the DoctorsController
 
 
@@ -170,5 +155,39 @@ RSpec.describe DoctorsController, type: :controller do
 
     end # end of testing the GET #search action in the DoctorsController
 
+    describe "PATCH #update" do
+        let(:clinic_ny) { FactoryBot.create(:clinic, name: "ClinA") }
+    
+        before :each do
+            @doctor = login_doctor(true)
+        end
 
+        it "assigns the doctor to the given clinic and sets a success notice" do
+            patch :update, params: { id: @doctor.id, clinic_id: clinic_ny.id }
+
+            expect(response).to redirect_to(clinics_path)
+            expect(flash[:notice]).to eq("You are now employed at ClinA")
+            expect(@doctor.reload.clinic).to eq(clinic_ny)
+        end
+
+        it "does not change clinic if already employed there and sets an alert" do
+            @doctor.update!(clinic: clinic_ny)
+
+            patch :update, params: { id: @doctor.id, clinic_id: clinic_ny.id }
+
+            expect(response).to redirect_to(clinics_path)
+            expect(flash[:alert]).to eq("You are already employed at this clinic")
+            expect(@doctor.reload.clinic).to eq(clinic_ny)
+        end
+
+        it "redirects to login if not logged in as a doctor" do
+            session[:user_id] = nil
+            session[:role]    = nil
+
+            patch :update, params: { id: @doctor.id, clinic_id: clinic_ny.id }
+
+            expect(response).to redirect_to(login_path)
+            expect(flash[:alert]).to eq('This page or action requires you to be logged in as: ["doctor"]')
+        end
+    end
 end

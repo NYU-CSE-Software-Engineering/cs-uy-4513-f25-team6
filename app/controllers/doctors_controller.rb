@@ -1,7 +1,13 @@
 class DoctorsController < ApplicationController
-
-    before_action :require_login, except: [:new, :create]
+    before_action(only: [:update]) { check_login ['doctor'] }
     
+    # GET /clinics/:clinic_id/doctors
+    # Lists all doctors within a specific clinic
+    def index
+        @clinic = Clinic.find(params[:clinic_id])
+        @doctors = @clinic.doctors
+    end
+
     # GET /doctors/new
     # Shows the doctor registration form
     def new
@@ -34,14 +40,25 @@ class DoctorsController < ApplicationController
             return
         end
     end
-    
-    # GET /clinics/:clinic_id/doctors
-    # Lists all doctors within a specific clinic
-    def index
-        @clinic = Clinic.find(params[:clinic_id])
-        @doctors = @clinic.doctors
-    end
 
+    # PATCH /clinics/:clinic_id/doctors/:id
+    # Associates a clinic with a doctor
+    def update
+        doctor = Doctor.find(params[:id])
+        clinic = Clinic.find(params[:clinic_id])
+
+        if doctor.clinic == clinic
+            flash[:alert] = "You are already employed at this clinic"
+            else
+            if doctor.update(clinic: clinic)
+                flash[:notice] = "You are now employed at #{clinic.name}"
+            else
+                flash[:alert] = "Unable to sign up for clinic"
+            end
+        end
+
+        redirect_to clinics_path
+    end
 
     # GET /clinics/:clinic_id/doctors/search
     # Searches for doctors within a specific clinic by name and/or specialty
@@ -73,15 +90,5 @@ class DoctorsController < ApplicationController
         if @doctors.empty?
             flash[:error] = "No doctors found matching your search criteria"
         end
-    end
-
-
-    private
-
-    # Redirects to login page if user is not signed in
-    def require_login
-        unless session[:user_id]
-            redirect_to login_path
-        end
-    end    
+    end   
 end
