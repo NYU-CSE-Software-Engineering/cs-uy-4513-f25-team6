@@ -4,7 +4,7 @@
     <%= form.submit "Refresh" %>
 <% end %>
 <h2>Available time slots for <%= @date %></h1>
-<table>
+<table class="table table-striped">
     <% @time_slots.each do |slot| %>
     <tr>
         <td><%= slot.starts_at.strftime("%l:%M %p") %> - <%= slot.ends_at.strftime("%l:%M %p") %></td>

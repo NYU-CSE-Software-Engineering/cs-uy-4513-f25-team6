@@ -8,3 +8,11 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
+
+.login-link {
+    color: aquamarine;
+}
+
+.login-link:hover {
+    color: lightskyblue;
+}

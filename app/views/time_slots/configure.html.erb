@@ -7,7 +7,7 @@
     <%= form.submit "Add" %>
 <% end %>
 <h2>Your current time slots</h1>
-<table>
+<table class="table table-striped">
     <% @time_slots.each do |slot| %>
     <tr>
         <td><%= slot.starts_at.strftime("%l:%M %p") %> - <%= slot.ends_at.strftime("%l:%M %p") %></td>
