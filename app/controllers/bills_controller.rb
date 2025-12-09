@@ -1,39 +1,44 @@
 class BillsController < ApplicationController
-  before_action :check_patient_login
+  before_action { check_login }
   before_action :set_bill
 
   def show
   end
 
   def update
+    if session[:role] == 'doctor'
+      redirect_to doctor_dashboard_path, alert: "You are not authorized to pay this bill"
+      return
+    elsif session[:role] == 'admin'
+      redirect_to admin_dashboard_path, alert: "You are not authorized to pay this bill"
+      return
+    end
+
     if @bill.paid?
       flash[:alert] = "This bill is already paid"
-      redirect_to billing_path(@bill)
+      redirect_to bill_path(@bill)
       return
     end
 
     if valid_payment_params?
       @bill.mark_as_paid!
       flash[:notice] = "Payment successful"
-      redirect_to billing_path(@bill)
+      redirect_to bill_path(@bill)
     else
       flash.now[:alert] = "Please enter a valid card number"
-      render :show, status: :unprocessable_entity
+      render :show, status: :unprocessable_content
     end
   end
 
   private
 
-  def check_patient_login
-    check_login(['patient'])
-  end
-
   def set_bill
-    @bill = Bill.joins(appointment: :patient)
-                .where(patients: { id: session[:user_id] })
-                .find(params[:id])
-  rescue ActiveRecord::RecordNotFound
-    redirect_to root_path, alert: "You are not authorized to access this bill"
+    @bill = Bill.find(params[:id])
+    if session[:role] == 'patient' && @bill.patient.id != session[:user_id]
+      redirect_to patient_dashboard_path, alert: "You are not authorized to access this bill"
+    elsif session[:role] == 'doctor' && @bill.doctor.id != session[:user_id]
+      redirect_to doctor_dashboard_path, alert: "You are not authorized to access this bill"
+    end
   end
 
   def valid_payment_params?
