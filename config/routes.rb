@@ -43,7 +43,7 @@ Rails.application.routes.draw do
 
   resources :patients, only: [:new, :create]
 
-  resources :doctors, only: [:new, :create] do
+  resources :doctors, only: [:new, :create, :update] do
     resources :time_slots, only: [:index, :create, :destroy]
   end
 
