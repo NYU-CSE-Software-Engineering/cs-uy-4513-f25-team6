@@ -5,7 +5,12 @@ class DoctorsController < ApplicationController
     # Lists all doctors within a specific clinic
     def index
         @clinic = Clinic.find(params[:clinic_id])
-        @doctors = @clinic.doctors
+
+        if params[:specialty] && params[:specialty] != ""
+            @doctors = @clinic.doctors.where(specialty: params[:specialty])
+        else
+            @doctors = @clinic.doctors
+        end
     end
 
     # GET /doctors/new
