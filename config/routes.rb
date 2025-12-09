@@ -35,7 +35,12 @@ Rails.application.routes.draw do
                     # creating a custom route (not one of the default RESTful routes)
     end
 
-    resources :doctors, only: [:index]
+    resources :doctors, only: [:index] do
+      collection do
+        get 'search'  # maps GET /clinics/:clinic_id/doctors/search to DoctorsController#search
+      end
+    end
+    
   end
 
   resources :patients, only: [:new, :create]
