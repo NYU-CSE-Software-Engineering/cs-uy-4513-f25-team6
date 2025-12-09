@@ -23,7 +23,7 @@
 <% if @clinics.present? %>
   <h2>All Clinics</h2>
 
-  <table class="table table-striped">
+  <table class="table table-striped table-bordered align-middle border border-dark-subtle" style="width:1000px">
     <thead>
       <tr>
         <th>Name</th>
@@ -41,8 +41,8 @@
           <td><%= clinic.specialty %></td>
           <td><%= clinic.location %></td>
           <td><%= clinic.rating %></td>
-          <td>
-            <%= button_to "Find a doctor at this clinic", clinic_doctors_path(clinic) %>
+          <td style="width:300px">
+            <%= button_to "Find a doctor at this clinic", clinic_doctors_path(clinic), method: :get %>
             <% if session[:role] == "doctor" && @user.present? %>
               <hr style="margin-top:10px;margin-bottom:10px">
               <%= button_to "Sign up to work at this clinic",

@@ -29,3 +29,7 @@
     padding-right: 7px;
     margin-right: 4px;
 }
+
+th {
+    text-align: center;
+}
