@@ -1,0 +1,48 @@
+<h1>My Prescriptions</h1>
+
+<!-- Status Filter Form -->
+<form method="get" action="<%= patient_prescriptions_path %>">
+  <label for="status">Status</label>
+  <select name="status" id="status">
+    <option value="">All</option>
+    <option value="active" <%= 'selected' if @current_status == 'active' %>>active</option>
+    <option value="expired" <%= 'selected' if @current_status == 'expired' %>>expired</option>
+    <option value="cancelled" <%= 'selected' if @current_status == 'cancelled' %>>cancelled</option>
+  </select>
+  <button type="submit">Apply</button>
+</form>
+
+<% if @prescriptions.empty? %>
+  <% if @filter_applied %>
+    <p>No prescriptions match your filter.</p>
+  <% else %>
+    <p>You don't have any prescriptions yet.</p>
+  <% end %>
+<% else %>
+  <h2>Prescriptions</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Medication</th>
+        <th>Dosage</th>
+        <th>Instructions</th>
+        <th>Prescribed By</th>
+        <th>Issued On</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @prescriptions.each do |prescription| %>
+        <tr class="prescription-item">
+          <td><%= prescription.medication_name %></td>
+          <td><%= prescription.dosage %></td>
+          <td><%= prescription.instructions %></td>
+          <td><%= prescription.doctor&.username %></td>
+          <td><%= prescription.issued_on.strftime('%Y-%m-%d') %></td>
+          <td><%= prescription.status %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
