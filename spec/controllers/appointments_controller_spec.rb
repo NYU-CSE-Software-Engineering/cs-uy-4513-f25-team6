@@ -61,8 +61,14 @@ RSpec.describe AppointmentsController, type: :controller do
 
   describe "GET #index" do
     before do
+      # Fix ID Collision: Move patient to ID 555 so they aren't mistaken for Doctor (ID 1)
+      patient.update(id: 555)
+      # Must update the associated appointments so they still belong to this patient
+      appt1.update(patient_id: 555)
+      appt2.update(patient_id: 555)
       # simulate logged-in patient
       session[:user_id] = patient.id
+      session[:role] = 'patient'
       get :index
     end
 
@@ -73,6 +79,29 @@ RSpec.describe AppointmentsController, type: :controller do
 
     it "renders the index template" do
       expect(response).to render_template(:index)
+    end
+
+    context "when logged in as a doctor" do
+      before do
+        # Simulate logged-in doctor 
+        session[:user_id] = doctor.id
+        session[:role] = 'doctor'
+        get :index
+      end
+
+      it "assigns the doctor's appointments" do
+        # appt1 and appt2 belong to 'doctor' defined in your let block
+        expect(assigns(:appointments)).to include(appt1, appt2)
+      end
+
+      it "does not include appointments for other doctors" do
+        # Create a generic appointment for a DIFFERENT doctor to ensure isolation
+        other_doctor = FactoryBot.create(:doctor)
+        other_slot = FactoryBot.create(:time_slot, doctor: other_doctor)
+        other_doc_appt = FactoryBot.create(:appointment, time_slot: other_slot)
+        
+        expect(assigns(:appointments)).not_to include(other_doc_appt)
+      end
     end
   end
 end

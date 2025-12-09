@@ -19,10 +19,14 @@ Rails.application.routes.draw do
   # Non-RESTful patient routes
   get '/patient/dashboard', to: 'dashboard#patient', as: :patient_dashboard
   get '/patient/appointments', to: 'appointments#index', as: :patient_appointments
+  get '/patient/prescriptions', to: 'prescriptions#patient_index', as: :patient_prescriptions
 
   # Non-RESTful doctor routes
   get '/doctor/dashboard', to: 'dashboard#doctor', as: :doctor_dashboard
   get '/doctor/time_slots', to: 'time_slots#configure', as: :configure_time_slots
+  get '/doctor/appointments', to: 'appointments#index', as: :doctor_appointments
+  get '/doctor/prescriptions', to: 'prescriptions#doctor_index', as: :doctor_prescriptions
+  post '/doctor/prescriptions', to: 'prescriptions#create', as: :create_prescription
 
   # Non-RESTful admin routes
   get '/admin/dashboard', to: 'dashboard#admin', as: :admin_dashboard
@@ -35,12 +39,7 @@ Rails.application.routes.draw do
                     # creating a custom route (not one of the default RESTful routes)
     end
 
-    resources :doctors, only: [:index] do
-      collection do
-        get 'search'  # maps GET /clinics/:clinic_id/doctors/search to DoctorsController#search
-      end
-    end
-    
+    resources :doctors, only: [:index]
   end
 
   resources :patients, only: [:new, :create]
@@ -53,5 +52,5 @@ Rails.application.routes.draw do
   
   resources :appointments, only: [:create]
 
-  resources :bills, only: [:show, :update], path: "billing", as: "billing"
+  resources :bills, only: [:show, :update]
 end

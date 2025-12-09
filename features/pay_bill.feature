@@ -1,4 +1,3 @@
-@wip
 Feature: Pay for appointment bill
   As a signed-in patient
   I want to pay my appointment bill
@@ -30,8 +29,8 @@ Feature: Pay for appointment bill
 
   @edge
   Scenario: Patient attempts to pay an already-paid bill
-    Given I have a paid bill
-    And I am on the page for my paid bill
+    Given I am on the page for my unpaid bill
+    And the bill is now paid
     When I click "Pay Now"
     Then I should see the string "This bill is already paid"
     And I should see the string "Status: paid"

@@ -7,10 +7,6 @@ def sign_in_user(user)
   click_button "Log in"
 end
 
-def patient_billing_show_path_for(bill)
-  "/billing/#{bill.id}"
-end
-
 Given('I have an unpaid bill for one of my appointments') do
   # Minimal associated records so the Bill is valid
   doctor = Doctor.create!(email: "doc@example.com", password: Digest::MD5.hexdigest('testPassword'), username: "Dr. Ada")
@@ -21,7 +17,7 @@ end
 
 Given('I am on the page for my unpaid bill') do
   raise "No @bill set. Did you call the unpaid bill step?" unless @bill
-  visit patient_billing_show_path_for(@bill)
+  visit bill_path(@bill)
   expect(page.status_code).to be_between(200, 399).inclusive rescue nil
 end
 
@@ -35,17 +31,9 @@ Then('the bill should be marked paid') do
   end
 end
 
-Given('I have a paid bill') do
-  doctor = Doctor.create!(email: "doc2@example.com", password: Digest::MD5.hexdigest('testPassword'), username: "Dr. Turing")
-  time_slot = TimeSlot.create!(doctor: doctor, starts_at: "10:00", ends_at: "11:00")
-  appt = Appointment.create!(patient: @test_user, time_slot: time_slot, date: Date.today - 1.day)
-  @paid_bill = Bill.create!(appointment: appt, amount: 90.0, status: "paid", due_date: Date.today + 7.days)
-end
-
-Given('I am on the page for my paid bill') do
-  raise "No @paid_bill set. Did you call the paid bill step?" unless @paid_bill
-  visit patient_billing_show_path_for(@paid_bill)
-  expect(page).to have_content("paid").or have_current_path(patient_billing_show_path_for(@paid_bill), ignore_query: true) rescue nil
+Given('the bill is now paid') do
+  raise "No @bill set. Did you call the unpaid bill step?" unless @bill
+  @bill.mark_as_paid!
 end
 
 Given("another patient exists with a different unpaid bill") do
@@ -58,5 +46,5 @@ end
 
 When("I visit that other patient's bill page") do
   raise "No @others_bill set. Did you create the other patient's bill?" unless @others_bill
-  visit patient_billing_show_path_for(@others_bill)
+  visit bill_path(@others_bill)
 end

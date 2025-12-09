@@ -1,4 +1,3 @@
-@wip
 Feature: View prescriptions
   As a signed-in patient
   I want to access my prescriptions
@@ -35,7 +34,7 @@ Feature: View prescriptions
       | Zyrtec          | 2 tablets daily  | Take with meal               | Dr Smith    | 2025-09-20 | expired |
       | Panadol         | 1 tablet daily   | Take with evening meal       | Dr Rivera   | 2025-10-10 | active  |
     And I am on the prescriptions page
-    And I choose "active" in the status filter
+    And I filter by "active" status
     And I apply the filter
     Then I should see the string "Ibuprofen"
     And I should see the string "Panadol"

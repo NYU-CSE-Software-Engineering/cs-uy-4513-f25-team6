@@ -26,7 +26,7 @@
       <li>
         Appointment on <%= bill.appointment.date %> —
         Amount: $<%= bill.amount %>
-        (<%= link_to "View bill", billing_path(bill) %>)
+        (<%= link_to "View bill", bill_path(bill) %>)
       </li>
     <% end %>
   </ul>

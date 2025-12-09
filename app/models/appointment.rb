@@ -29,4 +29,8 @@ class Appointment < ApplicationRecord
         # Default bill amount - can be made configurable later
         100.0
     end
+
+    def clinic_name
+      doctor&.clinic&.name
+    end
 end
