@@ -5,7 +5,7 @@
   <%= label_tag :specialty %>
   <%= select_tag :specialty,
       options_for_select(
-        @doctors.pluck(:specialty),
+        @specialties,
         params[:specialty]
       ),
       include_blank: 'Any Specialty' %>
@@ -19,7 +19,7 @@
             <th>Name</th>
             <th>Specialty</th>
             <th>
-                <%= link_to "Rating", search_clinic_doctors_path(@clinic, sort: "rating") %>
+                <%= link_to "Rating", clinic_doctors_path(@clinic, params.permit(:specialty, :commit).merge!(sort: 'rating')) %>
             </th>
         </tr>
     </thead>

@@ -5,11 +5,16 @@ class DoctorsController < ApplicationController
     # Lists all doctors within a specific clinic
     def index
         @clinic = Clinic.find(params[:clinic_id])
+        @specialties = @clinic.doctors.pluck(:specialty)
 
         if params[:specialty] && params[:specialty] != ""
             @doctors = @clinic.doctors.where(specialty: params[:specialty])
         else
             @doctors = @clinic.doctors
+        end
+
+        if params[:sort] == "rating"
+            @doctors = @doctors.order(rating: :desc)
         end
     end
 
@@ -67,33 +72,33 @@ class DoctorsController < ApplicationController
 
     # GET /clinics/:clinic_id/doctors/search
     # Searches for doctors within a specific clinic by name and/or specialty
-    def search
-        @clinic = Clinic.find(params[:clinic_id])
+    # def search
+    #     @clinic = Clinic.find(params[:clinic_id])
 
-        # Get the search parameters from the HTTP request
-        name = params[:name]
-        specialty = params[:specialty]
-        sort = params[:sort]
+    #     # Get the search parameters from the HTTP request
+    #     name = params[:name]
+    #     specialty = params[:specialty]
+    #     sort = params[:sort]
 
-        # Check if sorting by rating is requested
-        if sort == "rating"
-            @doctors = Doctor.sort_by_rating(@clinic.id)
-            return
-        end
+    #     # Check if sorting by rating is requested
+    #     if sort == "rating"
+    #         @doctors = Doctor.sort_by_rating(@clinic.id)
+    #         return
+    #     end
 
-        # Check that at least one search parameter is present
-        if name.blank? && specialty.blank?
-            flash[:error] = "Please provide at least a name or specialty to search"
-            @doctors = Doctor.none
-            return
-        end
+    #     # Check that at least one search parameter is present
+    #     if name.blank? && specialty.blank?
+    #         flash[:error] = "Please provide at least a name or specialty to search"
+    #         @doctors = Doctor.none
+    #         return
+    #     end
 
-        # Use the model's search method
-        @doctors = Doctor.search_doctor(name, specialty, @clinic.id)
+    #     # Use the model's search method
+    #     @doctors = Doctor.search_doctor(name, specialty, @clinic.id)
 
-        # Show error if no doctors found
-        if @doctors.empty?
-            flash[:error] = "No doctors found matching your search criteria"
-        end
-    end   
+    #     # Show error if no doctors found
+    #     if @doctors.empty?
+    #         flash[:error] = "No doctors found matching your search criteria"
+    #     end
+    # end   
 end
