@@ -26,10 +26,10 @@
           <td><%= clinic.location %></td>
           <td class="rating"><%= clinic.rating %></td>
           <td>
-            <%= link_to "View doctors", clinic_doctors_path(clinic) %>
+            <%= button_to "Find a doctor at this clinic", clinic_doctors_path(clinic) %>
 
             <% if session[:role] == "doctor" && @user.present? %>
-              <%= button_to "Sign up to work here",
+              <%= button_to "Sign up to work at this clinic",
                     doctor_path(@user, clinic_id: clinic.id),
                     method: :patch %>
             <% end %>

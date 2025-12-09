@@ -1,5 +1,4 @@
 class ClinicsController < ApplicationController
-    before_action { check_login ['patient', 'doctor', 'admin'] }
     before_action(only: [:create]) { check_login ['admin'] }
 
     def create
@@ -47,17 +46,6 @@ class ClinicsController < ApplicationController
         # use the model's search method
         @clinics = Clinic.search_clinic(specialty, location)
     end
-
-
-    private
-
-    def require_login
-        unless session[:user_id]
-            redirect_to login_path # redirect to the login page if the user is not logged in
-        end
-    end
-
-
 end
 
 

@@ -16,3 +16,16 @@
 .login-link:hover {
     color: lightskyblue;
 }
+
+.form-entry {
+    margin-bottom: 6px;
+    width: fit-content;
+}
+
+.padded-button {
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 32px;
+    padding-right: 7px;
+    margin-right: 4px;
+}

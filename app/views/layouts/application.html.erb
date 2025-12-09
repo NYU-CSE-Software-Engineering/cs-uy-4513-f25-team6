@@ -65,8 +65,8 @@
             </ul>
           </h4>
         </div>
-        <% if session[:role] != nil %>
-          <h4>
+        <h4 style="margin-bottom:0px">
+          <% if session[:role] != nil %>
             <%= @user.username %> | 
             <% case session[:role] %>
             <% when 'patient' %>
@@ -77,15 +77,13 @@
               <span class="border border-white rounded bg-danger" style="padding: 3px">Admin</span>
             <% end %>
              | <%= link_to "Log Out", logout_path, class: "login-link" %>
-          </h4>
-        <% else %>
-          <h4>
+          <% else %>
             Not logged in | Sign up as: 
             <%= link_to "Patient", new_patient_path, class: "login-link" %>
             <%= link_to "Doctor", new_doctor_path, class: "login-link" %>
             <%= link_to "Admin", new_admin_path, class: "login-link" %>
-          </h4>
-        <% end %>
+          <% end %>
+        </h4>
       </div>
     </nav>
     <div class="container">
