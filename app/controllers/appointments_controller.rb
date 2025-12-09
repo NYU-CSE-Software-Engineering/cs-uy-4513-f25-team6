@@ -10,10 +10,14 @@ class AppointmentsController < ApplicationController
     if session[:role] == 'doctor'
       # Logic for Doctor
       @appointments = Appointment.includes(:time_slot, :patient)
-                                 .where(time_slots: { doctor_id: session[:user_id] })
+                                 .where(time_slot: {doctor_id: session[:user_id]})
 
       if params[:status].present? && params[:status] != "All"
-        @appointments = @appointments.where(status: params[:status])
+        if params[:status] == 'Upcoming'
+          @appointments = @appointments.where('time_slot.starts_at > ?', DateTime.now)
+        elsif params[:status] == 'Completed'
+          @appointments = @appointments.where('time_slot.starts_at < ?', DateTime.now)
+        end
       end
 
     elsif Appointment.respond_to?(:includes) && Appointment.respond_to?(:where)
