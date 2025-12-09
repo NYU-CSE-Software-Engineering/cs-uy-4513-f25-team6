@@ -3,7 +3,7 @@
 # ----- Background data for clinics, employments, and time slots -----
 
 Given('a clinic called {string} exists') do |name|
-  Clinic.create!(name: name)
+  FactoryBot.create(:clinic, name: name)
 end
 
 Given('doctor {string} works at clinic {string}') do |_doctor_username, _clinic_name|

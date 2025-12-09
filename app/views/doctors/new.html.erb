@@ -1,0 +1,25 @@
+<h2>Sign up as a doctor</h2>
+<%= form_with model: (@new_doctor || Doctor.new) do |form| %>
+    Account details:
+    <br>
+    <%= form.label :email, "Email:" %>
+    <%= form.text_field :email, required: true %>
+    <br>
+    <%= form.label :username, "Username:" %>
+    <%= form.text_field :username, required: true %>
+    <br>
+    <%= form.label :password, "Password:" %>
+    <%= form.password_field :password, required: true %>
+    <br>
+    <br>
+    Optional info:
+    <br>
+    <%= form.label :specialty, "Specialty:" %>
+    <%= form.text_field :specialty %>
+    <br>
+    <%= form.label :phone, "Phone Number:" %>
+    <%= form.text_field :phone %>
+    <br>
+    <br>
+    <%= form.submit "Register" %>
+<% end %>

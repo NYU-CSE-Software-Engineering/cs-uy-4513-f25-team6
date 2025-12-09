@@ -1,2 +1,56 @@
+<h1>Admin Dashboard</h1>
+
 <p>Welcome, <%= @user.username %></p>
-<p>This is the admin dashboard</p>
+
+<ul>
+  <li>Total patients: <%= @patients_count %></li>
+  <li>Total doctors: <%= @doctors_count %></li>
+  <li>Total appointments: <%= @appointments_count %></li>
+  <li>Unpaid bills: <%= @unpaid_bills_count %></li>
+</ul>
+
+<h2>Create new clinic</h2>
+<%= form_with url: clinics_path, model: Clinic.new do |form| %>
+  <%= form.label :name, "Name:" %>
+  <%= form.text_field :name, required: true %>
+  <br>
+  <%= form.label :specialty, "Specialty:" %>
+  <%= form.text_field :specialty, required: true %>
+  <br>
+  <%= form.label :location, "Location:" %>
+  <%= form.text_field :location, required: true %>
+  <br>
+  <%= form.label :rating, "Rating:" %>
+  <%= form.number_field :rating, required: true %>
+  <br>
+  <%= form.submit "Create clinic" %>
+<% end %>
+
+<h2>View database tables</h2>
+<form>
+  <label for="table">Select a table: </label>
+  <select name="table" id="table">
+    <% @models.each do |model| %>
+      <option <% if model == params[:table] then %>selected<% end %>><%= model %></option>
+    <% end %>
+  </select>
+  <input type="submit" value="View">
+</form>
+<% if @rows %>
+  <table>
+    <tr>
+      <% @col_names.each do |col_name| %>
+        <% if col_name == 'password' then next end %>
+        <th><%= col_name %></th>
+      <% end %>
+    </tr>
+    <% @rows.each do |row| %>
+      <tr>
+        <% row.attributes.each do |key, val| %>
+          <% if key == 'password' then next end %>
+          <td><%= val %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </table>
+<% end %>

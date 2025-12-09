@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_09_030427) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_01_205123) do
   create_table "admins", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "email"
@@ -30,6 +30,16 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_09_030427) do
     t.index ["time_slot_id"], name: "index_appointments_on_time_slot_id"
   end
 
+  create_table "bills", force: :cascade do |t|
+    t.decimal "amount"
+    t.integer "appointment_id", null: false
+    t.datetime "created_at", null: false
+    t.date "due_date"
+    t.string "status"
+    t.datetime "updated_at", null: false
+    t.index ["appointment_id"], name: "index_bills_on_appointment_id"
+  end
+
   create_table "clinics", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "location"
@@ -46,6 +56,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_09_030427) do
     t.string "email"
     t.string "password"
     t.string "phone"
+    t.float "rating"
     t.float "salary"
     t.string "specialty"
     t.datetime "updated_at", null: false
@@ -74,4 +85,6 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_09_030427) do
     t.datetime "updated_at", null: false
     t.index ["doctor_id"], name: "index_time_slots_on_doctor_id"
   end
+
+  add_foreign_key "bills", "appointments"
 end

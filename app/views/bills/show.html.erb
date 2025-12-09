@@ -1,0 +1,61 @@
+<h1>Bill Details</h1>
+
+<p>
+  <strong>Appointment date:</strong>
+  <%= @bill.appointment.date %>
+</p>
+
+<p>
+  <strong>Doctor:</strong>
+  <%= @bill.appointment.doctor&.username || "N/A" %>
+</p>
+
+<p>
+  <strong>Amount:</strong>
+  $<%= @bill.amount %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @bill.status %>
+</p>
+
+<% if @bill.due_date.present? %>
+  <p>
+    <strong>Due date:</strong>
+    <%= @bill.due_date %>
+  </p>
+<% end %>
+
+<% if flash[:notice].present? %>
+  <p><%= flash[:notice] %></p>
+<% end %>
+
+<% if flash[:alert].present? %>
+  <p><%= flash[:alert] %></p>
+<% end %>
+
+<% if @bill.unpaid? %>
+  <h2>Payment Information</h2>
+  <%= form_with url: billing_path(@bill), method: :patch do |f| %>
+    <div>
+      <%= f.label :card_number, "Card Number" %>
+      <%= f.text_field :card_number, placeholder: "4242424242424242" %>
+    </div>
+    <div>
+      <%= f.label :expiration_month, "Expiration Month" %>
+      <%= f.text_field :expiration_month, placeholder: "12" %>
+    </div>
+    <div>
+      <%= f.label :expiration_year, "Expiration Year" %>
+      <%= f.text_field :expiration_year, placeholder: "2030" %>
+    </div>
+    <div>
+      <%= f.label :cvc, "CVC" %>
+      <%= f.text_field :cvc, placeholder: "123" %>
+    </div>
+    <%= f.submit "Pay Now" %>
+  <% end %>
+<% else %>
+  <p>This bill is already paid.</p>
+<% end %>

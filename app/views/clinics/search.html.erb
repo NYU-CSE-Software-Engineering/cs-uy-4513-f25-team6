@@ -1,0 +1,45 @@
+<h1>Search Results</h1>
+
+<% if @clinics.present? %>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Specialty</th>
+        <th>Location</th>
+        <th>
+          <%= link_to "Rating", search_clinics_path(
+            specialty: params[:specialty],
+            location:  params[:location],
+            sort:      "rating"
+          ) %>
+        </th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @clinics.each do |clinic| %>
+        <tr>
+          <td><%= clinic.name %></td>
+          <td><%= clinic.specialty %></td>
+          <td><%= clinic.location %></td>
+          <td class="rating"><%= clinic.rating %></td>
+          <td>
+            <%= link_to "View doctors", clinic_doctors_path(clinic) %>
+
+            <% if session[:role] == "doctor" && @user.present? %>
+              <%= button_to "Sign up to work here",
+                    doctor_path(@user, clinic_id: clinic.id),
+                    method: :patch %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>No clinics found</p>
+<% end %>
+
+<%= link_to "Back to Search", clinics_path %>

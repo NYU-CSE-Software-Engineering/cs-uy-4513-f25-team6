@@ -1,0 +1,57 @@
+<h1>Find Clinics</h1>
+
+<%= form_tag(search_clinics_path, method: :get) do %>
+  <%= label_tag :specialty %>
+  <%= select_tag :specialty,
+      options_for_select(
+        Clinic.distinct.order(:specialty).pluck(:specialty),
+        params[:specialty]
+      ),
+      include_blank: 'Any Specialty' %>
+
+  <%= label_tag :location %>
+  <%= select_tag :location,
+      options_for_select(
+        Clinic.distinct.order(:location).pluck(:location),
+        params[:location]
+      ),
+      include_blank: 'Any Location' %>
+
+  <%= submit_tag "Search" %>
+<% end %>
+
+<% if @clinics.present? %>
+  <h2>All Clinics</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Specialty</th>
+        <th>Location</th>
+        <th>Rating</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @clinics.each do |clinic| %>
+        <tr>
+          <td><%= clinic.name %></td>
+          <td><%= clinic.specialty %></td>
+          <td><%= clinic.location %></td>
+          <td><%= clinic.rating %></td>
+          <td>
+            <%= link_to "View doctors", clinic_doctors_path(clinic) %>
+
+            <% if session[:role] == "doctor" && @user.present? %>
+              <%= button_to "Sign up to work here",
+                    doctor_path(@user, clinic_id: clinic.id),
+                    method: :patch %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

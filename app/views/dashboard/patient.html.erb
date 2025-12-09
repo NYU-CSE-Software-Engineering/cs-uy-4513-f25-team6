@@ -1,2 +1,35 @@
+<h1>Patient Dashboard</h1>
+
 <p>Welcome, <%= @user.username %></p>
-<p>This is the patient dashboard</p>
+
+<h2>Upcoming Appointments</h2>
+<% if @appointments.any? %>
+  <ul>
+    <% @appointments.each do |appointment| %>
+      <li class="appointment-row">
+        <strong><%= appointment.date %></strong><br>
+        <%= appointment.time_slot.starts_at.strftime("%I:%M %p") %> –
+        <%= appointment.time_slot.ends_at.strftime("%I:%M %p") %><br>
+        with <%= appointment.doctor&.username || "Doctor" %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>You have no upcoming appointments.</p>
+<% end %>
+<p><%= link_to "View all appointments", patient_appointments_path %></p>
+
+<h2>Unpaid Bills</h2>
+<% if @unpaid_bills.any? %>
+  <ul>
+    <% @unpaid_bills.each do |bill| %>
+      <li>
+        Appointment on <%= bill.appointment.date %> —
+        Amount: $<%= bill.amount %>
+        (<%= link_to "View bill", billing_path(bill) %>)
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>You have no unpaid bills.</p>
+<% end %>
