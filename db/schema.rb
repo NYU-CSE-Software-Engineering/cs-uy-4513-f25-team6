@@ -77,6 +77,21 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_09_030427) do
     t.float "weight"
   end
 
+  create_table "prescriptions", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "doctor_id", null: false
+    t.string "dosage"
+    t.text "instructions"
+    t.date "issued_on", null: false
+    t.string "medication_name", null: false
+    t.integer "patient_id", null: false
+    t.string "status", default: "active", null: false
+    t.datetime "updated_at", null: false
+    t.index ["doctor_id"], name: "index_prescriptions_on_doctor_id"
+    t.index ["patient_id", "issued_on"], name: "index_prescriptions_on_patient_id_and_issued_on"
+    t.index ["patient_id"], name: "index_prescriptions_on_patient_id"
+  end
+
   create_table "time_slots", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "doctor_id"
@@ -87,4 +102,6 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_09_030427) do
   end
 
   add_foreign_key "bills", "appointments"
+  add_foreign_key "prescriptions", "doctors"
+  add_foreign_key "prescriptions", "patients"
 end

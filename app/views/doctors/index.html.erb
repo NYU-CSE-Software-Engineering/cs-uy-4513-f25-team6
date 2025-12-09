@@ -1,20 +1,31 @@
 <h1>Doctors at <%= @clinic.name %></h1>
 
-<%= link_to "Back to Clinics", clinics_path %>
+<h2>Filter Doctors</h2>
+<%= form_tag(clinic_doctors_path(@clinic), method: :get) do %>
+  <%= label_tag :specialty %>
+  <%= select_tag :specialty,
+      options_for_select(
+        @specialties,
+        params[:specialty]
+      ),
+      include_blank: 'Any Specialty' %>
 
-<table>
+  <%= submit_tag "Search" %>
+<% end %>
+
+<table id="results">
     <thead>
         <tr>
             <th>Name</th>
             <th>Specialty</th>
             <th>
-                <%= link_to "Rating", search_clinic_doctors_path(@clinic, sort: "rating") %>
+                <%= link_to "Rating", clinic_doctors_path(@clinic, params.permit(:specialty, :commit).merge!(sort: 'rating')) %>
             </th>
         </tr>
     </thead>
     <tbody>
         <% @doctors.each do |doctor| %>
-            <tr>
+            <tr class="doctor">
                 <td><%= link_to doctor.username, doctor_time_slots_path(doctor)%></td>
                 <td><%= doctor.specialty %></td>
                 <td><%= doctor.rating %></td>
@@ -22,3 +33,6 @@
         <% end %>
     </tbody>
 </table>
+<br>
+
+<%= link_to "Back to Clinics", clinics_path %>
