@@ -21,7 +21,7 @@
     <tbody>
       <% @clinics.each do |clinic| %>
         <tr>
-          <td><%= link_to clinic.name, clinic_doctors_path(clinic) %></td>
+          <td><%= clinic.name %></td>
           <td><%= clinic.specialty %></td>
           <td><%= clinic.location %></td>
           <td class="rating"><%= clinic.rating %></td>
