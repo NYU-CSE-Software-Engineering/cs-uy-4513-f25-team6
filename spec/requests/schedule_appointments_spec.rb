@@ -30,6 +30,7 @@ RSpec.describe "Schedule Appointments (request)", type: :request do
 
   describe "POST /appointments" do
     it "books when slot is available (happy path)" do
+      login_patient
       doctor = instance_double("Doctor", id: 7, username: "dr_user")
       slot   = instance_double("TimeSlot", id: 101, doctor: doctor)
 
@@ -45,6 +46,7 @@ RSpec.describe "Schedule Appointments (request)", type: :request do
     end
 
     it "rejects when slot is taken (sad path)" do
+      login_patient
       doctor = instance_double("Doctor", id: 7, username: "dr_user")
       slot   = instance_double("TimeSlot", id: 101, doctor: doctor)
 
@@ -68,6 +70,7 @@ RSpec.describe "Schedule Appointments (request)", type: :request do
 
   describe "GET /patient/appointments" do
     it "renders the patient appointments page (redirect destination)" do
+      login_patient
       get patient_appointments_path
       expect(response).to have_http_status(:ok)
     end

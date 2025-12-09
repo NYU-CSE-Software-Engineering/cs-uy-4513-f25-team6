@@ -24,6 +24,7 @@ Rails.application.routes.draw do
   # Non-RESTful doctor routes
   get '/doctor/dashboard', to: 'dashboard#doctor', as: :doctor_dashboard
   get '/doctor/time_slots', to: 'time_slots#configure', as: :configure_time_slots
+  get '/doctor/appointments', to: 'appointments#index', as: :doctor_appointments
   get '/doctor/prescriptions', to: 'prescriptions#doctor_index', as: :doctor_prescriptions
   post '/doctor/prescriptions', to: 'prescriptions#create', as: :create_prescription
 

@@ -1,5 +1,34 @@
 class AppointmentsController < ApplicationController
 
+  def index
+    unless session[:user_id]
+      flash[:alert] = "You are not authorized to view this page."
+      redirect_to login_path
+      return
+    end
+
+    if session[:role] == 'doctor'
+      # Logic for Doctor
+      @appointments = Appointment.includes(:time_slot, :patient)
+                                 .where(time_slot: {doctor_id: session[:user_id]})
+
+      if params[:status].present? && params[:status] != "All"
+        if params[:status] == 'Upcoming'
+          @appointments = @appointments.where('time_slot.starts_at > ?', DateTime.now)
+        elsif params[:status] == 'Completed'
+          @appointments = @appointments.where('time_slot.starts_at < ?', DateTime.now)
+        end
+      end
+
+    elsif Appointment.respond_to?(:includes) && Appointment.respond_to?(:where)
+      # Logic for Patient
+      @appointments = Appointment.includes(:time_slot, :doctor)
+                                 .where(patient_id: session[:user_id])
+    else
+      @appointments = []
+    end
+  end
+
   def create
     slot = TimeSlot.find(params.dig(:appointment, :time_slot_id))
     date = params.dig(:appointment, :date)
@@ -13,12 +42,4 @@ class AppointmentsController < ApplicationController
     redirect_to patient_appointments_path, notice: "Appointment confirmed"
   end
 
-  def index
-    if Appointment.respond_to?(:includes) && Appointment.respond_to?(:where)
-      @appointments = Appointment.includes(:time_slot, :doctor).where(patient_id: session[:user_id])
-    else
-      @appointments = []
-    end
-  # Rails will automatically render app/views/appointments/index.html.erb
-  end
 end
