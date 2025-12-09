@@ -11,4 +11,8 @@ class Appointment < ApplicationRecord
     def full_datetime
         Time.new(date.year, date.month, date.day, time_slot.starts_at.hour, time_slot.starts_at.min)
     end
+
+    def clinic_name
+      doctor&.clinic&.name
+    end
 end
