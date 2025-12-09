@@ -1,0 +1,53 @@
+<h1>Bill Details</h1>
+
+<p>
+  <strong>Appointment date:</strong>
+  <%= @bill.appointment.date %>
+</p>
+
+<p>
+  <strong>Doctor:</strong>
+  <%= @bill.appointment.doctor&.username || "N/A" %>
+</p>
+
+<p>
+  <strong>Amount:</strong>
+  $<%= sprintf('%.2f', @bill.amount_cents.to_f / 100) %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @bill.status %>
+</p>
+
+<% if flash[:notice].present? %>
+  <p><%= flash[:notice] %></p>
+<% end %>
+
+<% if flash[:alert].present? %>
+  <p><%= flash[:alert] %></p>
+<% end %>
+
+<% if @bill.paid? %>
+  <p>This bill is already paid.</p>
+<% else %>
+  <%= form_with url: pay_patient_bill_path(@bill), method: :post, local: true do |f| %>
+    <div>
+      <%= f.label :card_number, "Card Number" %><br>
+      <%= f.text_field :card_number, name: "payment[card_number]" %>
+    </div>
+    <div>
+      <%= f.label :exp_month, "Expiration Month" %><br>
+      <%= f.text_field :exp_month, name: "payment[exp_month]" %>
+    </div>
+    <div>
+      <%= f.label :exp_year, "Expiration Year" %><br>
+      <%= f.text_field :exp_year, name: "payment[exp_year]" %>
+    </div>
+    <div>
+      <%= f.label :cvc, "CVC" %><br>
+      <%= f.text_field :cvc, name: "payment[cvc]" %>
+    </div>
+    <%= f.submit "Pay Now" %>
+  <% end %>
+<% end %>

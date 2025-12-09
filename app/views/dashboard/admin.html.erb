@@ -1,2 +1,9 @@
+<h1>Admin Dashboard</h1>
 <p>Welcome, <%= @user.username %></p>
-<p>This is the admin dashboard</p>
+
+<ul>
+  <li>Total patients: <%= @patients_count %></li>
+  <li>Total doctors: <%= @doctors_count %></li>
+  <li>Total appointments: <%= @appointments_count %></li>
+  <li>Unpaid bills: <%= @unpaid_bills_count %></li>
+</ul>

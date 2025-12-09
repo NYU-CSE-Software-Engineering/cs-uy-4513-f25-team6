@@ -1,2 +1,19 @@
+<h1>Doctor Dashboard</h1>
+
 <p>Welcome, <%= @user.username %></p>
-<p>This is the doctor dashboard</p>
+
+<h2>Upcoming Appointments</h2>
+<% if @appointments.any? %>
+  <ul>
+    <% @appointments.each do |appointment| %>
+      <li>
+        <strong><%= appointment.date %></strong><br>
+        <%= appointment.time_slot.starts_at.strftime("%I:%M %p") %> –
+        <%= appointment.time_slot.ends_at.strftime("%I:%M %p") %><br>
+        with <%= appointment.patient.username %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>You have no upcoming appointments.</p>
+<% end %>
