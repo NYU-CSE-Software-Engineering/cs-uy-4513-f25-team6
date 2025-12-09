@@ -100,7 +100,7 @@ end
 # INTERACTION STEPS
 # ============================================
 
-When("I choose {string} in the status filter") do |status|
+When("I filter by {string} status") do |status|
   select status, from: "Status"
 end
 
