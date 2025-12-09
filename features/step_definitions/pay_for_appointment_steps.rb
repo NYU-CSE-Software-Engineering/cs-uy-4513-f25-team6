@@ -8,14 +8,15 @@ def sign_in_user(user)
 end
 
 def patient_billing_show_path_for(bill)
-  "/patient/billing/#{bill.id}"
+  "/billing/#{bill.id}"
 end
 
 Given('I have an unpaid bill for one of my appointments') do
   # Minimal associated records so the Bill is valid
-  doctor = Doctor.create!(email: "doc@example.com", password: Digest::MD5.hexdigest('testPassword'), name: "Dr. Ada")
-  appt   = Appointment.create!(patient: @test_user, doctor: doctor, starts_at: Time.current + 2.days)
-  @bill  = Bill.create!(patient: @test_user, appointment: appt, amount_cents: 15000, status: "unpaid")
+  doctor = Doctor.create!(email: "doc@example.com", password: Digest::MD5.hexdigest('testPassword'), username: "Dr. Ada")
+  time_slot = TimeSlot.create!(doctor: doctor, starts_at: "09:00", ends_at: "10:00")
+  appt = Appointment.create!(patient: @test_user, time_slot: time_slot, date: Date.today + 2.days)
+  @bill = Bill.create!(appointment: appt, amount: 150.0, status: "unpaid", due_date: Date.today + 7.days)
 end
 
 Given('I am on the page for my unpaid bill') do
@@ -29,16 +30,16 @@ Then('the bill should be marked paid') do
   if @bill
     @bill.reload
     expect(@bill.status).to eq("paid")
-    expect(@bill.paid_at).to be_present
   else
     expect(page).to have_content("Status: paid")
   end
 end
 
 Given('I have a paid bill') do
-  doctor = Doctor.create!(email: "doc2@example.com", password: Digest::MD5.hexdigest('testPassword'), name: "Dr. Turing")
-  appt   = Appointment.create!(patient: @test_user, doctor: doctor, starts_at: Time.current - 1.day)
-  @paid_bill = Bill.create!(patient: @test_user, appointment: appt, amount_cents: 9000, status: "paid", paid_at: Time.current)
+  doctor = Doctor.create!(email: "doc2@example.com", password: Digest::MD5.hexdigest('testPassword'), username: "Dr. Turing")
+  time_slot = TimeSlot.create!(doctor: doctor, starts_at: "10:00", ends_at: "11:00")
+  appt = Appointment.create!(patient: @test_user, time_slot: time_slot, date: Date.today - 1.day)
+  @paid_bill = Bill.create!(appointment: appt, amount: 90.0, status: "paid", due_date: Date.today + 7.days)
 end
 
 Given('I am on the page for my paid bill') do
@@ -48,13 +49,14 @@ Given('I am on the page for my paid bill') do
 end
 
 Given("another patient exists with a different unpaid bill") do
-  @other_patient = Patient.create!(email: "other@example.com", password: Digest::MD5.hexdigest('testPassword'))
-  d = Doctor.create!(email: "doc3@example.com", password: Digest::MD5.hexdigest('testPassword'), name: "Dr. Hopper")
-  a = Appointment.create!(patient: @other_patient, doctor: d, starts_at: Time.current + 1.day)
-  @others_bill = Bill.create!(patient: @other_patient, appointment: a, amount_cents: 5000, status: "unpaid")
+  @other_patient = Patient.create!(email: "other@example.com", password: Digest::MD5.hexdigest('testPassword'), username: "otherpatient")
+  d = Doctor.create!(email: "doc3@example.com", password: Digest::MD5.hexdigest('testPassword'), username: "Dr. Hopper")
+  time_slot = TimeSlot.create!(doctor: d, starts_at: "11:00", ends_at: "12:00")
+  a = Appointment.create!(patient: @other_patient, time_slot: time_slot, date: Date.today + 1.day)
+  @others_bill = Bill.create!(appointment: a, amount: 50.0, status: "unpaid", due_date: Date.today + 7.days)
 end
 
 When("I visit that other patient's bill page") do
-  raise "No @others_bill set. Did you create the other patient’s bill?" unless @others_bill
+  raise "No @others_bill set. Did you create the other patient's bill?" unless @others_bill
   visit patient_billing_show_path_for(@others_bill)
 end

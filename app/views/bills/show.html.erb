@@ -17,7 +17,7 @@
 
 <p>
   <strong>Status:</strong>
-  <%= @bill.status.capitalize %>
+  <%= @bill.status %>
 </p>
 
 <% if @bill.due_date.present? %>
@@ -35,9 +35,26 @@
   <p><%= flash[:alert] %></p>
 <% end %>
 
-<% if @bill.status == "unpaid" %>
+<% if @bill.unpaid? %>
+  <h2>Payment Information</h2>
   <%= form_with url: billing_path(@bill), method: :patch do |f| %>
-    <%= f.submit "Pay now" %>
+    <div>
+      <%= f.label :card_number, "Card Number" %>
+      <%= f.text_field :card_number, placeholder: "4242424242424242" %>
+    </div>
+    <div>
+      <%= f.label :expiration_month, "Expiration Month" %>
+      <%= f.text_field :expiration_month, placeholder: "12" %>
+    </div>
+    <div>
+      <%= f.label :expiration_year, "Expiration Year" %>
+      <%= f.text_field :expiration_year, placeholder: "2030" %>
+    </div>
+    <div>
+      <%= f.label :cvc, "CVC" %>
+      <%= f.text_field :cvc, placeholder: "123" %>
+    </div>
+    <%= f.submit "Pay Now" %>
   <% end %>
 <% else %>
   <p>This bill is already paid.</p>
