@@ -16,6 +16,7 @@ def path_to(page_name)
 
     when 'doctor dashboard' then '/doctor/dashboard'
     when 'doctor appointments' then '/doctor/appointments'
+    when 'doctor prescriptions' then '/doctor/prescriptions'
     when 'time slot' then '/doctor/time_slots'
 
     when 'admin dashboard' then '/admin/dashboard'
