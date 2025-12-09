@@ -10,7 +10,7 @@ RSpec.describe BillsController, type: :controller do
   end
 
   let(:clinic) do
-    Clinic.create!(name: "Test Clinic")
+    FactoryBot.create(:clinic, name: "Test Clinic")
   end
 
   let(:doctor) do

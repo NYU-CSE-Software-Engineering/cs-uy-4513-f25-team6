@@ -1,0 +1,28 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "Remote Code Execution",
+      "warning_code": 24,
+      "fingerprint": "180ff439c3470d78f20d39c68289535cdb9153b621d6685c3998b746fda20e92",
+      "check_name": "UnsafeReflection",
+      "message": "Unsafe reflection method `constantize` called on parameter value",
+      "file": "app/controllers/dashboard_controller.rb",
+      "line": 44,
+      "link": "https://brakemanscanner.org/docs/warning_types/remote_code_execution/",
+      "code": "params[:table].constantize",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "DashboardController",
+        "method": "admin"
+      },
+      "user_input": "params[:table]",
+      "confidence": "High",
+      "cwe_id": [
+        470
+      ],
+      "note": "Line 45 verifies that the constantized value is a real DB model before doing anything with it"
+    }
+  ],
+  "brakeman_version": "7.1.1"
+}

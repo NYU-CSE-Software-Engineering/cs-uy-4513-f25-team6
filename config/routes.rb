@@ -29,11 +29,8 @@ Rails.application.routes.draw do
 
   # /clinics/:clinic_id/doctors
   resources :clinics do
-
     collection do
-
       # collection routes are routes that are not associated with a specific clinic --- routes operate on the entire collection of clinics resource
-
       get 'search' # maps `GET /clinics/search` to ClinicsController#search action
                     # creating a custom route (not one of the default RESTful routes)
     end

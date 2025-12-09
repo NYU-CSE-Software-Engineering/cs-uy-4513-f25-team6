@@ -2,7 +2,6 @@ require 'rails_helper'
 
 RSpec.describe DoctorsController, type: :controller do
 
-
     describe 'GET #index' do # start testing the GET #index action in the DoctorsController
 
         context 'when user is signed in as a patient' do # start of context block: all scenarios here are for signed in patients
