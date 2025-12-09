@@ -149,4 +149,19 @@ RSpec.describe Appointment, type: :model do
       )
     }.not_to raise_error
   end
+
+  # --- Bill Creation Callback ---
+
+  it 'automatically creates a bill when an appointment is created' do
+    appointment = Appointment.create!(
+      patient: @patient,
+      time_slot: @time_slot,
+      date: @appointment_date
+    )
+
+    expect(appointment.bill).to be_present
+    expect(appointment.bill.status).to eq("unpaid")
+    expect(appointment.bill.amount).to eq(100.0)
+    expect(appointment.bill.due_date).to eq(@appointment_date + 7.days)
+  end
 end
