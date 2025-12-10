@@ -37,11 +37,10 @@ RSpec.describe 'Account Registration (request)', type: :request do
             expect(Patient).to receive(:new).and_return(patient_obj)
             expect(patient_obj).to receive(:valid?).and_return(true)
             expect(patient_obj).to receive(:save)
-            expect(patient_obj).to receive(:id)
 
             post patients_path, params: {patient: patient_details}
 
-            expect(response).to redirect_to(patient_dashboard_path)
+            expect(response).to redirect_to(login_path)
             follow_redirect!
             expect(response.body).to include('Patient account created')
         end
@@ -83,11 +82,10 @@ RSpec.describe 'Account Registration (request)', type: :request do
             expect(Doctor).to receive(:new).and_return(doctor_obj)
             expect(doctor_obj).to receive(:valid?).and_return(true)
             expect(doctor_obj).to receive(:save)
-            expect(doctor_obj).to receive(:id)
 
             post doctors_path, params: {doctor: doctor_details}
 
-            expect(response).to redirect_to(doctor_dashboard_path)
+            expect(response).to redirect_to(login_path)
             follow_redirect!
             expect(response.body).to include('Doctor account created')
         end
@@ -128,11 +126,10 @@ RSpec.describe 'Account Registration (request)', type: :request do
             expect(Admin).to receive(:new).and_return(admin_obj)
             expect(admin_obj).to receive(:valid?).and_return(true)
             expect(admin_obj).to receive(:save)
-            expect(admin_obj).to receive(:id)
 
             post admins_path, params: {admin: admin_details}
 
-            expect(response).to redirect_to(admin_dashboard_path)
+            expect(response).to redirect_to(login_path)
             follow_redirect!
             expect(response.body).to include('Admin account created')
         end

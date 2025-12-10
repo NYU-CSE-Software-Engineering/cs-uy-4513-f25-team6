@@ -10,7 +10,7 @@ Scenario: patient successfully creates account
     And I fill in "patient_username" with "new patient"
     And I fill in "patient_password" with "batterystaple"
     And I click "Register"
-    Then I should be on the patient dashboard page
+    Then I should be on the login page
     And I should see the string "Patient account created"
 
 Scenario: doctor successfully creates account
@@ -20,7 +20,7 @@ Scenario: doctor successfully creates account
     And I fill in "doctor_username" with "new doctor"
     And I fill in "doctor_password" with "correcthorse"
     And I click "Register"
-    Then I should be on the doctor dashboard page
+    Then I should be on the login page
     And I should see the string "Doctor account created"
 
 Scenario: admin successfully creates account
@@ -30,7 +30,7 @@ Scenario: admin successfully creates account
     And I fill in "admin_username" with "new admin"
     And I fill in "admin_password" with "chbschbs"
     And I click "Register"
-    Then I should be on the admin dashboard page
+    Then I should be on the login page
     And I should see the string "Admin account created"
 
 Scenario: user fails to create account with no email
@@ -78,4 +78,5 @@ Scenario: user successfully creates account when email exists for a different ro
     And I fill in "patient_username" with "new patient"
     And I fill in "patient_password" with "batterystaple"
     And I click "Register"
-    Then I should be on the patient dashboard page
+    Then I should be on the login page
+    And I should see the string "Patient account created"

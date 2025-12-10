@@ -13,24 +13,4 @@ class Appointment < ApplicationRecord
     def full_datetime
         Time.new(date.year, date.month, date.day, time_slot.starts_at.hour, time_slot.starts_at.min)
     end
-
-    private
-
-    # def create_bill
-    #     Bill.create!(
-    #         appointment: self,
-    #         amount: default_bill_amount,
-    #         status: "unpaid",
-    #         due_date: date + 7.days
-    #     )
-    # end
-
-    # def default_bill_amount
-    #     # Default bill amount - can be made configurable later
-    #     100.0
-    # end
-
-    # def clinic_name
-    #   doctor.clinic.name
-    # end
 end
