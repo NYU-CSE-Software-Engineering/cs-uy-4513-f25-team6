@@ -1,9 +1,8 @@
 <h1>Prescriptions Management</h1>
 
 <!-- Patient Lookup -->
-<h2>Select a Patient</h2>
 <form method="get" action="<%= doctor_prescriptions_path %>">
-  <label for="patient_id">Patient</label>
+  <label for="patient_id">Select a patient:</label>
   <select name="patient_id" id="patient_id">
     <option value="">-- Select Patient --</option>
     <% @patients.each do |patient| %>

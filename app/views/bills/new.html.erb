@@ -1,9 +1,26 @@
 <h1>Create a Bill</h1>
 
-<p><strong>Appointment:</strong> [placeholder]</p>
+<p>
+    <strong>Appointment:</strong> 
+    <%= @app.date %> at <%= @app.time_slot.starts_at.strftime("%H:%M %p") %> with <%= @app.patient.username %> 
+</p>
 
-<%= form_with model: Bill.new, url: bills_path, method: :post do |f| %>
-    <p>[placeholder]</p>
+<%= form_with model: Bill.new, url: appointment_bills_path(@app.id), method: :post do |f| %>
+    <table class="table" style="width:390px">
+        <tr>
+            <td><%= f.label :amount, "Bill amount:" %></td>
+            <td><%= f.number_field :amount, required: true %></td>
+        </tr>
+        <tr>
+            <td><%= f.label :due_date, "Due date:" %></td>
+            <td>
+                <%= f.date_field :due_date, 
+                    value: Date.today + 30.days, 
+                    min: Date.today + 1.days, 
+                    required: true %>
+            </td>
+        </tr>
+    </table>
     
     <%= f.submit "Create bill" %>
 <% end %>

@@ -46,9 +46,11 @@ Rails.application.routes.draw do
 
   resources :admins, only: [:new, :create]
   
-  resources :appointments, only: [:create]
+  resources :appointments, only: [:create] do
+    resources :bills, only: [:new, :create]
+  end
 
   resources :prescriptions, only: [:create, :update]
 
-  resources :bills, only: [:show, :new, :create, :update]
+  resources :bills, only: [:show, :update]
 end

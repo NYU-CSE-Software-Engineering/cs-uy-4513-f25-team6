@@ -5,20 +5,20 @@ Feature: View appointments as a doctor
 
   Scenario: Doctor views their upcoming appointments
     Given I am signed in as a doctor
-    And I have the following appointments
-      | patient_id | appointment_time    | status    | clinic_name |
-      | 321        | 2025-04-13 10:00:00 | Completed | ClinicA     |
-      | 678        | 2025-11-11 10:00:00 | Upcoming  | ClinicA     |
+    And I have the following appointments as a doctor
+      | patient_id | appointment_time    | status    |
+      | 321        | 2025-04-13 10:00:00 | Completed |
+      | 678        | 2025-11-11 10:00:00 | Upcoming  |
     And I am on the doctor appointments page
     Then I should see all my upcoming appointments
-    And each appointment should display the patient's name, date, and clinic
+    And each appointment should display the patient's name and the date
 
   Scenario: Doctor filters appointments by status
     Given I am signed in as a doctor
-    And I have the following appointments
-      | patient_id | appointment_time    | status    | clinic_name |
-      | 321        | 2025-04-13 10:00:00 | Completed | ClinicA     |
-      | 678        | 2025-11-11 10:00:00 | Upcoming  | ClinicA     |
+    And I have the following appointments as a doctor
+      | patient_id | appointment_time    | status    |
+      | 321        | 2025-04-13 10:00:00 | Completed |
+      | 678        | 2025-11-11 10:00:00 | Upcoming  |
     And I am on the doctor appointments page
     When I select "Completed" from "status"
     And I click "Filter"

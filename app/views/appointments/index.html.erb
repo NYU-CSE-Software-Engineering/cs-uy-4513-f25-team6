@@ -2,7 +2,7 @@
 
 <div class="filter-section">
   <%= form_with url: request.path, method: :get, local: true do |form| %>
-    <%= form.label :status, "Status" %>
+    <%= form.label :status, "Status:" %>
     <%= form.select :status, options_for_select(['All', 'Upcoming', 'Completed'], params[:status]) %>
     <%= form.submit "Filter" %>
   <% end %>
@@ -30,7 +30,7 @@
             <% if appointment.bill %>
               <strong>Bill:</strong> <%= appointment.bill.status %>
             <% else %>
-              <%= link_to "Create bill", new_bill_path %>
+              <%= link_to "Create bill", new_appointment_bill_path(appointment) %>
             <% end %>
           <% end %>
         <% else %>
@@ -38,7 +38,11 @@
           <%= appointment.doctor&.username || "Doctor" %>
           <br>
           <strong>Clinic:</strong>
-          <%= appointment.doctor.clinic.name %>
+          <% if appointment.doctor.clinic %>
+            <%= appointment.doctor.clinic.name %>
+          <% else %>
+            N/A
+          <% end %>
         <% end %>
       </li>
       <hr>

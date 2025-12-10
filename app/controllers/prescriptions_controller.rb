@@ -66,7 +66,9 @@ class PrescriptionsController < ApplicationController
   end
 
   def find_patients
-    @patients = Patient.joins(appointments: :time_slot).where(time_slot: {doctor_id: session[:user_id]})
+    @patients = Patient.joins(appointments: :time_slot)
+                       .where(time_slot: {doctor_id: session[:user_id]})
+                       .distinct
   end
 
 end

@@ -24,6 +24,8 @@ def path_to(page_name)
     when 'find clinics' then '/clinics'
     when 'clinic search results' then '/clinics/search'
 
+    when 'bill creation' then "/appointments/#{@app.id}/bills/new"
+
     else raise "Can't find mapping from \"#{page_name}\" to a path."
     end
 end

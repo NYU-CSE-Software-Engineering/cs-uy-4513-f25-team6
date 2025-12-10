@@ -57,6 +57,12 @@ RSpec.describe Bill, type: :model do
       expect(bill).not_to be_valid
       expect(bill.errors[:due_date]).to be_present
     end
+
+    it 'requires due_date to be in the future' do
+      bill = Bill.new(appointment: appointment, amount: 100, status: "unpaid", due_date: Date.today - 10.days)
+      expect(bill).not_to be_valid
+      expect(bill.errors[:due_date]).to be_present
+    end
   end
 
   describe 'defaults' do

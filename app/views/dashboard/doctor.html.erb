@@ -4,7 +4,11 @@
 <hr>
 
 <h2>Your Clinic</h2>
-<p>You currently work at <%= @user.clinic.name %></p>
+<% if @user.clinic %>
+  <p>You currently work at <%= @user.clinic.name %></p>
+<% else %>
+  <p>You do not currently work at any clinic</p>
+<% end %>
 <hr>
 
 <h2>Upcoming Appointments</h2>
