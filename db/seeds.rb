@@ -13,10 +13,10 @@ cln2 = Clinic.create!(name: "Clinic Two", specialty: "Pediatrics", location: "Br
 
 pw_hash = Digest::MD5.hexdigest('password')
 
-pat1 = Patient.create!(username: "Patient One", email: "patient1@example.com", password: pw_hash, age: 21)
-pat2 = Patient.create!(username: "Patient Two", email: "patient2@example.com", password: pw_hash, age: 27)
-doc1 = Doctor.create!(username: "Doctor One", email: "doctor1@example.com", password: pw_hash, phone: "123-456-7890", specialty: "Headache", rating: 4.7)
-doc2 = Doctor.create!(clinic: cln2, username: "Doctor Two", email: "doctor2@example.com", password: pw_hash, phone: "123-456-7890", specialty: "Stomach", rating: 4.3)
+pat1 = Patient.create!(username: "Patient One", email: "patient1@example.com", password: pw_hash, age: 21, height: 70, weight: 190, gender: "Male")
+pat2 = Patient.create!(username: "Patient Two", email: "patient2@example.com", password: pw_hash, age: 27, height: 68, weight: 180, gender: "Female")
+doc1 = Doctor.create!(username: "Doctor One", email: "doctor1@example.com", password: pw_hash, phone: "123-456-7890", specialty: "Headache", rating: 4.7, salary: 100)
+doc2 = Doctor.create!(clinic: cln2, username: "Doctor Two", email: "doctor2@example.com", password: pw_hash, phone: "123-456-7890", specialty: "Stomach", rating: 4.3, salary: 150)
 adm = Admin.create!(username: "Example Admin", email: "admin@example.com", password: pw_hash)
 
 sl1 = TimeSlot.create!(doctor: doc1, starts_at: '1:00 PM', ends_at: '1:30 PM')
