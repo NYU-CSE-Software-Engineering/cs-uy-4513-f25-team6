@@ -23,7 +23,6 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_09_030427) do
     t.datetime "created_at", null: false
     t.date "date"
     t.integer "patient_id"
-    t.string "status"
     t.integer "time_slot_id"
     t.datetime "updated_at", null: false
     t.index ["patient_id"], name: "index_appointments_on_patient_id"
