@@ -73,6 +73,9 @@ group :test do
   
   # Rails controller testing helpers
   gem "rails-controller-testing"
+
+  # SimpleCov for code coverage analysis
+  gem "simplecov"
 end
 
 group :production do
