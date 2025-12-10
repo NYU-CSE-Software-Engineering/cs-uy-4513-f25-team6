@@ -2,7 +2,7 @@
 
 <!-- Status Filter Form -->
 <form method="get" action="<%= patient_prescriptions_path %>">
-  <label for="status">Status</label>
+  <label for="status">Status:</label>
   <select name="status" id="status">
     <option value="">All</option>
     <option value="active" <%= 'selected' if @current_status == 'active' %>>active</option>
