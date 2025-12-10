@@ -40,43 +40,6 @@ RSpec.describe ClinicsController, type: :controller do
 
     end # end of testing the GET #index action in the ClinicsController
 
-
-    # describe 'GET #search' do # start testing the GET #search action in the ClinicsController
-        
-    #     before do
-    #         @patient = login_patient(true)
-
-    #         @clinic1 = Clinic.create!(name: "NYC Dermatology", specialty: "Dermatology", location: "New York", rating: 4.5)
-    #         @clinic2 = Clinic.create!(name: "LA Dermatology", specialty: "Dermatology", location: "Los Angeles", rating: 4.0)
-    #     end
-
-    #     context 'with valid search parameters' do
-
-    #         it 'returns matching clinics' do
-    #             get :search, params: {specialty: "Dermatology", location: "New York"}
-    #             expect(assigns(:clinics)).to include(@clinic1)
-    #             expect(assigns(:clinics)).not_to include(@clinic2)
-    #         end
-    #     end
-
-    #     context 'with missing search parameters' do
-
-    #         it 'shows an error message when both are missing' do
-    #             get :search, params: { specialty: "", location: ""}
-    #             expect(flash[:alert]).to be_present
-    #         end
-    #     end
-
-    #     context 'sorting by rating' do
-
-    #         it 'returns clinics sorted by rating when sort param is provided' do
-    #             get :search, params: { sort: "rating" }
-    #             clinics = assigns(:clinics).to_a
-    #             expect(clinics.first.rating).to be >= clinics.last.rating
-    #         end
-    #     end
-    # end # end of testing the GET #search action in the ClinicsController
-
     describe 'POST #create' do
         it 'creates a new clinic with valid details' do
             login_admin(true)
