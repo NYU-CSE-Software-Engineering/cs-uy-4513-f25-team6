@@ -18,13 +18,6 @@ class ClinicsController < ApplicationController
     end
 
     def index
-        @clinics = Clinic.order(:name) # grab all Clinics from the database and order them by name
-
-        # no explicity redirect so this action will render the index template: app/views/clinics/index.html.erb
-    end
-
-
-    def search
         # get the search parameters from the http request
         specialty = params[:specialty]
         location = params[:location]
@@ -33,13 +26,6 @@ class ClinicsController < ApplicationController
         # check if sorting by rating is requested
         if sort == "rating"
             @clinics = Clinic.sort_by_rating # use the model's sort_by_rating method
-            return
-        end
-
-        # check that at least one search parameter is present
-        if specialty.blank? && location.blank?
-            flash[:alert] = "Please provide at least a specialty or location to search"
-            @clinics = Clinic.none
             return
         end
 

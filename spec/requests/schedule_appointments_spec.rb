@@ -7,6 +7,7 @@ RSpec.describe "Schedule Appointments (request)", type: :request do
 
   describe "GET /doctors/:id/time_slots" do
     it "renders the schedule page and lists available slots" do
+      login_patient
       doctor = instance_double("Doctor", id: 42, username: "dr_user")
       slot1    = instance_double("TimeSlot", id: 101,
                                  starts_at: Time.zone.parse("2000-01-01 09:00"),
@@ -25,6 +26,11 @@ RSpec.describe "Schedule Appointments (request)", type: :request do
       expect(response.body).to include("Available time slots")
       expect(response.body).to include(/9:00([ -APM]*)9:30/)
       expect(response.body).to include(/9:30([ -APM]*)10:00/)
+    end
+
+    it "redirects when not logged in" do
+      get doctor_time_slots_path(1)
+      expect(response).to redirect_to(login_path)
     end
   end
 

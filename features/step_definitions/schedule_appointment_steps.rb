@@ -67,6 +67,13 @@ Given('the slot starting at {string} on {string} for doctor {string} is already 
   Appointment.create(patient: otherPat, time_slot: slot, date: date)
 end
 
+When('I make an appointment with {string}') do |doctor|
+  row = find('tr', text: doctor)
+  within(row) do
+    click_button 'Make an appointment'
+  end
+end
+
 # Click the "Book this slot" button for a specific slot
 When('I book the slot starting at {string}') do |start_time|
   page.find('td', text: start_time).find('+td button').click

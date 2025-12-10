@@ -1,6 +1,6 @@
 <h1>Find Clinics</h1>
 
-<%= form_tag(search_clinics_path, method: :get) do %>
+<%= form_tag(clinics_path, method: :get) do %>
   <%= label_tag :specialty %>
   <%= select_tag :specialty,
       options_for_select(
@@ -29,7 +29,13 @@
         <th>Name</th>
         <th>Specialty</th>
         <th>Location</th>
-        <th>Rating</th>
+        <th>
+          <%= link_to "Rating", clinics_path(
+              specialty: params[:specialty],
+              location:  params[:location],
+              sort:      "rating"
+            ) %>
+        </th>
         <th>Actions</th>
       </tr>
     </thead>

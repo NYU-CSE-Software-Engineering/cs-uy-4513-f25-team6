@@ -35,10 +35,6 @@
                 <li class="nav-item">
                   <%= nav_link "Dashboard", "/#{session[:role]}/dashboard" %>
                 </li>
-              <% else %>
-                <li class="nav-item">
-                  <%= nav_link "Login", login_path %>
-                </li>
               <% end %>
               <li class="nav-item">
                 <%= nav_link "Clinics", clinics_path %>
@@ -79,7 +75,8 @@
             <% end %>
              | <%= link_to "Log Out", logout_path, class: "login-link" %>
           <% else %>
-            Not logged in | Sign up as: 
+            <%= link_to "Log In", login_path, class: "login-link" %>
+             | Sign up: 
             <%= link_to "Patient", new_patient_path, class: "login-link" %>
             <%= link_to "Doctor", new_doctor_path, class: "login-link" %>
             <%= link_to "Admin", new_admin_path, class: "login-link" %>

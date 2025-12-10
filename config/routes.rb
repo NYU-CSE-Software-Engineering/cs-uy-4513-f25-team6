@@ -9,7 +9,7 @@ Rails.application.routes.draw do
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
-  root to: redirect('/login')
+  root to: redirect('/clinics')
 
   # Login routes
   get '/login', to: 'login#form', as: :login
@@ -30,14 +30,8 @@ Rails.application.routes.draw do
   # Non-RESTful admin routes
   get '/admin/dashboard', to: 'dashboard#admin', as: :admin_dashboard
 
-  # /clinics/:clinic_id/doctors
-  resources :clinics do
-    collection do
-      # collection routes are routes that are not associated with a specific clinic --- routes operate on the entire collection of clinics resource
-      get 'search' # maps `GET /clinics/search` to ClinicsController#search action
-                    # creating a custom route (not one of the default RESTful routes)
-    end
-
+  # RESTful routes
+  resources :clinics, only: [:index, :create] do
     resources :doctors, only: [:index]
   end
 
