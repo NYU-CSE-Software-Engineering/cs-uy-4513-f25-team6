@@ -1,4 +1,5 @@
 class AppointmentsController < ApplicationController
+  before_action { check_login ['patient', 'doctor'] }
 
   def index
     unless session[:user_id]
@@ -10,22 +11,19 @@ class AppointmentsController < ApplicationController
     if session[:role] == 'doctor'
       # Logic for Doctor
       @appointments = Appointment.includes(:time_slot, :patient, :doctor, :bill)
-                                 .where(time_slot: {doctor_id: session[:user_id]})
-
-      if params[:status].present? && params[:status] != "All"
-        if params[:status] == 'Upcoming'
-          @appointments = @appointments.where('time_slot.starts_at > ?', DateTime.now)
-        elsif params[:status] == 'Completed'
-          @appointments = @appointments.where('time_slot.starts_at < ?', DateTime.now)
-        end
-      end
-
-    elsif Appointment.respond_to?(:includes) && Appointment.respond_to?(:where)
+                                 .where(time_slots: {doctor_id: session[:user_id]})
+    elsif session[:role] == 'patient'
       # Logic for Patient
-      @appointments = Appointment.includes(:time_slot, :doctor)
+      @appointments = Appointment.joins(:time_slot).includes(:time_slot, :doctor)
                                  .where(patient_id: session[:user_id])
-    else
-      @appointments = []
+    end
+
+    if params[:status].present? && params[:status] != "All"
+      if params[:status] == 'Upcoming'
+        @appointments = @appointments.where('date > ? OR (DATE = ? AND time_slots.starts_at > ?)', Date.today, Date.today, DateTime.now.strftime('%H:%M:%S'))
+      elsif params[:status] == 'Completed'
+        @appointments = @appointments.where('date < ? OR (DATE = ? AND time_slots.starts_at <= ?)', Date.today, Date.today, DateTime.now.strftime('%H:%M:%S'))
+      end
     end
   end
 

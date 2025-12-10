@@ -31,4 +31,4 @@ Feature: View appointments as a doctor
 
   Scenario: Unauthorized user tries to view doctor appointments
     Given I am on the doctor appointments page
-    Then I should see the string "You are not authorized to view this page."
+    Then I should see the string "This page or action requires you to be logged in"

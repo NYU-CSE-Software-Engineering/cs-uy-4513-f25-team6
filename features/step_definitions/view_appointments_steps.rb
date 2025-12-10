@@ -18,8 +18,7 @@ Given("I have the following appointments as a patient") do |table|
     Appointment.create!(
       time_slot: slot_obj,
       patient_id: @test_user.id, 
-      date: row["date"] || row["appointment_time"], 
-      status: row["status"]
+      date: row["date"] || row["appointment_time"]
     )
   end
 end
@@ -55,8 +54,7 @@ Given("I have the following appointments as a doctor") do |table|
     Appointment.create!(
       patient: patient,
       time_slot: time_slot,
-      date: date_part,
-      status: row['status']
+      date: date_part
     )
   end
 end

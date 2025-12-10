@@ -47,6 +47,7 @@ RSpec.describe "Schedule Appointments (request)", type: :request do
       post appointments_path, params: { appointment: { time_slot_id: 101, date: "2025-04-13" } }
 
       expect(response).to redirect_to(patient_appointments_path)
+      expect(appointment_class).to receive_message_chain(:joins, :includes, :where).and_return([])
       follow_redirect!
       expect(response.body).to include("Appointment confirmed")
     end

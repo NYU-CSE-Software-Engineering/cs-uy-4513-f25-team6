@@ -101,6 +101,14 @@ RSpec.describe DoctorsController, type: :controller do
             @doctor = login_doctor(true)
         end
 
+        it "updates the salary if salary parameter present" do
+            patch :update, params: { id: @doctor.id, clinic_id: clinic_ny.id, salary: 123 }
+
+            expect(response).to redirect_to(doctor_dashboard_path)
+            expect(flash[:notice]).to eq("Salary has been updated")
+            expect(@doctor.reload.salary).to eq(123)
+        end
+
         it "assigns the doctor to the given clinic and sets a success notice" do
             patch :update, params: { id: @doctor.id, clinic_id: clinic_ny.id }
 

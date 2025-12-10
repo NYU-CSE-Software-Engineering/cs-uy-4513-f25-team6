@@ -50,22 +50,35 @@ class DoctorsController < ApplicationController
     end
 
     # PATCH /clinics/:clinic_id/doctors/:id
+    # Updates doctor salary
     # Associates a clinic with a doctor
     def update
         doctor = Doctor.find(params[:id])
         clinic = Clinic.find(params[:clinic_id])
 
-        if doctor.clinic == clinic
-            flash[:alert] = "You are already employed at this clinic"
+        salary = params[:salary]
+        if salary
+            # salary update
+            if doctor.update(salary: salary)
+                flash[:notice] = "Salary has been updated"
             else
-            if doctor.update(clinic: clinic)
-                flash[:notice] = "You are now employed at #{clinic.name}"
-            else
-                flash[:alert] = "Unable to sign up for clinic"
+                flash[:alert] = "Unable to update salary"
             end
+            redirect_to doctor_dashboard_path
+        else
+            # clinic employment
+            if doctor.clinic == clinic
+                flash[:alert] = "You are already employed at this clinic"
+            else
+                salary = doctor.salary || 100
+                if doctor.update(clinic: clinic, salary: salary)
+                    flash[:notice] = "You are now employed at #{clinic.name}"
+                else
+                    flash[:alert] = "Unable to sign up for clinic"
+                end
+            end
+            redirect_to clinics_path
         end
-
-        redirect_to clinics_path
     end
 
     # GET /clinics/:clinic_id/doctors/search
