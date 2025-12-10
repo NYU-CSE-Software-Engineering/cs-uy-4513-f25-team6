@@ -16,10 +16,8 @@ class PatientsController < ApplicationController
 
         if (@new_patient.valid?)
             @new_patient.save
-            session[:user_id] = @new_patient.id
-            session[:role] = 'patient'
-            flash[:notice] = 'Patient account created'
-            redirect_to patient_dashboard_path
+            flash[:notice] = 'Patient account created, please log in'
+            redirect_to login_path
             return
         else
             flash[:alert] = 'Invalid account details: '+@new_patient.errors.full_messages.to_s

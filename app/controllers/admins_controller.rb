@@ -16,10 +16,8 @@ class AdminsController < ApplicationController
 
         if (@new_admin.valid?)
             @new_admin.save
-            session[:user_id] = @new_admin.id
-            session[:role] = 'admin'
-            flash[:notice] = 'Admin account created'
-            redirect_to admin_dashboard_path
+            flash[:notice] = 'Admin account created, please log in'
+            redirect_to login_path
             return
         else
             flash[:alert] = 'Invalid account details: '+@new_admin.errors.full_messages.to_s

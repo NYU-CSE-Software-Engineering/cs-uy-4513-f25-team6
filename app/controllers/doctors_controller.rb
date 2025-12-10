@@ -39,10 +39,8 @@ class DoctorsController < ApplicationController
 
         if (@new_doctor.valid?)
             @new_doctor.save
-            session[:user_id] = @new_doctor.id
-            session[:role] = 'doctor'
-            flash[:notice] = 'Doctor account created'
-            redirect_to doctor_dashboard_path
+            flash[:notice] = 'Doctor account created, please log in'
+            redirect_to login_path
             return
         else
             flash[:alert] = 'Invalid account details: '+@new_doctor.errors.full_messages.to_s
