@@ -27,4 +27,5 @@ sl4 = TimeSlot.create!(doctor: doc2, starts_at: '10:00 AM', ends_at: '10:30 AM')
 sl5 = TimeSlot.create!(doctor: doc2, starts_at: '10:30 AM', ends_at: '11:00 AM')
 sl6 = TimeSlot.create!(doctor: doc2, starts_at: '3:00 PM', ends_at: '3:15 PM')
 
+Appointment.create!(patient: pat2, time_slot: sl3, date: '2025-11-11')
 Appointment.create!(patient: pat2, time_slot: sl3, date: '2025-12-25')
