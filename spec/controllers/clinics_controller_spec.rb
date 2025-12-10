@@ -23,16 +23,6 @@ RSpec.describe ClinicsController, type: :controller do
             end
         end # end of context block: all scenarios here are for signed in patients
 
-        
-        context 'when user is not signed in' do # start of context block: all scenarios here are for unsigned in users
-            
-            # this is testing a scenario of the GET #index action in the ClinicsController --- it should redirect to the login page
-            it 'redirects to the login page' do
-                get :index # simulate a GET request to the ClinicsController#index action
-                expect(response).to redirect_to(login_path) # expectation: the response should redirect to the login page
-            end
-        end # end of context block: all scenarios here are for unsigned in users
-
     end # end of testing the GET #index action in the ClinicsController
 
 

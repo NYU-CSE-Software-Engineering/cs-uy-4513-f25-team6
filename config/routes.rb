@@ -26,7 +26,6 @@ Rails.application.routes.draw do
   get '/doctor/time_slots', to: 'time_slots#configure', as: :configure_time_slots
   get '/doctor/appointments', to: 'appointments#index', as: :doctor_appointments
   get '/doctor/prescriptions', to: 'prescriptions#doctor_index', as: :doctor_prescriptions
-  post '/doctor/prescriptions', to: 'prescriptions#create', as: :create_prescription
 
   # Non-RESTful admin routes
   get '/admin/dashboard', to: 'dashboard#admin', as: :admin_dashboard
@@ -51,6 +50,8 @@ Rails.application.routes.draw do
   resources :admins, only: [:new, :create]
   
   resources :appointments, only: [:create]
+
+  resources :prescriptions, only: [:create, :update]
 
   resources :bills, only: [:show, :update]
 end

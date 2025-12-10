@@ -27,8 +27,8 @@ end
 Given('I am logged in as patient {string}') do |username|
   visit "/login"
   patient = Patient.find_by!(username: username)
-  fill_in "Email:", with: patient.email
-  fill_in "Password", with: "Secret12"
+  fill_in "email", with: patient.email
+  fill_in "password", with: "Secret12"
   choose "Patient"
   click_button "Log In"
 end

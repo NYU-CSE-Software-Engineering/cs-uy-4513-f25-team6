@@ -14,8 +14,8 @@ Feature: User logs in
   @happy_path
   Scenario: Patient logs in successfully with email
     Given I am on the login page
-    When I fill in "Email:" with "pat@example.com"
-    And I fill in "Password:" with "Secret12"
+    When I fill in "email" with "pat@example.com"
+    And I fill in "password" with "Secret12"
     And I choose "Patient"
     And I click "Log In"
     Then I should see the string "Welcome, pat_user"
@@ -24,8 +24,8 @@ Feature: User logs in
   @username_login
   Scenario: Doctor logs in successfully with username
     Given I am on the login page
-    When I fill in "Email:" with "drsmith@example.com"
-    And I fill in "Password:" with "Secret12"
+    When I fill in "email" with "drsmith@example.com"
+    And I fill in "password" with "Secret12"
     And I choose "Doctor"
     And I click "Log In"
     Then I should see the string "Welcome, dr_smith"
@@ -34,8 +34,8 @@ Feature: User logs in
   @sad_path
   Scenario: Login fails with invalid password
     Given I am on the login page
-    When I fill in "Email:" with "admin@example.com"
-    And I fill in "Password:" with "wrongpass"
+    When I fill in "email" with "admin@example.com"
+    And I fill in "password" with "wrongpass"
     And I choose "Admin"
     And I click "Log In"
     Then I should see the string "Invalid email or password"

@@ -1,12 +1,5 @@
 <h1>Prescriptions Management</h1>
 
-<% if flash[:notice] %>
-  <p style="color: green;"><%= flash[:notice] %></p>
-<% end %>
-<% if flash[:alert] %>
-  <p style="color: red;"><%= flash[:alert] %></p>
-<% end %>
-
 <!-- Patient Lookup -->
 <h2>Select a Patient</h2>
 <form method="get" action="<%= doctor_prescriptions_path %>">
@@ -19,7 +12,7 @@
       </option>
     <% end %>
   </select>
-  <button type="submit">View Prescriptions</button>
+  <input type="submit" value="Manage Prescriptions">
 </form>
 
 <% if @selected_patient %>
@@ -30,7 +23,7 @@
   <% if @prescriptions.empty? %>
     <p>This patient has no prescriptions.</p>
   <% else %>
-    <table>
+    <table class="table table-striped table-bordered align-middle border border-dark-subtle">
       <thead>
         <tr>
           <th>Medication</th>
@@ -49,7 +42,16 @@
             <td><%= prescription.instructions %></td>
             <td><%= prescription.doctor&.username %></td>
             <td><%= prescription.issued_on.strftime('%Y-%m-%d') %></td>
-            <td><%= prescription.status %></td>
+            <td style="width:210px">
+              <%= form_with url: prescription_path(prescription.id), method: :patch, local: true do |f| %>
+                <select name="status">
+                  <option <%= 'selected' if prescription.status == "active" %>>active</option>
+                  <option <%= 'selected' if prescription.status == "expired" %>>expired</option>
+                  <option <%= 'selected' if prescription.status == "cancelled" %>>cancelled</option>
+                </select>
+                <input type="submit" value="Update">
+              <% end %>
+            </td>
           </tr>
         <% end %>
       </tbody>
@@ -60,34 +62,26 @@
 
   <!-- Create New Prescription Form -->
   <h2>Create New Prescription for <%= @selected_patient.username %></h2>
-  <%= form_with url: create_prescription_path, method: :post, local: true do |f| %>
+  <%= form_with url: prescriptions_path, method: :post, local: true do |f| %>
     <input type="hidden" name="prescription[patient_id]" value="<%= @selected_patient.id %>">
+    <input type="hidden" name="prescription[status]" value="active">
 
-    <div>
-      <label for="prescription_medication_name">Medication Name *</label>
-      <input type="text" name="prescription[medication_name]" id="prescription_medication_name" required>
-    </div>
+    <table class="table" style="width:450px">
+      <tr>
+        <td><label for="prescription_medication_name">Medication Name *</label></td>
+        <td><input type="text" name="prescription[medication_name]" id="prescription_medication_name" required></td>
+      </tr>
+      <tr>
+        <td><label for="prescription_dosage">Dosage</label></td>
+        <td><input type="text" name="prescription[dosage]" id="prescription_dosage"></td>
+      </tr>
+      <tr>
+        <td><label for="prescription_instructions">Instructions</label></td>
+        <td><textarea name="prescription[instructions]" id="prescription_instructions"></textarea></td>
+      </tr>
+    </table>
 
-    <div>
-      <label for="prescription_dosage">Dosage</label>
-      <input type="text" name="prescription[dosage]" id="prescription_dosage">
-    </div>
-
-    <div>
-      <label for="prescription_instructions">Instructions</label>
-      <textarea name="prescription[instructions]" id="prescription_instructions"></textarea>
-    </div>
-
-    <div>
-      <label for="prescription_status">Status</label>
-      <select name="prescription[status]" id="prescription_status">
-        <option value="active" selected>active</option>
-        <option value="expired">expired</option>
-        <option value="cancelled">cancelled</option>
-      </select>
-    </div>
-
-    <button type="submit">Create Prescription</button>
+    <input type="submit" value="Create Prescription">
   <% end %>
 <% end %>
 

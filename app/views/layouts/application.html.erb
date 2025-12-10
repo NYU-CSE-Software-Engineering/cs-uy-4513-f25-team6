@@ -48,13 +48,14 @@
                   <%= nav_link "Appointments", patient_appointments_path %>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link">[prescriptions]</a>
-                  <%#= nav_link "Prescriptions", prescriptions_path %>
+                  <%= nav_link "Prescriptions", patient_prescriptions_path %>
                 </li>
               <% elsif session[:role] == "doctor" %>
                 <li class="nav-item">
-                  <a class="nav-link">[appointments]</a>
-                  <%#= nav_link "Appointments", doctor_appointments_path %>
+                  <%= nav_link "Appointments", doctor_appointments_path %>
+                </li>
+                <li class="nav-item">
+                  <%= nav_link "Prescriptions", doctor_prescriptions_path %>
                 </li>
                 <li class="nav-item">
                   <%= nav_link "Time Slots", configure_time_slots_path %>

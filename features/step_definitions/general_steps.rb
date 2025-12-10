@@ -57,8 +57,8 @@ Given(/I am signed in as an? (.*)/) do |role|
         raise "#{role} is not a valid role."
     end
     visit '/login'
-    fill_in 'Email', with: @test_user.email
-    fill_in 'Password', with: 'testPassword'
+    fill_in 'email', with: @test_user.email
+    fill_in 'password', with: 'testPassword'
     choose role.capitalize
     click_button 'Log In'
 end
