@@ -1,24 +1,58 @@
-# README
+# Clinic Appointment & Prescription System
+*CS-UY 4513 – Software Engineering*
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Project Title and Description
+This project implements a modular SaaS-style **Clinic Appointment & Prescription System** that supports three categories of users—**patients**, **doctors**, and **administrators**. The system provides functionality for:
+- Secure user authentication and authorization  
+- Viewing clinics and available doctors  
+- Scheduling and managing medical appointments  
+- Doctors issuing prescriptions and patients viewing them  
+- Billing and payment management  
 
-Things you may want to cover:
+The system uses **Ruby on Rails**, follows a **modular architecture** with clear module dependencies, exposes **RESTful API endpoints**, and stores all persistent data in a **MySQL relational database**.
 
-* Ruby version
+## Team Members and Roles
+| Name | Role | Primary Contributions |
+|------|------|------------------------|
+| Ben Miller | Group Leader | Login, account creation, appointment scheduling, CSS |
+| Joe Aronov | Developer | Appointments model, doctor appointments list |
+| Guanqiao Chen | Developer | Clinic model, bill payment and creation |
+| Nelson Jiang | Developer | Login, clinic indexing and search system |
+| Charlie Li | Developer | Login, doctor index search system |
+| Ananya Shah | Developer | Dashboard pages, patient appointments list |
+| William Shi | Developer | Prescription system, clinic employment |
 
-* System dependencies
 
-* Configuration
 
-* Database creation
+## Setup Instructions
 
-* Database initialization
+### 1. Required Software Versions
+- Ruby 3.4.7  
+- Rails 8.1.1
+- SQLite 2.1 (development/testing)
+- PostgreSQL 17.5 (production)
 
-* How to run the test suite
+### 2. Clone the Repository
+```bash
+git clone <repository-url>
+cd <project-directory>
+```
 
-* Services (job queues, cache servers, search engines, etc.)
+### 3. Set up Ruby
+- Make sure Ruby is installed on your computer
+```bash
+gem install bundler
+bundle install
+```
 
-* Deployment instructions
+### 4. Set up the Rails app
+```bash
+bundle exec rails db:create
+bundle exec rails db:migrate
+bundle exec rails db:seed
+bundle exec rails server
+```
 
-* ...
+## Tesing Instructions
+- Use `bundle exec rspec` to run the low-level RSpec tests
+- Use `bundle exec cucumber` to run the high-level Cucumber scenarios
