@@ -4,11 +4,11 @@
     <%= form.submit "Refresh" %>
 <% end %>
 <h2>Available time slots for <%= @date %></h1>
-<table>
+<table class="table table-striped" style="width: 400px">
     <% @time_slots.each do |slot| %>
     <tr>
         <td><%= slot.starts_at.strftime("%-l:%M %p") %> - <%= slot.ends_at.strftime("%-l:%M %p") %></td>
-        <td><%= button_to "Book this slot",
+        <td style="text-align:right"><%= button_to "Book this slot",
                 appointments_path,
                 method: :post,
                 params: { appointment: { time_slot_id: slot.id, doctor_id: @doctor.id, date: @date } } %></td>

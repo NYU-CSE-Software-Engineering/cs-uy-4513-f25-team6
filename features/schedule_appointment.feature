@@ -21,7 +21,7 @@ Feature: Patient picks an appointment time with a doctor
     Given I am logged in as patient "pat_user"
     And I am on the find doctor page for clinic "Midtown Health"
     Then I should see the string "dr_user"
-    When I click "dr_user"
+    When I make an appointment with "dr_user"
     Then I should be on the time slots page for doctor "dr_user"
     When I choose the date "2025-06-14"
     Then I should see the string "9:00 AM - 9:30 AM"

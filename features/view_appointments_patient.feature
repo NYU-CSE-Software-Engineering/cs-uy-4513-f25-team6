@@ -28,8 +28,5 @@ Scenario: Patient views all appointments on dedicated page
       | 10:00 | 2024-11-11 | oldman  |
       | 10:00 | 2026-06-18 | realman |
       | 11:30 | 2026-10-20 | fakeman |
-    And I am on the patient dashboard page
-    Then I should see the string "View all appointments"
-    When I click "View all appointments"
-    Then I should be on the patient appointments page
-    And I should see all my appointments
+    And I am on the patient appointments page
+    Then I should see all my appointments

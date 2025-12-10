@@ -1,6 +1,29 @@
 class BillsController < ApplicationController
   before_action { check_login }
-  before_action :set_bill
+  before_action(only: [:new, :create]) { check_login ['doctor'] }
+  before_action :set_bill, only: [:show, :update]
+
+  def new
+    @app = Appointment.find(params[:appointment_id])
+  end
+
+  def create
+    @app = Appointment.find(params[:appointment_id])
+    bill_params = params.expect(bill: [:amount, :due_date])
+    
+    bill = Bill.new(bill_params)
+    bill.appointment_id = @app.id
+    bill.status = 'unpaid'
+
+    if bill.valid?
+      bill.save
+      flash[:notice] = 'New bill successfully created'
+      redirect_to doctor_appointments_path
+    else
+      flash[:alert] = 'Invalid bill details'
+      render :new
+    end
+  end
 
   def show
   end

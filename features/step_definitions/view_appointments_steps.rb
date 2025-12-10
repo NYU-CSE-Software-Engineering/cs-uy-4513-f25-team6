@@ -24,16 +24,10 @@ Given("I have the following appointments as a patient") do |table|
   end
 end
 
-Given("I have the following appointments") do |table|
+Given("I have the following appointments as a doctor") do |table|
   raise "No doctor signed in" unless @test_user.is_a?(Doctor)
 
   table.hashes.each do |row|
-    # Assign the logged-in doctor to the clinic specified in the table
-    if row['clinic_name'].present?
-      clinic = Clinic.find_or_create_by(name: row['clinic_name'])
-      @test_user.update(clinic: clinic)
-    end
-
     # Handle Patient (Find or Create)
     patient = Patient.find_by(id: row['patient_id'])
     if patient.nil?
@@ -91,25 +85,16 @@ Then ('I should not see any appointments') do
   expect(page).not_to have_selector(".appointment-row")
 end
 
-# Then("I should see a list of my upcoming appointments") do
-#   expect(page).to have_content("Upcoming Appointments")
-#   expect(page).to have_selector(".appointment-row")
-# end
-
-# When("I select {string} from the status dropdown") do |status|
-#   select status, from: "Status"
-#   click_button "Filter"
-# end
-
 Then("I should see only completed appointments") do
   expect(page).to have_content("Completed Appointments")
   expect(page).not_to have_content("Upcoming Appointments")
 end
 
-Then("each appointment should display the patient's name, date, and clinic") do
-  within find(".appointment-row", match: :first) do
-    expect(page).to have_content("Patient")
-    expect(page).to have_content("Date")
-    expect(page).to have_content("Clinic")
+Then("each appointment should display the patient's name and the date") do
+  all(".appointment-row").each do |row|
+    within row do
+      expect(page).to have_content("Patient")
+      expect(page).to have_content("Date")
+    end
   end
 end

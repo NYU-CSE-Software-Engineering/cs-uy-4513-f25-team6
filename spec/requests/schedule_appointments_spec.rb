@@ -7,6 +7,7 @@ RSpec.describe "Schedule Appointments (request)", type: :request do
 
   describe "GET /doctors/:id/time_slots" do
     it "renders the schedule page and lists available slots" do
+      login_patient
       doctor = instance_double("Doctor", id: 42, username: "dr_user")
       slot1    = instance_double("TimeSlot", id: 101,
                                  starts_at: Time.zone.parse("2000-01-01 09:00"),
@@ -26,6 +27,11 @@ RSpec.describe "Schedule Appointments (request)", type: :request do
       expect(response.body).to include(/9:00([ -APM]*)9:30/)
       expect(response.body).to include(/9:30([ -APM]*)10:00/)
     end
+
+    it "redirects when not logged in" do
+      get doctor_time_slots_path(1)
+      expect(response).to redirect_to(login_path)
+    end
   end
 
   describe "POST /appointments" do
@@ -35,10 +41,10 @@ RSpec.describe "Schedule Appointments (request)", type: :request do
       slot   = instance_double("TimeSlot", id: 101, doctor: doctor)
 
       expect(time_slot_class).to receive(:find).with("101").and_return(slot)
-      expect(appointment_class).to receive(:exists?).with(time_slot: slot).and_return(false)
-      expect(appointment_class).to receive(:create!).with(patient_id: anything, time_slot: slot, date: "2025-4-13")
+      expect(appointment_class).to receive(:exists?).with(time_slot: slot, date: '2025-04-13').and_return(false)
+      expect(appointment_class).to receive(:create!).with(patient_id: anything, time_slot: slot, date: "2025-04-13")
 
-      post appointments_path, params: { appointment: { time_slot_id: 101, date: "2025-4-13" } }
+      post appointments_path, params: { appointment: { time_slot_id: 101, date: "2025-04-13" } }
 
       expect(response).to redirect_to(patient_appointments_path)
       follow_redirect!
@@ -51,10 +57,10 @@ RSpec.describe "Schedule Appointments (request)", type: :request do
       slot   = instance_double("TimeSlot", id: 101, doctor: doctor)
 
       expect(time_slot_class).to receive(:find).with("101").and_return(slot)
-      expect(appointment_class).to receive(:exists?).with(time_slot: slot).and_return(true)
+      expect(appointment_class).to receive(:exists?).with(time_slot: slot, date: '2025-04-13').and_return(true)
       expect(appointment_class).not_to receive(:create!)
 
-      post appointments_path, params: { appointment: { time_slot_id: 101, doctor_id: 7 } }
+      post appointments_path, params: { appointment: { time_slot_id: 101, doctor_id: 7, date: '2025-04-13' } }
 
       expect(response).to redirect_to(doctor_time_slots_path(doctor.id))
 

@@ -1,7 +1,7 @@
 <h1>Search Results</h1>
 
 <% if @clinics.present? %>
-  <table>
+  <table class="table table-striped table-bordered align-middle border border-dark-subtle">
     <thead>
       <tr>
         <th>Name</th>
@@ -26,10 +26,10 @@
           <td><%= clinic.location %></td>
           <td class="rating"><%= clinic.rating %></td>
           <td>
-            <%= link_to "View doctors", clinic_doctors_path(clinic) %>
+            <%= button_to "Find a doctor at this clinic", clinic_doctors_path(clinic), method: :get %>
 
             <% if session[:role] == "doctor" && @user.present? %>
-              <%= button_to "Sign up to work here",
+              <%= button_to "Sign up to work at this clinic",
                     doctor_path(@user, clinic_id: clinic.id),
                     method: :patch %>
             <% end %>

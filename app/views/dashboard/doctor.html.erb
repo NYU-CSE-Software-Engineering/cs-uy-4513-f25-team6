@@ -1,13 +1,22 @@
 <h1>Doctor Dashboard</h1>
 
 <p>Welcome, <%= @user.username %></p>
+<hr>
+
+<h2>Your Clinic</h2>
+<% if @user.clinic %>
+  <p>You currently work at <%= @user.clinic.name %></p>
+<% else %>
+  <p>You do not currently work at any clinic</p>
+<% end %>
+<hr>
 
 <h2>Upcoming Appointments</h2>
 <% if @appointments.any? %>
   <ul>
     <% @appointments.each do |appointment| %>
       <li>
-        <strong><%= appointment.date %></strong><br>
+        <strong>Appointment at <%= appointment.date %></strong><br>
         <%= appointment.time_slot.starts_at.strftime("%I:%M %p") %> –
         <%= appointment.time_slot.ends_at.strftime("%I:%M %p") %><br>
         with <%= appointment.patient.username %>

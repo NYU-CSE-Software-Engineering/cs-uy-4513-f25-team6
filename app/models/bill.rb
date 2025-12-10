@@ -6,6 +6,7 @@ class Bill < ApplicationRecord
   validates :amount, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validates :status, inclusion: { in: %w[unpaid paid] }
   validates :due_date, presence: true
+  validates :due_date, comparison: { greater_than: Date.today }
 
   before_validation :set_default_status, on: :create
 

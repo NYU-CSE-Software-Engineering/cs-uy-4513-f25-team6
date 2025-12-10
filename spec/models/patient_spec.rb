@@ -10,10 +10,18 @@ describe Patient do
         expect(patient.appointments.exists?(time_slot: slot)).to be_truthy
     end
 
-    # ---- UNCOMMENT ONCE PRESCRIPTIONS EXIST ----
-    # it 'can access own prescriptions' do
-    #     patient = Patient.create!(email: "test@test.com", username: "testPatient", password: Digest::MD5.hexdigest("testPassword"))
-    #     Prescription.create!(patient_id: patient.id, doctor_id: 3, medication: "testMed")
-    #     expect(patient.prescriptionss.exists?(doctor_id: 3)).to be_truthy
-    # end
+    it 'can access own prescriptions' do
+        patient = FactoryBot.create(:patient)
+        doctor = FactoryBot.create(:doctor)
+        Prescription.create!(
+            patient: patient,
+            doctor: doctor,
+            medication_name: 'med',
+            dosage: '',
+            instructions: '',
+            issued_on: Date.today,
+            status: 'active'
+        )
+        expect(patient.prescriptions.exists?(doctor: doctor, medication_name: 'med')).to be_truthy
+    end
 end

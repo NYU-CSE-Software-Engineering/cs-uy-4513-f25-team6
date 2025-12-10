@@ -17,36 +17,86 @@
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
   </head>
 
   <body>
-    <header style="display: flex; justify-content: space-between">
-      <span><b>MediTracker</b></span>
-      <% if session[:role] != nil %>
-        <span>
-          Logged in as <%= @user.username %> (<%= session[:role].titleize %>) | 
-          <%= link_to "Log Out", logout_path %>
-        </span>
-      <% else %>
-        <span>
-          Not logged in | Sign up as: 
-          <%= link_to "Patient", new_patient_path %>
-          <%= link_to "Doctor", new_doctor_path %>
-          <%= link_to "Admin", new_admin_path %>
-        </span>
+    <nav class="navbar navbar-expand-lg bg-primary text-white mb-3" data-bs-theme="dark">
+      <div class="container-fluid">
+        <div class="collapse navbar-collapse">
+          <h1 class="title" style="margin-bottom:5px;margin-right:12px">MediTracker&nbsp;&nbsp;|</h1>
+          <h4 style="margin-bottom:0px">
+            <ul class="navbar-nav">
+              <% if session[:role] %>
+                <li class="nav-item">
+                  <%= nav_link "Dashboard", "/#{session[:role]}/dashboard" %>
+                </li>
+              <% end %>
+              <li class="nav-item">
+                <%= nav_link "Clinics", clinics_path %>
+              </li>
+              <% if session[:role] == "patient" %>
+                <li class="nav-item">
+                  <%= nav_link "Appointments", patient_appointments_path %>
+                </li>
+                <li class="nav-item">
+                  <%= nav_link "Prescriptions", patient_prescriptions_path %>
+                </li>
+              <% elsif session[:role] == "doctor" %>
+                <li class="nav-item">
+                  <%= nav_link "Appointments", doctor_appointments_path %>
+                </li>
+                <li class="nav-item">
+                  <%= nav_link "Prescriptions", doctor_prescriptions_path %>
+                </li>
+                <li class="nav-item">
+                  <%= nav_link "Time Slots", configure_time_slots_path %>
+                </li>
+              <% elsif session[:role] == "admin" %>
+                <!-- admin-specific navbar links go here -->
+              <% end %>
+            </ul>
+          </h4>
+        </div>
+        <h4 style="margin-bottom:0px">
+          <% if session[:role] != nil %>
+            <%= @user.username %> | 
+            <% case session[:role] %>
+            <% when 'patient' %>
+              <span class="border border-white rounded bg-info" style="padding: 3px">Patient</span>
+            <% when 'doctor' %>
+              <span class="border border-white rounded bg-success" style="padding: 3px">Doctor</span>
+            <% when 'admin' %>
+              <span class="border border-white rounded bg-danger" style="padding: 3px">Admin</span>
+            <% end %>
+             | <%= link_to "Log Out", logout_path, class: "login-link" %>
+          <% else %>
+            <%= link_to "Log In", login_path, class: "login-link" %>
+             | Sign up: 
+            <%= link_to "Patient", new_patient_path, class: "login-link" %>
+            <%= link_to "Doctor", new_doctor_path, class: "login-link" %>
+            <%= link_to "Admin", new_admin_path, class: "login-link" %>
+          <% end %>
+        </h4>
+      </div>
+    </nav>
+    <div class="container">
+      <% if flash[:notice] %>
+        <div class="alert alert-info" role="alert" id="notice">
+          <%= flash[:notice] %>
+        </div>
+      <% elsif flash[:alert] %>
+        <div class="alert alert-danger" role="alert" id="alert">
+          <%= flash[:alert] %>
+        </div>
       <% end %>
-    </header>
-    <% if flash[:notice] %>
-      <div class="alert alert-info" role="alert" id="notice">
-        <%= flash[:notice] %>
-      </div>
-    <% elsif flash[:alert] %>
-      <div class="alert alert-danger" role="alert" id="alert">
-        <%= flash[:alert] %>
-      </div>
-    <% end %>
-    <%= yield %>
+      <main id="main" style="font-size:larger">
+        <%= yield %>
+      </main>
+    </div>
   </body>
 </html>

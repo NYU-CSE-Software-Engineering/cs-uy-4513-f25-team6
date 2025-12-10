@@ -24,6 +24,8 @@ def path_to(page_name)
     when 'find clinics' then '/clinics'
     when 'clinic search results' then '/clinics/search'
 
+    when 'bill creation' then "/appointments/#{@app.id}/bills/new"
+
     else raise "Can't find mapping from \"#{page_name}\" to a path."
     end
 end
@@ -57,8 +59,8 @@ Given(/I am signed in as an? (.*)/) do |role|
         raise "#{role} is not a valid role."
     end
     visit '/login'
-    fill_in 'Email', with: @test_user.email
-    fill_in 'Password', with: 'testPassword'
+    fill_in 'email', with: @test_user.email
+    fill_in 'password', with: 'testPassword'
     choose role.capitalize
     click_button 'Log In'
 end

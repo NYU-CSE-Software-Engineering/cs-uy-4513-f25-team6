@@ -26,6 +26,7 @@ class DashboardController < ApplicationController
   end
 
   def admin
+    @clinics_count      = Clinic.count
     @patients_count     = Patient.count
     @doctors_count      = Doctor.count
     @appointments_count = Appointment.count

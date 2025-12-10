@@ -9,36 +9,32 @@ Rails.application.routes.draw do
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
-  root to: redirect('/login')
+  root to: redirect('/clinics')
 
-  # Login routes
+  # =========== NON RESTFUL ROUTES ===========
+
+  # Login
   get '/login', to: 'login#form', as: :login
   post '/login', to: 'login#login'
   get '/logout', to: 'login#logout', as: :logout
 
-  # Non-RESTful patient routes
+  # Patient
   get '/patient/dashboard', to: 'dashboard#patient', as: :patient_dashboard
   get '/patient/appointments', to: 'appointments#index', as: :patient_appointments
   get '/patient/prescriptions', to: 'prescriptions#patient_index', as: :patient_prescriptions
 
-  # Non-RESTful doctor routes
+  # Doctor
   get '/doctor/dashboard', to: 'dashboard#doctor', as: :doctor_dashboard
   get '/doctor/time_slots', to: 'time_slots#configure', as: :configure_time_slots
   get '/doctor/appointments', to: 'appointments#index', as: :doctor_appointments
   get '/doctor/prescriptions', to: 'prescriptions#doctor_index', as: :doctor_prescriptions
-  post '/doctor/prescriptions', to: 'prescriptions#create', as: :create_prescription
 
-  # Non-RESTful admin routes
+  # Admin
   get '/admin/dashboard', to: 'dashboard#admin', as: :admin_dashboard
 
-  # /clinics/:clinic_id/doctors
-  resources :clinics do
-    collection do
-      # collection routes are routes that are not associated with a specific clinic --- routes operate on the entire collection of clinics resource
-      get 'search' # maps `GET /clinics/search` to ClinicsController#search action
-                    # creating a custom route (not one of the default RESTful routes)
-    end
-
+  # ============= RESTFUL ROUTES =============
+  
+  resources :clinics, only: [:index, :create] do
     resources :doctors, only: [:index]
   end
 
@@ -50,7 +46,11 @@ Rails.application.routes.draw do
 
   resources :admins, only: [:new, :create]
   
-  resources :appointments, only: [:create]
+  resources :appointments, only: [:create] do
+    resources :bills, only: [:new, :create]
+  end
+
+  resources :prescriptions, only: [:create, :update]
 
   resources :bills, only: [:show, :update]
 end

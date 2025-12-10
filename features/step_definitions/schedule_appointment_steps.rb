@@ -27,8 +27,8 @@ end
 Given('I am logged in as patient {string}') do |username|
   visit "/login"
   patient = Patient.find_by!(username: username)
-  fill_in "Email:", with: patient.email
-  fill_in "Password", with: "Secret12"
+  fill_in "email", with: patient.email
+  fill_in "password", with: "Secret12"
   choose "Patient"
   click_button "Log In"
 end
@@ -65,6 +65,13 @@ Given('the slot starting at {string} on {string} for doctor {string} is already 
   doc = Doctor.find_by!(username: doc_name)
   slot = TimeSlot.find_by!(starts_at: slot_time, doctor: doc)
   Appointment.create(patient: otherPat, time_slot: slot, date: date)
+end
+
+When('I make an appointment with {string}') do |doctor|
+  row = find('tr', text: doctor)
+  within(row) do
+    click_button 'Make an appointment'
+  end
 end
 
 # Click the "Book this slot" button for a specific slot

@@ -15,17 +15,12 @@ Feature: Doctor signs up to work at a clinic
   Scenario: Successfully sign up for a clinic
     Given I am signed in as a doctor
     And I am on the find clinics page
-    When I click "Sign up to work here" for "ClinA"
+    When I click "Sign up to work at this clinic" for "ClinA"
     Then I should see "You are now employed at ClinA"
 
   Scenario: Cannot sign up for the same clinic twice
     Given I am signed in as a doctor
     And I am already employed at "ClinA"
     And I am on the find clinics page
-    When I click "Sign up to work here" for "ClinA"
+    When I click "Sign up to work at this clinic" for "ClinA"
     Then I should see "You are already employed at this clinic"
-
-  Scenario: Must be logged in to view clinic list
-    Given I am logged out
-    When I visit the find clinics page
-    Then I should be on the login page

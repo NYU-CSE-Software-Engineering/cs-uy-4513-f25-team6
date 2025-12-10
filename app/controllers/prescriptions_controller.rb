@@ -1,6 +1,6 @@
 class PrescriptionsController < ApplicationController
   before_action(only: [:patient_index]) { check_login ['patient'] }
-  before_action(only: [:doctor_index, :create]) { check_login ['doctor'] }
+  before_action(only: [:doctor_index, :create, :update]) { check_login ['doctor'] }
 
   # GET /patient/prescriptions
   # Patients see their own prescriptions
@@ -15,9 +15,9 @@ class PrescriptionsController < ApplicationController
   end
 
   # GET /doctor/prescriptions
-  # Doctors can view all patients and their prescriptions
+  # Doctors can view prescriptions of their own patients
   def doctor_index
-    @patients = Patient.all.order(:username)
+    find_patients
 
     if params[:patient_id].present?
       @selected_patient = Patient.find_by(id: params[:patient_id])
@@ -36,7 +36,7 @@ class PrescriptionsController < ApplicationController
       redirect_to doctor_prescriptions_path(patient_id: @prescription.patient_id),
                   notice: "Prescription created successfully"
     else
-      @patients = Patient.all.order(:username)
+      find_patients
       @selected_patient = Patient.find_by(id: @prescription.patient_id)
       @prescriptions = @selected_patient&.prescriptions&.recent_first&.includes(:doctor) || []
       flash.now[:alert] = "Failed to create prescription: #{@prescription.errors.full_messages.join(', ')}"
@@ -44,10 +44,32 @@ class PrescriptionsController < ApplicationController
     end
   end
 
+  def update
+    prescription = Prescription.find(params[:id])
+    new_status = params[:status]
+
+    prescription.status = new_status
+
+    if prescription.valid?
+      prescription.save
+      flash[:notice] = "Updated prescription status"
+    else
+      flash[:alert] = "Invalid prescription status #{prescription.errors.to_json}"
+    end
+    redirect_to doctor_prescriptions_path(patient_id: prescription.patient_id)
+  end
+
   private
 
   def prescription_params
     params.require(:prescription).permit(:patient_id, :medication_name, :dosage, :instructions, :status)
   end
+
+  def find_patients
+    @patients = Patient.joins(appointments: :time_slot)
+                       .where(time_slot: {doctor_id: session[:user_id]})
+                       .distinct
+  end
+
 end
 

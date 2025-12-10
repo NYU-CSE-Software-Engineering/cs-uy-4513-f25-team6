@@ -7,11 +7,13 @@
     <%= form.submit "Add" %>
 <% end %>
 <h2>Your current time slots</h1>
-<table>
+<table class="table table-striped" style="width:400px">
     <% @time_slots.each do |slot| %>
     <tr>
-        <td><%= slot.starts_at.strftime("%l:%M %p") %> - <%= slot.ends_at.strftime("%l:%M %p") %></td>
-        <td><%= 
+        <td>
+            <%= slot.starts_at.strftime("%l:%M %p") %> - <%= slot.ends_at.strftime("%l:%M %p") %>
+        </td>
+        <td style="text-align:right"><%= 
             button_to "Remove this slot",
             doctor_time_slot_path(session[:user_id], slot.id),
             method: :delete

@@ -1,8 +1,7 @@
 <h1>Doctors at <%= @clinic.name %></h1>
 
-<h2>Filter Doctors</h2>
 <%= form_tag(clinic_doctors_path(@clinic), method: :get) do %>
-  <%= label_tag :specialty %>
+  <%= label_tag :specialty, "Filter by specialty:" %>
   <%= select_tag :specialty,
       options_for_select(
         @specialties,
@@ -13,7 +12,7 @@
   <%= submit_tag "Search" %>
 <% end %>
 
-<table id="results">
+<table id="results" style="width:700px" class="table table-striped table-bordered align-middle border border-dark-subtle">
     <thead>
         <tr>
             <th>Name</th>
@@ -21,14 +20,20 @@
             <th>
                 <%= link_to "Rating", clinic_doctors_path(@clinic, params.permit(:specialty, :commit).merge!(sort: 'rating')) %>
             </th>
+            <% if session[:role] == 'patient' %>
+                <th>Appointment</th>
+            <% end %>
         </tr>
     </thead>
     <tbody>
         <% @doctors.each do |doctor| %>
             <tr class="doctor">
-                <td><%= link_to doctor.username, doctor_time_slots_path(doctor)%></td>
+                <td><%= doctor.username %></td>
                 <td><%= doctor.specialty %></td>
                 <td><%= doctor.rating %></td>
+                <% if session[:role] == 'patient' %>
+                    <td><%= button_to "Make an appointment", doctor_time_slots_path(doctor), method: :get %></td>
+                <% end %>
             </tr>
         <% end %>
     </tbody>

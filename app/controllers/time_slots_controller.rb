@@ -1,6 +1,6 @@
 class TimeSlotsController < ApplicationController
-    before_action(only: [:configure]) { check_login ['doctor'] }
-    before_action(only: [:create, :destroy]) { check_login ['doctor', 'admin'] }
+    before_action(only: [:index]) { check_login ['patient'] }
+    before_action(only: [:configure, :create, :destroy]) { check_login ['doctor'] }
     
     def index
         @doctor = Doctor.find(params[:doctor_id])

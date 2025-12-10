@@ -8,7 +8,7 @@ class Appointment < ApplicationRecord
     # each time slot can only be used once per day
     validates :time_slot_id, uniqueness: {scope: :date}
 
-    after_create :create_bill
+    #after_create :create_bill
 
     def full_datetime
         Time.new(date.year, date.month, date.day, time_slot.starts_at.hour, time_slot.starts_at.min)
@@ -16,21 +16,21 @@ class Appointment < ApplicationRecord
 
     private
 
-    def create_bill
-        Bill.create!(
-            appointment: self,
-            amount: default_bill_amount,
-            status: "unpaid",
-            due_date: date + 7.days
-        )
-    end
+    # def create_bill
+    #     Bill.create!(
+    #         appointment: self,
+    #         amount: default_bill_amount,
+    #         status: "unpaid",
+    #         due_date: date + 7.days
+    #     )
+    # end
 
-    def default_bill_amount
-        # Default bill amount - can be made configurable later
-        100.0
-    end
+    # def default_bill_amount
+    #     # Default bill amount - can be made configurable later
+    #     100.0
+    # end
 
-    def clinic_name
-      doctor&.clinic&.name
-    end
+    # def clinic_name
+    #   doctor.clinic.name
+    # end
 end
