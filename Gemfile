@@ -74,3 +74,7 @@ group :test do
   # Rails controller testing helpers
   gem "rails-controller-testing"
 end
+
+group :production do
+  gem "pg"
+end
