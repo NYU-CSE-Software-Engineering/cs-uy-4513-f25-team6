@@ -20,7 +20,7 @@
             <th>
                 <%= link_to "Rating", clinic_doctors_path(@clinic, params.permit(:specialty, :commit).merge!(sort: 'rating')) %>
             </th>
-            <% if session[:role] %>
+            <% if session[:role] == 'patient' %>
                 <th>Appointment</th>
             <% end %>
         </tr>
@@ -31,7 +31,7 @@
                 <td><%= doctor.username %></td>
                 <td><%= doctor.specialty %></td>
                 <td><%= doctor.rating %></td>
-                <% if session[:role] %>
+                <% if session[:role] == 'patient' %>
                     <td><%= button_to "Make an appointment", doctor_time_slots_path(doctor), method: :get %></td>
                 <% end %>
             </tr>

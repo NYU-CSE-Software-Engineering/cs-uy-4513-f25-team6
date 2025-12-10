@@ -1,5 +1,5 @@
 class TimeSlotsController < ApplicationController
-    before_action(only: [:index]) { check_login }
+    before_action(only: [:index]) { check_login ['patient'] }
     before_action(only: [:configure, :create, :destroy]) { check_login ['doctor'] }
     
     def index

@@ -1,0 +1,9 @@
+<h1>Create a Bill</h1>
+
+<p><strong>Appointment:</strong> [placeholder]</p>
+
+<%= form_with model: Bill.new, url: bills_path, method: :post do |f| %>
+    <p>[placeholder]</p>
+    
+    <%= f.submit "Create bill" %>
+<% end %>

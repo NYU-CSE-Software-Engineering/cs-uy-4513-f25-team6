@@ -19,21 +19,26 @@
 
         <strong>Time:</strong>
         <%= appointment.time_slot.starts_at.strftime("%I:%M %p") %> –
-        <%= appointment.time_slot.ends_at.strftime("%I:%M %p") %><br>
+        <%= appointment.time_slot.ends_at.strftime("%I:%M %p") %>
+        <br>
 
         <% if session[:role] == 'doctor' %>
-           <strong>Patient:</strong>
-           <%= appointment.patient&.username || "Patient" %>
+          <strong>Patient:</strong>
+          <%= appointment.patient&.username || "Patient" %>
+          <% if appointment.full_datetime < DateTime.now %>
+            <br>
+            <% if appointment.bill %>
+              <strong>Bill:</strong> <%= appointment.bill.status %>
+            <% else %>
+              <%= link_to "Create bill", new_bill_path %>
+            <% end %>
+          <% end %>
         <% else %>
-           <strong>Doctor:</strong>
-           <%= appointment.doctor&.username || "Doctor" %>
-        <% end %>
-        
-        <%# Ensure clinic name is displayed if present %>
-        <% if appointment.respond_to?(:clinic_name) && appointment.clinic_name.present? %>
-          <br><strong>Clinic:</strong> <%= appointment.clinic_name %>
-        <% else %>
-          <br><strong>Clinic:</strong> N/A
+          <strong>Doctor:</strong>
+          <%= appointment.doctor&.username || "Doctor" %>
+          <br>
+          <strong>Clinic:</strong>
+          <%= appointment.doctor.clinic.name %>
         <% end %>
       </li>
       <hr>

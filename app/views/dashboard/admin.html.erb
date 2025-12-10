@@ -1,30 +1,41 @@
 <h1>Admin Dashboard</h1>
 
 <p>Welcome, <%= @user.username %></p>
+<hr>
 
+<h2>System statistics</h2>
 <ul>
+  <li>Total clinics: <%= @clinics_count %></li>
   <li>Total patients: <%= @patients_count %></li>
   <li>Total doctors: <%= @doctors_count %></li>
   <li>Total appointments: <%= @appointments_count %></li>
   <li>Unpaid bills: <%= @unpaid_bills_count %></li>
 </ul>
+<hr>
 
 <h2>Create new clinic</h2>
 <%= form_with url: clinics_path, model: Clinic.new do |form| %>
-  <%= form.label :name, "Name:" %>
-  <%= form.text_field :name, required: true %>
-  <br>
-  <%= form.label :specialty, "Specialty:" %>
-  <%= form.text_field :specialty, required: true %>
-  <br>
-  <%= form.label :location, "Location:" %>
-  <%= form.text_field :location, required: true %>
-  <br>
-  <%= form.label :rating, "Rating:" %>
-  <%= form.number_field :rating, required: true %>
-  <br>
+  <table class="table" style="width:360px">
+    <tr>
+      <td><%= form.label :name, "Name:" %></td>
+      <td><%= form.text_field :name, required: true %></td>
+    </tr>
+    <tr>
+      <td><%= form.label :specialty, "Specialty:" %></td>
+      <td><%= form.text_field :specialty, required: true %></td>
+    </tr>
+    <tr>
+      <td><%= form.label :location, "Location:" %></td>
+      <td><%= form.text_field :location, required: true %></td>
+    </tr>
+    <tr>
+      <td><%= form.label :rating, "Rating:" %></td>
+      <td><%= form.number_field :rating, required: true %></td>
+    </tr>
+  </table>
   <%= form.submit "Create clinic" %>
 <% end %>
+<hr>
 
 <h2>View database tables</h2>
 <form>
@@ -37,13 +48,15 @@
   <input type="submit" value="View">
 </form>
 <% if @rows %>
-  <table>
-    <tr>
-      <% @col_names.each do |col_name| %>
-        <% if col_name == 'password' then next end %>
-        <th><%= col_name %></th>
-      <% end %>
-    </tr>
+  <table class="table table-striped table-bordered align-middle border border-dark-subtle">
+    <thead>
+      <tr>
+        <% @col_names.each do |col_name| %>
+          <% if col_name == 'password' then next end %>
+          <th><%= col_name %></th>
+        <% end %>
+      </tr>
+    </thead>
     <% @rows.each do |row| %>
       <tr>
         <% row.attributes.each do |key, val| %>

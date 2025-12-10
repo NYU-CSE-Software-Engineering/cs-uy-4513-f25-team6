@@ -1,6 +1,13 @@
 class BillsController < ApplicationController
   before_action { check_login }
-  before_action :set_bill
+  before_action :set_bill, only: [:show, :update]
+
+  def new
+  end
+
+  def create
+    # create the bill!
+  end
 
   def show
   end

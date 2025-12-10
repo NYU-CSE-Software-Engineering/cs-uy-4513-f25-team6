@@ -1,13 +1,14 @@
 <h1>Patient Dashboard</h1>
 
 <p>Welcome, <%= @user.username %></p>
+<hr>
 
 <h2>Upcoming Appointments</h2>
 <% if @appointments.any? %>
   <ul>
     <% @appointments.each do |appointment| %>
       <li class="appointment-row">
-        <strong><%= appointment.date %></strong><br>
+        <strong>Appointment at <%= appointment.date %></strong><br>
         <%= appointment.time_slot.starts_at.strftime("%I:%M %p") %> –
         <%= appointment.time_slot.ends_at.strftime("%I:%M %p") %><br>
         with <%= appointment.doctor&.username || "Doctor" %>
@@ -17,7 +18,7 @@
 <% else %>
   <p>You have no upcoming appointments.</p>
 <% end %>
-<p><%= link_to "View all appointments", patient_appointments_path %></p>
+<hr>
 
 <h2>Unpaid Bills</h2>
 <% if @unpaid_bills.any? %>
