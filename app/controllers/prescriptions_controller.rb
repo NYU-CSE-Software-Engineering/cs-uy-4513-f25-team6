@@ -17,11 +17,11 @@ class PrescriptionsController < ApplicationController
   # GET /doctor/prescriptions
   # Doctors can view prescriptions of their own patients
   def doctor_index
-    find_patients
+    @patients = find_patients_of(@user)
 
     if params[:patient_id].present?
-      @selected_patient = Patient.find_by(id: params[:patient_id])
-      @prescriptions = @selected_patient&.prescriptions&.recent_first&.includes(:doctor) || []
+      @selected_patient = Patient.find(params[:patient_id])
+      @prescriptions = @selected_patient.prescriptions.recent_first.includes(:doctor) || []
     end
   end
 
@@ -36,7 +36,7 @@ class PrescriptionsController < ApplicationController
       redirect_to doctor_prescriptions_path(patient_id: @prescription.patient_id),
                   notice: "Prescription created successfully"
     else
-      find_patients
+      @patients = find_patients_of(@user)
       @selected_patient = Patient.find_by(id: @prescription.patient_id)
       @prescriptions = @selected_patient&.prescriptions&.recent_first&.includes(:doctor) || []
       flash.now[:alert] = "Failed to create prescription: #{@prescription.errors.full_messages.join(', ')}"
@@ -65,10 +65,10 @@ class PrescriptionsController < ApplicationController
     params.require(:prescription).permit(:patient_id, :medication_name, :dosage, :instructions, :status)
   end
 
-  def find_patients
-    @patients = Patient.joins(appointments: :time_slot)
-                       .where(time_slot: {doctor_id: session[:user_id]})
-                       .distinct
+  def find_patients_of(doctor)
+    return Patient.joins(appointments: :time_slot)
+                  .where(time_slot: {doctor_id: doctor.id})
+                  .distinct
   end
 
 end
