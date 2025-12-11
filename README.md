@@ -56,3 +56,4 @@ bundle exec rails server
 ## Tesing Instructions
 - Use `bundle exec rspec` to run the low-level RSpec tests
 - Use `bundle exec cucumber` to run the high-level Cucumber scenarios
+- Open `coverage/index.html` in a browser to see the coverage report from SimpleCov
