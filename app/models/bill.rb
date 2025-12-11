@@ -3,12 +3,12 @@ class Bill < ApplicationRecord
   has_one :patient, through: :appointment
   delegate :doctor, to: :appointment
 
+  before_validation :set_default_status, on: :create
+
   validates :amount, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validates :status, inclusion: { in: %w[unpaid paid] }
   validates :due_date, presence: true
   validates :due_date, comparison: { greater_than: Date.today }
-
-  before_validation :set_default_status, on: :create
 
   scope :unpaid, -> { where(status: "unpaid") }
   scope :paid, -> { where(status: "paid") }
