@@ -47,11 +47,6 @@ class LoginController < ApplicationController
 
     private
 
-    def current_user
-        return nil unless session[:user_id]
-        find_user_by({id: session[:user_id]}, session[:role])
-    end
-
     def find_user_by(hash, role)
         case role.downcase
         when 'patient'

@@ -83,7 +83,6 @@ RSpec.describe BillsController, type: :controller do
       expect(Appointment).to receive(:find).with('5').and_return(app)
       expect(Bill).to receive(:new).and_return(bill)
       expect(bill).to receive(:appointment_id=)
-      expect(bill).to receive(:status=)
       expect(bill).to receive(:valid?).and_return(true)
       expect(bill).to receive(:save)
 
@@ -99,7 +98,6 @@ RSpec.describe BillsController, type: :controller do
       expect(Appointment).to receive(:find).with('5').and_return(app)
       expect(Bill).to receive(:new).and_return(bill)
       expect(bill).to receive(:appointment_id=)
-      expect(bill).to receive(:status=)
       expect(bill).to receive(:valid?).and_return(false)
       expect(bill).not_to receive(:save)
 

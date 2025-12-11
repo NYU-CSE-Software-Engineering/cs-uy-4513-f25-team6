@@ -3,6 +3,7 @@
     <%= form.date_field :schedule_date, value: @date %>
     <%= form.submit "Refresh" %>
 <% end %>
+
 <h2>Available time slots for <%= @date %></h1>
 <table class="table table-striped" style="width: 400px">
     <% @time_slots.each do |slot| %>

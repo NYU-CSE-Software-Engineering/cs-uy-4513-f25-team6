@@ -2,12 +2,6 @@ class AppointmentsController < ApplicationController
   before_action { check_login ['patient', 'doctor'] }
 
   def index
-    unless session[:user_id]
-      flash[:alert] = "You are not authorized to view this page."
-      redirect_to login_path
-      return
-    end
-
     if session[:role] == 'doctor'
       # Logic for Doctor
       @appointments = Appointment.includes(:time_slot, :patient, :doctor, :bill)

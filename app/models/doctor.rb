@@ -3,7 +3,6 @@ class Doctor < User
     has_many :time_slots, -> { order(:starts_at) }
     has_many :appointments, through: :time_slots
 
-
     # Search for doctors within a specific clinic by name and/or specialty
     # @param name [String] the doctor's name (partial match, case-insensitive)
     # @param specialty [String] the doctor's specialty (exact match, case-insensitive)
@@ -28,7 +27,6 @@ class Doctor < User
         doctors
     end
 
-
     # Get all doctors in a clinic sorted by rating in descending order
     # Doctors with nil ratings are placed last
     # @param clinic_id [Integer] the clinic ID to filter by
@@ -37,12 +35,10 @@ class Doctor < User
         where(clinic_id: clinic_id).order(Arel.sql('rating DESC NULLS LAST'))
     end
 
-
     # Get all doctors belonging to a specific clinic
     # @param clinic_id [Integer] the clinic ID to filter by
     # @return [ActiveRecord::Relation] all doctors in the clinic
     def self.doctors_in_clinic(clinic_id)
         where(clinic_id: clinic_id)
     end
-
 end

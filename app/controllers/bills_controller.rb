@@ -13,7 +13,6 @@ class BillsController < ApplicationController
     
     bill = Bill.new(bill_params)
     bill.appointment_id = @app.id
-    bill.status = 'unpaid'
 
     if bill.valid?
       bill.save
